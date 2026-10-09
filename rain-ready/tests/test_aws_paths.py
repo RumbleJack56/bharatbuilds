@@ -94,3 +94,26 @@ def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
 
     monkeypatch.setattr(boto3, "client", lambda name, **kw: Boom())
     assert triage.triage_photo(b"x", "image/jpeg") is None
+
+
+def test_health_flags_bad_config(client, monkeypatch):
+    monkeypatch.setattr(config, "STORAGE", "s3")
+    monkeypatch.setattr(config, "S3_BUCKET", "")
+    assert any("S3_BUCKET" in w for w in client.get("/api/health").json()["config_warnings"])
+
+
+def test_health_deep_probes_aws(s3, client):
+    r = client.get("/api/health?deep=1").json()
+    assert r["aws"] == {"s3": "ok"}
+    assert s3.puts[-1]["Key"] == "healthcheck.txt"
+
+
+def test_health_deep_reports_aws_errors(client, monkeypatch):
+    import boto3
+    monkeypatch.setattr(config, "STORAGE", "s3")
+    monkeypatch.setattr(config, "S3_BUCKET", "b")
+
+    def boom(*a, **k):
+        raise RuntimeError("no credentials")
+    monkeypatch.setattr(boto3, "client", boom)
+    assert "no credentials" in client.get("/api/health?deep=1").json()["aws"]["s3"]

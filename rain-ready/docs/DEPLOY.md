@@ -6,7 +6,7 @@
 4. EC2: Amazon Linux 2023, t3.small, 20 GB. Security group: 22 from your IP, 80 and 443 open. Attach an Elastic IP and the role. Set the metadata option **hop limit to 2** (Advanced details); with 1, the Docker container cannot read the role and S3/Bedrock fail with "no credentials".
 5. On the box: run `scripts/bootstrap-ec2.sh` (git, docker, compose plugin, AWS CLI), then log out and in. `git clone` the repo, `cd bharatbuilds/rain-ready`.
 6. `cp .env.example .env`. Set `DOMAIN=<ip-with-dashes>.sslip.io` (e.g. `13-233-10-20.sslip.io`), `STORAGE=s3`, `S3_BUCKET=...`.
-7. `docker compose up -d --build`. Caddy fetches a certificate. Open `https://<DOMAIN>` on a phone (camera and GPS need HTTPS).
+7. `docker compose up -d --build`. Caddy fetches a certificate. Open `https://<DOMAIN>` on a phone (camera and GPS need HTTPS). Then check `https://<DOMAIN>/api/health?deep=1`: `config_warnings` must be empty and `aws` shows `s3: ok` (and `bedrock: ok` when enabled). Any error text there names the missing role, bucket or model access.
 8. Bedrock: enable a Claude model in the console. Find the id with `aws bedrock list-inference-profiles --region ap-south-1`. Put it in `BEDROCK_MODEL_ID`, set `TRIAGE_MODE=bedrock`, restart. Test one photo. If it fails, `TRIAGE_MODE=manual` (the app falls back anyway).
 9. Backup: hourly cron `S3_BUCKET=<bucket> scripts/backup.sh` (snapshot to `backup/rainready-<hour>.db`, keeps 24 copies). Take an AMI before recording.
 10. Build the APK: `make apk API=https://<DOMAIN>`.
