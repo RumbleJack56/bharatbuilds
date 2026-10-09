@@ -1,7 +1,7 @@
 # CLAUDE.md: read first, every session
 
 **Rain-Ready**: a shared action list for monsoon waterlogging. What to clean, who owns it, who did it, who checked, did it help.
-Read `SCOPE.md` (what, MVP vs good-to-haves) and `TASKS.md` (who owns which files, branching rules, tasks) before coding. Ask which developer you are working for (Aarush: backend, AWS, data, APK; Ujjwal: all of `web/`) and edit only that person's files.
+Read `SCOPE.md` (what, MVP vs good-to-haves) and `TASKS.md` (who owns which files, branching rules, tasks) before coding. Ask which developer you are working for (Ujjwal: backend, AWS, data, APK; Aarush: all of `web/`) and edit only that person's files.
 
 ## Stack
 FastAPI + SQLite (`app/`), pure logic in `core/` (tested), plain HTML/JS in `web/` (no build step), Capacitor wrapper in `mobile/` for the APK. AWS: EC2, S3, Bedrock. The API contract is `/docs` on the running server.
