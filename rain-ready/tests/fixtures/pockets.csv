@@ -1,0 +1,2 @@
+id,name,kind,lat,lon,catchment_ha,runoff_c,storage_m3,drain_mm_h,spills_to,linked_asset_ids,exposed_assets,data_source,confidence,citation
+LP-T-1,Test pocket,saucer,28.642,77.18,5,0.8,500,20,,way-1;drains-0001,3,field,low,fixture visit

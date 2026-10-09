@@ -1,0 +1,6 @@
+{"type":"FeatureCollection","features":[
+ {"type":"Feature","properties":{"id":"way/1","name":"Test drain A","citation":"fixture","confidence":"medium"},
+  "geometry":{"type":"LineString","coordinates":[[77.1800,28.6400],[77.1800,28.6420],[77.1800,28.6440]]}},
+ {"type":"Feature","properties":{"name":"Test drain B","citation":"fixture"},
+  "geometry":{"type":"MultiLineString","coordinates":[[[77.20,28.60],[77.21,28.60]],[[77.30,28.60],[77.30,28.61]]]}},
+ {"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[77.2,28.6]}}]}
