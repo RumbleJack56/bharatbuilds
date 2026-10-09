@@ -52,3 +52,13 @@ test("dashboard.simulate maps names to the API body", async () => {
   await createDashboardService(http).simulate({ rain: 40, state: "clean" });
   assert.deepEqual(http.calls[0].json, { rain_mm_h: 40, drain_state: "clean" });
 });
+test("incidents.create sends accuracy_m only when it is a number", async () => {
+  const http = createFakeHttp({ "POST /api/incidents": { incident: {} } });
+  const svc = createIncidentsService(http);
+  await svc.create({ lat: 1, lon: 2, kind: "x", accuracy_m: 12.5 });
+  await svc.create({ lat: 1, lon: 2, kind: "x" });
+  await svc.create({ lat: 1, lon: 2, kind: "x", accuracy_m: undefined });
+  assert.equal(http.calls[0].form.get("accuracy_m"), "12.5");
+  assert.equal(http.calls[1].form.has("accuracy_m"), false);
+  assert.equal(http.calls[2].form.has("accuracy_m"), false);
+});

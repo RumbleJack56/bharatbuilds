@@ -4,6 +4,8 @@ import assert from "node:assert/strict";
 import { esc, hrs } from "../js/ui/format.js";
 import { photos, guard } from "../js/ui/components.js";
 import * as copy from "../js/ui/copy.js";
+import { reportForm, reportResult } from "../js/views/report.view.js";
+import { loginView } from "../js/views/login.view.js";
 
 test("esc escapes HTML", () => assert.equal(esc(`<a href="x">'&`), "&lt;a href=&quot;x&quot;&gt;&#39;&amp;"));
 test("hrs reads 'about X h' and handles null", () => {
@@ -26,4 +28,37 @@ test("no banned word in any fixed UI string", () => {
   const strings = Object.values(copy).flatMap(v => typeof v === "string" ? [v] : v instanceof RegExp ? [] :
     Object.values(v).flatMap(x => Array.isArray(x) ? x.filter(s => typeof s === "string") : [x]));
   for (const s of strings) assert.doesNotMatch(String(s), copy.BANNED, s);
+});
+
+const base = { message: "Linked.", linked_asset: "DR-RN-001", distance_m: 3, task_id: 4, task_created: true, field_rule: "rule",
+  incident: { kind: "blocked_drain", ai: { kind: "blocked_drain", summary: "Grate covered in plastic." } } };
+test("report form offers 'Not sure' first so the photo can be classified", () => {
+  assert.match(reportForm({ fieldRule: "rule", kinds: copy.KINDS }), /<option value="">Not sure/);
+});
+test("report result shows the AI suggestion, labelled", () => {
+  const html = reportResult(base);
+  assert.match(html, /Suggested from your photo/);
+  assert.match(html, /Grate covered in plastic\./);
+  assert.match(html, /#\/task\/4/);
+  assert.doesNotMatch(html, /held for a check/);
+});
+test("held report says it is saved but waiting for a check, and lists flags with a text level", () => {
+  const html = reportResult({ ...base, task_id: null, task_created: false, held_for_review: true, flags: [
+    { code: "old", level: "warn", detail: "Photo is older than 2 days." }, { code: "x", level: "info", detail: "No location in photo." }] });
+  assert.match(html, /saved and linked/);
+  assert.match(html, /held for a check/);
+  assert.doesNotMatch(html, /No task was created/);
+  assert.match(html, /Check needed[^<]*<\/strong>[^<]*Photo is older than 2 days\./);
+  assert.match(html, /Note[^<]*<\/strong>[^<]*No location in photo\./);
+  assert.doesNotMatch(html, copy.BANNED);
+});
+test("not-held report with an info flag still lists it", () => {
+  const html = reportResult({ ...base, held_for_review: false, flags: [{ code: "x", level: "info", detail: "Taken indoors." }] });
+  assert.match(html, /Taken indoors\./);
+  assert.doesNotMatch(html, /held for a check/);
+});
+test("login view lists personas and escapes names", () => {
+  const html = loginView({ users: [{ id: "res-1", name: "A<b>", role: "resident" }], note: "demo" });
+  assert.match(html, /data-id="res-1"/);
+  assert.match(html, /A&lt;b&gt;/);
 });

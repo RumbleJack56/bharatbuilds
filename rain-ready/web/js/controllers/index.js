@@ -1,16 +1,16 @@
 // web/js/controllers/index.js — route table. Each entry is a Controller (PLAN.md 2.2); legacy() until migrated.
 import { legacy } from "../core/router.js";
-import { renderLogin } from "../login.js";
-import { renderReport } from "../report.js";
+import { login } from "./login.js";
+import { report } from "./report.js";
 import { renderMine, renderConfirm } from "../resident.js";
 import { renderInbox, renderTask } from "../official.js";
 import { renderAdmin } from "../admin.js";
 import { renderDash } from "../dash.js";
 
 export const CONTROLLERS = [
-  legacy("login", null, (root) => renderLogin(root, () => location.reload())),   // reload: legacy login writes storage behind the session cache
+  login,
   legacy("dash", null, (root, _me, tab) => renderDash(root, tab)),
-  legacy("report", ["resident", "admin"], renderReport),
+  report,
   legacy("mine", ["resident"], renderMine),
   legacy("confirm", ["resident"], renderConfirm),
   legacy("inbox", ["official"], renderInbox),
