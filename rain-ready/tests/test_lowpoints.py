@@ -69,7 +69,7 @@ def test_bad_graphs_rejected():
 
 def test_no_banned_words_in_planner_and_scenario_text():
     import re
-    from core import m4_rules, safety_copy
+    from core import copy as safety_copy, m4_rules
     r = m4_rules.plan(600, 12, soil="sandy_loam", has_vehicular_or_wash_runoff=True, poor_groundwater_quality=True)
     texts = [r["banner"], r["reason"], r["first_flush"], *r["warnings"], *r["maintenance"], *(c["name"] for c in r["checks"])]
     for t in texts:

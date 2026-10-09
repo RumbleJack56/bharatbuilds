@@ -1,43 +1,25 @@
 # Rain-Ready
 
-Which low points fill first as rain increases, whether the drains feeding them were really cleaned, and what each person should do. Pilot: Old Rajinder Nagar / Karol Bagh, Delhi.
-Built for WeMakeDevs x AWS **Environmental Hacks** (Oct 2026), track **Heat and Water**.
+A shared action list for monsoon waterlogging: **what to clean, who owns it, who did it, who checked, did it help.**
 
-> Unofficial. Scenario and preparedness tool, not a flood forecast and not an official warning. Official warnings: IMD / NDMA Sachet.
+Residents report a blocked drain. The system links it to the nearest drain and low-point pocket, picks the owner agency (or says "No owner found") and ranks the task by how much fill time cleaning would buy. Officials accept, bounce ("wrong owner") or complete with a photo. A different resident confirms. A public dashboard shows the map, a responsibility chart per agency, impact numbers, a rain scenario simulator and rain-capture candidates.
 
-## Start here (new teammate or new Claude session)
-1. `CLAUDE.md`: context, ownership and hard rules (read first, every session)
-2. `PROJECT.md`: what we are building and why, the features, the golden path, the video
-3. `TASKS.md`: **task board per dev** (dev#1 Ujjwal, dev#2 Aarush, dev#3, dev#4), sync points, what to do first
-4. `WORK_PACKAGES.md`: the seams, how four people and four Claude sessions stay in sync, kickoff prompts
-5. `openapi.yaml`, `schema.sql`, `core/`: the contract everyone builds to
+Pilot ward: Old Rajinder Nagar and Karol Bagh, Delhi. Seed data is **placeholder** and labelled. Scenario numbers are illustrative, not forecasts.
 
-## Quickstart
+One web codebase (`web/`) runs in a browser and as an Android APK (`mobile/`).
+
+Docs: [`SCOPE.md`](SCOPE.md) (what we build), [`docs/API.md`](docs/API.md) (endpoint map), [`TASKS.md`](TASKS.md) (who does what, branching), [`docs/DEPLOY.md`](docs/DEPLOY.md) (AWS).
+
+## Run
 ```
-make setup     # venv + deps (uses uv, Python 3.12)
-make run       # http://localhost:8010
-make test      # unit and API tests
-make status    # contract board: PASS / TODO / FAIL per endpoint
+make setup && make run      # http://localhost:8010   API docs at /docs
+make test
 ```
 
-## Layout
-```
-app/        FastAPI app (main, db, ledger, auth, routers/)
-core/       pure logic: scoring, closure levels, building level, low-point simulator, rain-capture rules,
-            ledger hash, safety copy, geo
-ai/         photo triage (Bedrock or manual fallback)
-data/       seed.json (pockets, assets, hotspots; hand-placed and labelled), capture_presets.json, replay_2024.json
-web/        static pages + MapLibre
-scripts/    status.py (contract board), build_replay.py, flow.py (end-to-end smoke test)
-docs/       research, adversarial review, implementation notes + AWS runbook
-evidence/   saved forecast-vs-observed data, interview notes
-```
+## AWS
+EC2 (host), S3 (photos), Bedrock (photo to report category).
 
-## Credits and licences
-(dev#4 owns this whole file; dev#1 only adds `LICENSE`. Keep this current. Anything we did not write goes here with its licence.) FastAPI, Uvicorn, Pydantic, Pillow, imagehash, boto3, MapLibre GL JS, OpenStreetMap data and tiles (ODbL; attribution shown on the map), Open-Meteo (CC BY 4.0, free non-commercial tier).
-
-## AI tools used
-Claude Code (Anthropic) was used for planning, code and documentation. Amazon Bedrock is used for photo triage only when `TRIAGE_MODE=bedrock`. (dev#4: confirm exact wording before submitting.)
-
-## Licence
-MIT (dev#1 adds the `LICENSE` file).
+## Credits and AI tools
+- FastAPI, Uvicorn, Pydantic, boto3 (open source). Leaflet 1.9.4 and OpenStreetMap tiles. Capacitor (MIT).
+- Built with Claude Code (Claude Sonnet 5.5) as a coding assistant.
+- TODO before submission: LICENSE and the final credits list.

@@ -1,133 +1,52 @@
--- FROZEN CONTRACT. Change only via a PR that also updates openapi.yaml and pings the group. Owner: dev#1.
--- SQLite. Timestamps are ISO-8601 UTC strings. JSON columns are TEXT.
--- Anonymous users: the browser generates a UUID kept in localStorage and sends it as X-User-Id. No accounts.
-
-CREATE TABLE IF NOT EXISTS settings (
-  key TEXT PRIMARY KEY,
-  value_json TEXT NOT NULL
-);                                   -- e.g. key='storm' -> {"active":true,"level":"warning","source":"IMD orange","set_at":"..."}
-
-CREATE TABLE IF NOT EXISTS assets (  -- hand-digitised drains/inlets/underpasses/pumps. WRITE: dev#3 (seed). READ: all
-  id TEXT PRIMARY KEY,               -- e.g. DR-RN-007
-  type TEXT NOT NULL CHECK (type IN ('drain_segment','inlet','underpass','pump_station')),
-  name TEXT NOT NULL,
+-- Rain-Ready schema v3 (SQLite). Task history lives in task_events; that table is the accountability record.
+CREATE TABLE IF NOT EXISTS agencies (
+  id TEXT PRIMARY KEY, name TEXT NOT NULL, kind TEXT NOT NULL            -- drain_owner | water | other
+);
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY, name TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('resident','official','admin')),
+  agency_id TEXT REFERENCES agencies(id)
+);
+CREATE TABLE IF NOT EXISTS assets (
+  id TEXT PRIMARY KEY, type TEXT NOT NULL, name TEXT NOT NULL, lat REAL NOT NULL, lon REAL NOT NULL,
+  agency_id TEXT REFERENCES agencies(id),                                -- NULL = no owner found
+  owner_source TEXT NOT NULL DEFAULT 'none',                             -- citation or 'none' / 'disputed'
+  last_confirmed_clean TEXT,
+  data_source TEXT NOT NULL DEFAULT 'placeholder', confidence TEXT NOT NULL DEFAULT 'low', note TEXT
+);
+CREATE TABLE IF NOT EXISTS pockets (
+  id TEXT PRIMARY KEY, name TEXT NOT NULL, kind TEXT NOT NULL, lat REAL NOT NULL, lon REAL NOT NULL,
+  catchment_ha REAL NOT NULL, runoff_c REAL NOT NULL, storage_m3 REAL NOT NULL, drain_mm_h REAL NOT NULL,
+  spills_to TEXT REFERENCES pockets(id), linked_asset_ids TEXT NOT NULL DEFAULT '[]',
+  exposed_assets INTEGER NOT NULL DEFAULT 0,                             -- placeholder count of basements/shops inside
+  data_source TEXT NOT NULL DEFAULT 'placeholder', confidence TEXT NOT NULL DEFAULT 'low', note TEXT
+);
+CREATE TABLE IF NOT EXISTS incidents (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL REFERENCES users(id),
   lat REAL NOT NULL, lon REAL NOT NULL,
-  geom_json TEXT,                    -- optional GeoJSON for line assets
-  owner TEXT NOT NULL DEFAULT 'DISPUTED',   -- PWD | MCD | IFC | NDMC | DISPUTED
-  covered INTEGER NOT NULL DEFAULT 0,
-  hotspot_listed INTEGER NOT NULL DEFAULT 0,
-  standing_water_last_monsoon INTEGER NOT NULL DEFAULT 0,
-  source_near_m REAL NOT NULL DEFAULT 1000000,
-  consequence REAL NOT NULL DEFAULT 0.2,
-  silt_measured REAL, silt_measured_on TEXT,
-  last_confirmed_clean TEXT,         -- set ONLY when a job reaches level >= 2
-  data_source TEXT NOT NULL DEFAULT 'placeholder',   -- placeholder | field | inquiry_report | news
-  confidence TEXT NOT NULL DEFAULT 'low',
-  note TEXT
+  kind TEXT NOT NULL CHECK (kind IN ('blocked_drain','standing_water','overflow','other')),
+  note TEXT, photo_key TEXT, ai_json TEXT,
+  asset_id TEXT REFERENCES assets(id), pocket_id TEXT REFERENCES pockets(id), task_id INTEGER,
+  created_at TEXT NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS hotspots ( -- named known hotspots / underpasses (watch list). WRITE: dev#3 (seed). READ: all
-  id TEXT PRIMARY KEY, name TEXT NOT NULL, kind TEXT NOT NULL,   -- underpass | low_colony | other
-  lat REAL NOT NULL, lon REAL NOT NULL,
-  data_source TEXT NOT NULL, year INTEGER, note TEXT
+CREATE TABLE IF NOT EXISTS tasks (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, asset_id TEXT NOT NULL REFERENCES assets(id),
+  pocket_id TEXT REFERENCES pockets(id), agency_id TEXT REFERENCES agencies(id),
+  action TEXT NOT NULL DEFAULT 'clean',
+  status TEXT NOT NULL DEFAULT 'open'
+    CHECK (status IN ('open','accepted','rejected','done','confirmed','disputed')),
+  gain_h REAL NOT NULL DEFAULT 0, report_count INTEGER NOT NULL DEFAULT 0, rank_score REAL NOT NULL DEFAULT 0,
+  done_by TEXT, due_at TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS lowpoints ( -- hand-placed ILLUSTRATIVE pockets for the scenario simulator. WRITE: dev#3 (seed). READ: all
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  kind TEXT NOT NULL CHECK (kind IN ('underpass','saucer','low_lane','other')),
-  lat REAL NOT NULL, lon REAL NOT NULL,
-  catchment_ha REAL NOT NULL, runoff_c REAL NOT NULL, storage_m3 REAL NOT NULL,
-  drain_mm_h REAL NOT NULL,            -- design drainage capacity as mm/h over the catchment
-  spills_to TEXT REFERENCES lowpoints(id),   -- downstream pocket, NULL = outlet (must form a forest: no cycles)
-  linked_asset_ids TEXT NOT NULL DEFAULT '[]',   -- JSON array of assets.id whose silt state applies to this pocket
-  data_source TEXT NOT NULL DEFAULT 'placeholder',  -- placeholder | field | satellite | inquiry_report
-  confidence TEXT NOT NULL DEFAULT 'low',
-  note TEXT
+CREATE TABLE IF NOT EXISTS task_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, task_id INTEGER NOT NULL REFERENCES tasks(id),
+  actor_id TEXT, event TEXT NOT NULL, note TEXT, photo_key TEXT, agency_id TEXT, at TEXT NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS alerts (   -- outbound Telegram sends to TEAM phones. WRITE: dev#1 (alerts router)
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  at TEXT NOT NULL,
-  channel TEXT NOT NULL DEFAULT 'telegram',
-  kind TEXT NOT NULL,                  -- lowpoint_high | storm_checklist
-  lang TEXT NOT NULL,
-  recipients_n INTEGER NOT NULL,
-  text_sha256 TEXT NOT NULL,
-  ref TEXT                             -- e.g. lowpoint id or storm set_at
+CREATE TABLE IF NOT EXISTS sites (
+  id TEXT PRIMARY KEY, name TEXT NOT NULL, lat REAL NOT NULL, lon REAL NOT NULL,
+  roof_m2 REAL NOT NULL, water_table_m REAL, water_table_verified INTEGER NOT NULL DEFAULT 0,
+  soil TEXT, in_floodplain INTEGER NOT NULL DEFAULT 0, wash_runoff INTEGER NOT NULL DEFAULT 0,
+  nearest_septic_m REAL, data_source TEXT NOT NULL DEFAULT 'hypothetical'
 );
-
-CREATE TABLE IF NOT EXISTS reports (  -- WRITE: dev#1
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ticket TEXT NOT NULL UNIQUE,       -- RR-000123
-  created_at TEXT NOT NULL,
-  category TEXT NOT NULL CHECK (category IN ('blocked_drain','waterlogged_road','open_manhole','live_wire','basement_water','other')),
-  lat REAL NOT NULL, lon REAL NOT NULL, accuracy_m REAL,
-  location_verified INTEGER NOT NULL DEFAULT 0,   -- 0 when manual pin / GPS denied
-  client_ts TEXT,
-  photo_key TEXT, photo_phash TEXT, photo_sha256 TEXT,
-  note TEXT,
-  user_id TEXT NOT NULL, user_role TEXT NOT NULL DEFAULT 'resident',   -- resident | staff
-  cluster_id INTEGER,
-  asset_id TEXT,                     -- nearest asset within 50 m, else NULL
-  triage_json TEXT,                  -- Bedrock output or {"mode":"manual"}; NEVER a scoring input
-  status TEXT NOT NULL DEFAULT 'reported'   -- reported | unverified | corroborated
-);
-
-CREATE TABLE IF NOT EXISTS jobs (     -- one cleaning job per asset visit. WRITE: dev#1 (reports/jobs routers; /ops creates)
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  asset_id TEXT NOT NULL REFERENCES assets(id),
-  created_at TEXT NOT NULL,
-  trigger TEXT NOT NULL,             -- p1_storm | p2_inspection | report | manual
-  score_snapshot REAL,
-  level INTEGER NOT NULL DEFAULT 0,  -- 0..3 (see core/levels.py)
-  status TEXT NOT NULL DEFAULT 'CLAIMED',   -- CLAIMED | FLAGGED | EVIDENCE_SUBMITTED | CONFIRMED | AUDITED
-  note TEXT
-);
-
-CREATE TABLE IF NOT EXISTS evidence ( -- WRITE: dev#1
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  job_id INTEGER NOT NULL REFERENCES jobs(id),
-  phase TEXT NOT NULL CHECK (phase IN ('before','after','bank','confirm','audit')),
-  role TEXT NOT NULL CHECK (role IN ('crew','resident','staff')),
-  user_id TEXT NOT NULL,
-  lat REAL NOT NULL, lon REAL NOT NULL, accuracy_m REAL,
-  client_ts TEXT, server_ts TEXT NOT NULL,
-  photo_key TEXT NOT NULL, photo_phash TEXT, photo_sha256 TEXT,
-  flags_json TEXT NOT NULL DEFAULT '[]'
-);
-
-CREATE TABLE IF NOT EXISTS buildings ( -- WRITE: dev#3
-  code TEXT PRIMARY KEY,             -- unguessable, e.g. 8 chars [a-z0-9]
-  name TEXT NOT NULL,
-  lat REAL, lon REAL,
-  declared_use TEXT, declared_exits INTEGER,
-  basement INTEGER NOT NULL, entrance_below_road INTEGER NOT NULL,
-  people_inside INTEGER NOT NULL, ramp_over_drain INTEGER NOT NULL,
-  near_listed_hotspot_200m INTEGER NOT NULL DEFAULT 0,
-  level TEXT NOT NULL, reasons_json TEXT NOT NULL,
-  lang TEXT NOT NULL DEFAULT 'en',
-  consent INTEGER NOT NULL DEFAULT 0,
-  created_at TEXT NOT NULL, last_ack_at TEXT,
-  is_demo INTEGER NOT NULL DEFAULT 0
-);
-
-CREATE TABLE IF NOT EXISTS acks (     -- caretaker acknowledged the checklist for a warning. WRITE: dev#3
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  building_code TEXT NOT NULL REFERENCES buildings(code),
-  warning_set_at TEXT NOT NULL, at TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS ledger (   -- append-only hash chain. WRITE: dev#1 only, via app/ledger.py
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  prev_hash TEXT NOT NULL, hash TEXT NOT NULL UNIQUE,
-  kind TEXT NOT NULL,                -- report | evidence | job_level | storm | building_ack | alert
-  ref_id TEXT NOT NULL,
-  record_json TEXT NOT NULL,
-  photo_sha256 TEXT,
-  server_ts TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_reports_cluster ON reports(category, created_at);
-CREATE INDEX IF NOT EXISTS idx_evidence_job ON evidence(job_id);
-CREATE INDEX IF NOT EXISTS idx_ledger_ref ON ledger(kind, ref_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_agency ON tasks(agency_id, status);
+CREATE INDEX IF NOT EXISTS idx_events_task ON task_events(task_id);

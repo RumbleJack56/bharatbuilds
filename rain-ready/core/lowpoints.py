@@ -1,4 +1,4 @@
-"""Low-point fill SCENARIO simulator. Pure functions, no I/O. Owner: dev#3 (logic reviewed by dev#4).
+"""Low-point fill SCENARIO simulator. Pure functions, no I/O. 
 
 THIS IS A SCENARIO TOOL, NOT A FORECAST. Pocket geometry, catchments and storage volumes are hand-placed
 illustrative parameters (30 m elevation data cannot locate street-level pockets). Output is relative

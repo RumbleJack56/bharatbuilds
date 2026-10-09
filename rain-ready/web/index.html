@@ -1,21 +1,24 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>Rain-Ready</title>
-<style>body{font-family:system-ui;max-width:42rem;margin:1.5rem auto;padding:0 1rem;line-height:1.5}li{margin:.35rem 0}small{color:#555}.todo{color:#888}</style></head><body>
-<h1>Rain-Ready</h1>
-<p>Which low points fill first, whether the drains were really cleaned, and what each person should do. <b>Scenario tool, not a forecast.</b></p>
-<p><small>dev#2 replaces this page with the shared layout (<code>nav.js</code>, <code>app.css</code>). Links to pages that do not exist yet are expected to 404 until their owner pushes them.</small></p>
-<ul>
-<li><a href="/lowpoints.html">Low points: rain scenario</a> <small>(dev#2)</small></li>
-<li><a href="/replay.html">Forecast-miss replay</a> <small>(dev#4)</small></li>
-<li><a href="/report.html">Report a problem</a> <small>(dev#2)</small></li>
-<li><a href="/map.html">Drain map</a> <small>(dev#2)</small></li>
-<li><a href="/task.html?id=1">Cleaning task</a> <small>(dev#2)</small></li>
-<li><a href="/building.html">My building checklist</a> <small>(dev#3)</small></li>
-<li><a href="/b.html?code=demo0001">Building placard (public)</a> <small>(dev#3)</small></li>
-<li><a href="/capture.html">Rain capture planner (experimental)</a> <small>(dev#4)</small></li>
-<li><a href="/ops.html">Operator console</a> <small>(dev#2)</small></li>
-<li><a href="/verify.html?id=1">Verify a record</a> <small>(dev#3)</small></li>
-</ul>
-<p>API: <a href="/api/health">/api/health</a> · <a href="/api/state">/api/state</a> · <a href="/api/lowpoints">/api/lowpoints</a> · <a href="/api/replay">/api/replay</a> · <a href="/api/capture/presets">/api/capture/presets</a> · <a href="/docs">/docs</a></p>
-<p><small>Unofficial. Information only. Official warnings: IMD / NDMA Sachet.</small></p>
-</body></html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/">Rain-Ready</a>
+  <span id="who" class="who"></span>
+  <button id="logout" class="link" hidden>Log out</button>
+</header>
+<main id="view" tabindex="-1"></main>
+<nav id="tabs" class="tabs" aria-label="Main"></nav>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="config.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,13 +1,19 @@
-"""Tiny auth helpers. Owner: dev#1. No accounts: a device UUID and a shared ops key."""
-from fastapi import Header, HTTPException
+"""Demo auth: the client sends X-User-Id (a persona from /api/users). Not real authentication; labelled in the UI."""
+from fastapi import Depends, Header, HTTPException
 
-from . import config
-
-
-def user_id(x_user_id: str | None = Header(default=None)) -> str:
-    return (x_user_id or "anon")[:64]
+from .db import get_db
 
 
-def require_ops(x_ops_key: str | None = Header(default=None)) -> None:
-    if x_ops_key != config.OPS_KEY:
-        raise HTTPException(status_code=401, detail="ops key required")
+def current_user(x_user_id: str | None = Header(default=None), db=Depends(get_db)):
+    row = db.execute("SELECT * FROM users WHERE id=?", (x_user_id or "",)).fetchone() if x_user_id else None
+    if not row:
+        raise HTTPException(401, "send X-User-Id with a persona id from /api/users")
+    return row
+
+
+def need(*roles: str):
+    def dep(user=Depends(current_user)):
+        if user["role"] not in roles:
+            raise HTTPException(403, f"role {user['role']} cannot do this")
+        return user
+    return dep

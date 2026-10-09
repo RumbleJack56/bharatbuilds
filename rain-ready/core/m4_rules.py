@@ -1,4 +1,4 @@
-"""Rain Capture planner: store / detain / recharge decision rules. Pure function, no I/O. Owner: dev#4.
+"""Rain Capture planner: store / detain / recharge decision rules. Pure function, no I/O.
 
 EXPERIMENTAL. Thresholds are taken from CGWB / CGWA / IS 15797 as summarised in
 docs/Rain_Ready_System_Design.md section 5.2, set to the strictest where sources conflict.

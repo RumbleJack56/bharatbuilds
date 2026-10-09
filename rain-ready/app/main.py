@@ -1,5 +1,4 @@
-"""App wiring. Owner: dev#1. Routers are auto-discovered: drop a file in app/routers/ that exposes `router`.
-A missing or broken router is skipped with a log line, so one dev's WIP cannot stop everyone else's demo."""
+"""App wiring. Routers in app/routers/ are auto-loaded; a broken one is skipped and listed in /api/health."""
 import importlib
 import logging
 import pkgutil
@@ -7,6 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from . import config, routers
@@ -24,11 +24,11 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Rain-Ready", version=config.VERSION, lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
 
 for m in pkgutil.iter_modules(routers.__path__):
     try:
-        mod = importlib.import_module(f"{routers.__name__}.{m.name}")
-        app.include_router(mod.router)
+        app.include_router(importlib.import_module(f"{routers.__name__}.{m.name}").router)
         LOADED.append(m.name)
     except Exception as e:  # noqa: BLE001
         FAILED[m.name] = repr(e)
@@ -37,9 +37,9 @@ for m in pkgutil.iter_modules(routers.__path__):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED}
+    return {"ok": True, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED,
+            "storage": config.STORAGE, "triage": config.TRIAGE_MODE}
 
 
 WEB = Path(__file__).resolve().parent.parent / "web"
-Path(config.PHOTO_DIR).mkdir(parents=True, exist_ok=True)
 app.mount("/", StaticFiles(directory=WEB, html=True), name="web")

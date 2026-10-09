@@ -1,4 +1,4 @@
-# local copies of research docs (the tracked copies are in rain-ready/docs and rain-ready/evidence)
+# private local files
 /Rain_Ready_*.md
 /Rain_Ready_*.pdf
 /implementation-rough-idea.md

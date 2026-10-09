@@ -1,0 +1,11 @@
+{
+  "name": "rain-ready-mobile",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Capacitor shell that bundles ../web as an Android APK",
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  }
+}
