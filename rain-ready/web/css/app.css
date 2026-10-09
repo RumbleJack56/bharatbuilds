@@ -43,3 +43,7 @@ label{display:block;font-weight:600;margin:10px 0 4px}
 .tl{list-style:none;padding:0;margin:0}.tl li{border-left:3px solid var(--line);padding:2px 0 8px 10px}
 .toast{position:fixed;left:12px;right:12px;bottom:76px;background:var(--ink);color:var(--bg);padding:12px;border-radius:8px;z-index:2000}
 table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:4px;text-align:left;border-bottom:1px solid var(--line)}
+[hidden]{display:none!important}                       /* B-2: a display rule must never beat the hidden attribute */
+input[type=radio],input[type=checkbox]{min-height:auto;width:auto;padding:0;margin:0 8px 0 0;border:0}   /* B-5 */
+label.opt{display:flex;align-items:center;font-weight:400;min-height:44px;margin:0}
+.map-label{font-weight:700;font-size:.75rem}
