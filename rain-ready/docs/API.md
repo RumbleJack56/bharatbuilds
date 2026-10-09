@@ -13,6 +13,7 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `GET /api/map` | public | pockets (level at 35 mm/h), drains with owner and last cleaned, open tasks, capture sites, banner |
 | `POST /api/simulate` | public | `{rain_mm_h, drain_state: clean\|silted\|current, at_h}` -> pockets in fill order |
 | `POST /api/incidents` | resident, admin | multipart: `lat, lon, kind, note, photo`, optional `accuracy_m` (phone GPS accuracy). Links to the nearest drain within 150 m; creates or bumps a task. Photo checks add `flags` (`code`, `level` warn or info, `detail`). A warn flag (photo geotag far from the spot, photo older than 2 days, picture already submitted) sets `held_for_review: true`: the report is saved and linked to the drain but does not create or bump a task |
+| `GET /api/capture-token` | resident, admin | `{token, ref, issued_at, valid_for_s, server_time}`. Call just before opening the camera; send `token` as `capture_token` with the report |
 | `GET /api/incidents?mine=true` | any persona | reports |
 | `GET /api/tasks?agency_id=&status=` | public | ranked tasks. `agency_id=none` lists tasks with no owner |
 | `GET /api/tasks/{id}` | public | task with `events` (timeline) and `incidents` |

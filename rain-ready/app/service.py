@@ -2,9 +2,10 @@
 import json
 from datetime import date, datetime, timedelta, timezone
 
-from core import geo, photocheck, planning
+from ai import stampread
+from core import geo, photocheck, planning, stamp
 
-from . import config
+from . import capture, config
 from .db import now_iso
 
 ACTIVE = ("open", "accepted", "done", "disputed")
@@ -77,3 +78,15 @@ def ensure_task(db, asset_id: str, actor: str | None, *, from_report: bool) -> t
     log_event(db, tid, actor, "created", "from resident report" if from_report else "from ranked plan", agency_id=asset["agency_id"])
     refresh_rank(db, tid)
     return tid, True
+
+
+def check_stamp(data: bytes, content_type: str, lat: float, lon: float, user_id: str, token: str | None) -> list[dict]:
+    """Flags for the on-photo stamp and the capture token (see app/capture.py)."""
+    ref = capture.verify(token, user_id)
+    strict = config.REQUIRE_LIVE_CAPTURE
+    flags = []
+    if ref is None:
+        flags.append({"code": "photo_not_live", "level": "warn" if strict else "info",
+                      "detail": "the photo was not taken with the in-app camera just now"})
+    return flags + stamp.assess(stampread.read_stamp(data, content_type), lat, lon, datetime.now(timezone.utc), ref,
+                                "warn" if strict else "info")

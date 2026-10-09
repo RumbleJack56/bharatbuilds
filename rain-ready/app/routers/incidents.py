@@ -25,7 +25,7 @@ def _incident(r) -> dict:
 
 @router.post("/incidents")
 async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: str = Form(""), note: str = Form(""),
-                          accuracy_m: float | None = Form(None),
+                          accuracy_m: float | None = Form(None), capture_token: str = Form(""),
                           photo: UploadFile | None = File(default=None), user=Depends(need("resident", "admin")),
                           db=Depends(get_db)):
     if not geo.in_ncr(lat, lon):
@@ -39,6 +39,7 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
             raise HTTPException(422, str(e))
         ai = triage.triage_photo(data, photo.content_type, note)
         phash, flags = service.check_photo(db, data, lat, lon, user["id"], accuracy_m)
+        flags += service.check_stamp(data, photo.content_type, lat, lon, user["id"], capture_token)
     kind = kind if kind in KINDS else (ai["kind"] if ai else "")
     if kind not in KINDS:
         raise HTTPException(422, f"kind is required (one of {', '.join(KINDS)}) when the photo could not be classified")

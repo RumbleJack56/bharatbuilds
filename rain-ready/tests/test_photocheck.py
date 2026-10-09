@@ -101,7 +101,8 @@ def test_wrong_geotag_is_held(client):
 
 def test_honest_report_with_matching_geotag_counts(client):
     r = post(client, "res-1", picture(7, lat=28.6433, lon=77.1846, taken=datetime.now().strftime("%Y:%m:%d %H:%M:%S")))
-    assert not r["held_for_review"] and r["task_created"] and r["flags"] == []
+    assert not r["held_for_review"] and r["task_created"]
+    assert all(f["level"] == "info" for f in r["flags"])
 
 
 def test_after_photo_that_reuses_the_report_photo_is_flagged(client):
