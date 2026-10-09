@@ -83,10 +83,10 @@ Everything below is the full backlog after these.
 ## 5. Full backlog: Ujjwal
 
 - [x] B1 LICENSE (MIT) done; reset is in PR #1, merge to `main` and confirm both can push
-- [ ] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**
+- [x] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**. Live: https://15-207-177-122.sslip.io (details in `PLAN.md` section 7)
 - [ ] B3 Switch the server to `STORAGE=s3`; check photos load in the UI
 - [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`
-- [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green
+- [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green. The list is `PLAN.md` section 7; item 8 (S3 photo URLs) blocks the video
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
 - [ ] B7 Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
 - [ ] B8 Backend good-to-haves from SCOPE 4.5 to 4.9, in the order listed

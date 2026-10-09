@@ -1699,6 +1699,16 @@ Each is one new adapter or service function plus a view, so none touches existin
 2. Add `asset_name` and `last_confirmed_clean` to `/api/map` tasks.
 3. Enforce "a **different** resident confirms" (block the reporter of the task, not only `done_by`); today the `done_by` check can never trigger.
 4. Seed tuning so "As they are now" is not all High at 35 mm/h, and move the out-of-ward demo underpass so it does not rank #1.
-5. Add `node --test web/tests` to `.github/workflows/test.yml` and a `make test-web` target.
-6. `docs/DEPLOY.md`: Docker and Compose install commands for Amazon Linux 2023; APK build needs the Android SDK and JDK 17.
+5. Add `node --test web/tests` to the root `.github/workflows/test.yml` and a `make test-web` target.
+6. `docs/DEPLOY.md`: APK build needs the Android SDK and JDK 17.
 7. Same layering on the backend: routers = controllers, `app/service.py` = application services, `core/` = pure functions, `app/storage.py` and `ai/triage.py` = adapters picked by config. A `typing.Protocol` for `PhotoStore` and `Triage` would make that swap point explicit.
+8. **Photos do not open on the live server (blocks the video).** `app/storage.py` `presigned()` signs URLs for the global host `<bucket>.s3.amazonaws.com`. A new ap-south-1 bucket answers there with `TemporaryRedirect`, and the redirected request fails with 403 because the signature is for the other host. Fix, tested with the live bucket (returns 200 image/png):
+   `boto3.client("s3", region_name=config.AWS_REGION, endpoint_url=f"https://s3.{config.AWS_REGION}.amazonaws.com", config=Config(signature_version="s3v4", s3={"addressing_style": "virtual"}))`. Use the same client in `save_photo()` and `app/checks.py`.
+9. `scripts/bootstrap-ec2.sh`: the latest Compose plugin needs buildx 0.17 or later ("compose build requires buildx 0.17.0 or later"). Install `docker-buildx` into `/usr/local/lib/docker/cli-plugins` too, or pin the Compose version. On the live server it was installed by hand (buildx v0.38.0).
+10. Deploy playbook step B8: `git archive --format=tar HEAD:rain-ready` must run from the repo root. Run from `rain-ready/` it sends an empty archive without an error.
+
+### Live deployment (9 Oct 2026, Aarush's AWS account, ap-south-1)
+- URL: https://15-207-177-122.sslip.io (Caddy HTTPS). `/api/health?deep=1` returns `ok: true`, `storage: s3`, `aws: {s3: ok}`, `triage: manual`.
+- EC2 `i-02d1bc6b65cbad783` (t3.small, AL2023), Elastic IP 15.207.177.122, bucket `rainready-photos-896128818776`, role and instance profile `rainready-ec2`, first AMI `ami-0a18e29223db65238`, hourly DB backup to `s3://<bucket>/backup/` by cron.
+- Redeploy: from the repo root, `git archive --format=tar HEAD:rain-ready | ssh -i rain-ready/rainready.pem ec2-user@15.207.177.122 'tar -x -C bharatbuilds/rain-ready'`, then `ssh ... 'cd bharatbuilds/rain-ready && docker compose up -d --build'`. The server `.env` and `var/` are kept. Aarush shares the SSH key privately.
+- Bedrock is not on yet (model access pending). One test report (id 1, outside the ward) is in the DB; clear it before recording.
