@@ -103,3 +103,12 @@ test("after-photo flags show under the 'Marked done' event", () => {
     flags: [{ code: "old_photo", level: "warn", detail: "Photo is older than 2 days." }] }] };
   assert.match(taskDetail(t, { banner: "" }), /Marked done[\s\S]*Check needed:<\/strong> Photo is older than 2 days\./);
 });
+
+import { adminView } from "../js/views/admin.view.js";
+test("admin view lists no-owner tasks with an assign control and shows the last plan result", () => {
+  const html = adminView({ banner: "b", result: "Created 4 task(s): 2, 3, 4, 5.",
+    agencies: [{ id: "pwd", name: "PWD" }], tasks: [{ id: 5, status: "open", asset_name: "Inlet", owner_source: "disputed" }] });
+  assert.match(html, /Tasks with no owner \(1\)/);
+  assert.match(html, /data-task="5"/);
+  assert.match(html, /Created 4 task\(s\)/);
+});

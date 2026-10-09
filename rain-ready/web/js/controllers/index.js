@@ -4,7 +4,7 @@ import { login } from "./login.js";
 import { report } from "./report.js";
 import { mine, confirm } from "./resident.js";
 import { inbox, task } from "./official.js";
-import { renderAdmin } from "../admin.js";
+import { admin } from "./admin.js";
 import { renderDash } from "../dash.js";
 
 export const CONTROLLERS = [
@@ -15,7 +15,7 @@ export const CONTROLLERS = [
   confirm,
   inbox,
   task,
-  legacy("admin", ["admin"], renderAdmin),
+  admin,
 ];
 export const TABS = {
   resident: [["#/report", "Report"], ["#/mine", "My reports"], ["#/confirm", "Confirm"], ["#/dash", "Dashboard"]],
