@@ -1,15 +1,14 @@
 // web/js/controllers/index.js — route table. Each entry is a Controller (PLAN.md 2.2); legacy() until migrated.
-import { legacy } from "../core/router.js";
 import { login } from "./login.js";
 import { report } from "./report.js";
 import { mine, confirm } from "./resident.js";
 import { inbox, task } from "./official.js";
 import { admin } from "./admin.js";
-import { renderDash } from "../dash.js";
+import { dash } from "./dash.js";
 
 export const CONTROLLERS = [
   login,
-  legacy("dash", null, (root, _me, tab) => renderDash(root, tab)),
+  dash,
   report,
   mine,
   confirm,

@@ -112,3 +112,25 @@ test("admin view lists no-owner tasks with an assign control and shows the last 
   assert.match(html, /data-task="5"/);
   assert.match(html, /Created 4 task\(s\)/);
 });
+
+import { readFileSync } from "node:fs";
+import { accountabilityView, impactView, captureView, mapLegend } from "../js/views/dash.view.js";
+import { simResults } from "../js/views/sim.view.js";
+const fx = (n) => JSON.parse(readFileSync(new URL(`./fixtures/${n}.json`, import.meta.url)));
+
+test("every dashboard view renders seed data without banned words", () => {
+  const html = [accountabilityView(fx("accountability")), impactView(fx("impact")), captureView(fx("opportunities")),
+    mapLegend(fx("map")), simResults(fx("simulate"))].join("");
+  assert.doesNotMatch(html, copy.BANNED);
+});
+test("accountability shows the No owner found row", () => assert.match(accountabilityView(fx("accountability")), /No owner found/));
+test("simulator results carry a text level on every pocket, never colour alone", () => {
+  const d = fx("simulate");
+  const html = simResults(d);
+  for (const p of d.results) assert.match(html, new RegExp(copy.LEVEL[p.level][1]));
+  assert.match(html, /class="banner"/);
+});
+test("capture shows the rule id and the experimental banner", () => {
+  const html = captureView(fx("opportunities"));
+  assert.match(html, /R2/); assert.match(html, /Experimental/);
+});
