@@ -8,3 +8,8 @@ export const EVENT = { created: "Task created", report_added: "Another report ad
   disputed: "Disputed by a resident" };
 export const LEVEL = { high: ["#b3261e", "High"], elevated: ["#d9822b", "Elevated"], watch: ["#c9b100", "Watch"], none: ["#6b7b88", "None"] };
 export const USE = { store_reuse: "Store and reuse", detain: "Detain only", recharge: "Recharge", needs_data_or_tank: "Needs data" };
+export const PIN = {
+  default: "Default pin (Old Rajinder Nagar) - tap the map or use my location",
+  tapped: "Pin you tapped",
+  gps: (m) => `Your GPS (\u00b1 ${Math.round(m)} m)`,
+};

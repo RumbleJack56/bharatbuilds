@@ -12,18 +12,29 @@ export function resolve(controllers, name, role) {
 }
 
 export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml }) {
-  let cleanup = null;
+  let cleanup = null, seq = 0;
   async function render() {
+    const my = ++seq, stale = () => my !== seq;
     const { name, params } = parseHash(location.hash);
     const me = await ctx.services.session.me().catch(() => null);
+    if (stale()) return;
     const hit = resolve(controllers, name, me ? me.role : null);
     const target = me ? home[me.role] : "#/login";
     if (hit.redirect && location.hash !== target) { location.hash = target; return; }
     const controller = hit.controller || controllers.find(c => c.path === "login");
     onChrome(me, location.hash);
     if (cleanup) { cleanup(); cleanup = null; }
-    try { cleanup = (await controller.mount(root, ctx, params)) || null; }
-    catch (e) { root.innerHTML = errorHtml(e); }
+    const host = document.createElement("div");      // a stale render writes into a host nobody sees
+    root.replaceChildren(host);
+    let done = null;
+    try { done = (await controller.mount(host, ctx, params)) || null; }
+    catch (e) {
+      if (stale()) return;
+      if (e && e.status === 401) { ctx.services.session.logout(); location.hash = "#/login"; return; }
+      host.innerHTML = errorHtml(e);
+    }
+    if (stale()) { if (done) done(); return; }
+    cleanup = done;
     root.focus();
   }
   return {

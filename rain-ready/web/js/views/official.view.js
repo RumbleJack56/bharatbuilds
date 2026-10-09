@@ -20,7 +20,7 @@ const eventItem = (e) => `<li><strong>${esc(EVENT[e.event] || e.event)}</strong>
 
 export const taskDetail = (t, { banner: b, back }) => `<p><a href="${esc(back)}">Back</a></p>
   <h1>${esc(t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
-  <p>Owner: <strong>${esc(t.agency_name)}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
+  <p>Owner: <strong>${esc(t.agency_name || "No owner found")}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
   ${banner(b)}<p>${esc(t.pocket_name || "")} - cleaning this gains ${esc(hrs(t.gain_h))} of fill time.</p>
   ${t.due_at ? `<p class="small muted">Due ${esc(when(t.due_at))}</p>` : ""}
   <p class="rule">${esc(FIELD_RULE)}</p><div id="actions"></div>

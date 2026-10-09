@@ -1,6 +1,6 @@
 // web/js/controllers/report.js — resident report: photo, GPS or tapped pin, kind (or "not sure"), note.
 import { reportForm, reportResult } from "../views/report.view.js";
-import { KINDS, FIELD_RULE } from "../ui/copy.js";
+import { KINDS, FIELD_RULE, PIN } from "../ui/copy.js";
 import { errBox, guard } from "../ui/components.js";
 
 const DEFAULT = [28.6433, 77.1846];       // Old Rajinder Nagar, the pilot ward
@@ -13,14 +13,14 @@ export const report = {
     let pos = DEFAULT.slice(), accuracy = null;       // accuracy only while the pin is the GPS fix
     const mapView = ctx.map.available() ? ctx.map.create($("#mini"), { center: pos, zoom: 16 }) : null;
     if (!mapView) $("#mini").hidden = true;
-    const setPos = (lat, lon, fly, acc = null) => {
+    const setPos = (lat, lon, text, fly, acc = null) => {
       pos = [lat, lon]; accuracy = acc;
-      $("#coords").textContent = `Location: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+      $("#coords").textContent = text;
       mapView?.pin(pos);
       if (fly) mapView?.view(pos, 17);
     };
-    mapView?.onClick((lat, lon) => setPos(lat, lon));
-    setPos(...pos);
+    mapView?.onClick((lat, lon) => setPos(lat, lon, PIN.tapped));
+    setPos(pos[0], pos[1], PIN.default);
 
     $("#cam").onclick = () => $("#photo").click();
     $("#photo").onchange = (e) => {
@@ -29,8 +29,8 @@ export const report = {
       $("#cam").textContent = f ? "Change photo" : "Take or choose a photo";
     };
     $("#gps").onclick = (ev) => guard(ev.target, async () => {
-      try { const g = await ctx.geo.current(); setPos(g.lat, g.lon, true, g.accuracy_m); }
-      catch (e) { ctx.toast.show(e.message); }                       // pin stays where it was
+      try { const g = await ctx.geo.current(); setPos(g.lat, g.lon, g.accuracy_m == null ? "Your GPS" : PIN.gps(g.accuracy_m), true, g.accuracy_m); }
+      catch (e) { $("#coords").textContent = e.message; ctx.toast.show(e.message); }                       // pin stays where it was
     }, ctx.toast.show);
     $("#f").onsubmit = (ev) => {
       ev.preventDefault();

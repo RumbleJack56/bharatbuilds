@@ -9,7 +9,7 @@ export function photos(urls, alt) {
   return list.length ? `<div class="photos">${list.map(u => `<img loading="lazy" src="${esc(u)}" alt="${esc(alt)}">`).join("")}</div>` : "";
 }
 export const flagList = (flags) => flags && flags.length
-  ? `<ul class="flags">${flags.map(f => `<li><strong>${f.level === "warn" ? "Check needed" : "Note"}:</strong> ${esc(f.detail)}</li>`).join("")}</ul>` : "";
+  ? `<ul class="flags">${flags.map(f => `<li class="${f.level === "warn" ? "warn" : "info"}"><strong>${f.level === "warn" ? "Check needed" : "Note"}:</strong> ${esc(f.detail)}</li>`).join("")}</ul>` : "";
 // Runs fn once per tap: ignores taps while busy, re-enables after, reports errors to onError (usually ctx.toast.show).
 export async function guard(btn, fn, onError) {
   if (btn.disabled) return;
