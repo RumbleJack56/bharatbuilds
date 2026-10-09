@@ -162,7 +162,7 @@ def test_review_guards(client):
     assert client.post(f"/api/incidents/{iid}/review", json={"decision": "maybe"}, headers=as_("admin-1")).status_code == 422
     assert client.post(f"/api/incidents/{iid}/review", json={"decision": "reject"}, headers=as_("admin-1")).status_code == 200
     assert client.post(f"/api/incidents/{iid}/review", json={"decision": "release"}, headers=as_("admin-1")).status_code == 409
-    clean = post(client, "res-1", picture(11))
+    clean = post(client, "admin-1", picture(11))
     assert client.post(f"/api/incidents/{clean['incident']['id']}/review", json={"decision": "release"},
                        headers=as_("admin-1")).status_code == 409
 

@@ -46,6 +46,7 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
         ai = triage.triage_photo(data, photo.content_type, note)
         phash, flags = service.check_photo(db, data, lat, lon, user["id"], accuracy_m)
         flags += service.check_stamp(data, photo.content_type, lat, lon, user["id"], capture_token)
+    flags += service.check_duplicate(db, user["id"], lat, lon)
     kind = kind if kind in KINDS else (ai["kind"] if ai else "")
     if kind not in KINDS:
         raise HTTPException(422, f"kind is required (one of {', '.join(KINDS)}) when the photo could not be classified")
