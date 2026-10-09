@@ -43,3 +43,14 @@ label{display:block;font-weight:600;margin:10px 0 4px}
 .tl{list-style:none;padding:0;margin:0}.tl li{border-left:3px solid var(--line);padding:2px 0 8px 10px}
 .toast{position:fixed;left:12px;right:12px;bottom:76px;background:var(--ink);color:var(--bg);padding:12px;border-radius:8px;z-index:2000}
 table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:4px;text-align:left;border-bottom:1px solid var(--line)}
+[hidden]{display:none!important}                       /* B-2: a display rule must never beat the hidden attribute */
+input[type=radio],input[type=checkbox]{min-height:auto;width:auto;padding:0;margin:0 8px 0 0;border:0}   /* B-5 */
+label.opt{display:flex;align-items:center;font-weight:400;min-height:44px;margin:0}
+.map-label{font-weight:700;font-size:.75rem}
+
+.tasklink{display:block;text-decoration:none;color:inherit}.wide{width:100%}.gap{margin-top:14px}
+.map.tall{height:420px}fieldset.plain{border:0;padding:0;margin:8px 0}
+.drain{width:14px;height:14px;background:#0b5cad;border:2px solid #fff}.drain.noowner{background:#b3261e}
+.rank{width:28px;height:28px;border-radius:50%;background:#fff;color:#16202a;border:3px solid #b3261e;text-align:center;line-height:22px;font-weight:700}
+.flags{list-style:none;padding:0;margin:8px 0}.flags li{padding:6px 10px;margin:4px 0;border-left:4px solid var(--none);background:var(--card);border-radius:4px}
+.flags li.warn{border-left-color:var(--high);background:var(--warn-bg);color:var(--warn-ink)}
