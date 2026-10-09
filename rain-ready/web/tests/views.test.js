@@ -62,3 +62,22 @@ test("login view lists personas and escapes names", () => {
   assert.match(html, /data-id="res-1"/);
   assert.match(html, /A&lt;b&gt;/);
 });
+
+import { mineView, confirmCard } from "../js/views/resident.view.js";
+test("mine shows an empty state with a link to report", () => assert.match(mineView([]), /#\/report/));
+test("mine marks held reports and lists flag details with text levels", () => {
+  const warn = { kind: "blocked_drain", created_at: "2026-10-09T10:00:00", photo_url: "https://h/a.png",
+    flags: [{ code: "old", level: "warn", detail: "Photo is older than 2 days" }, { code: "n", level: "info", detail: "Low GPS accuracy" }] };
+  const html = mineView([warn]);
+  assert.match(html, /Held for a check/); assert.match(html, /Check needed:<\/strong> Photo is older/); assert.match(html, /Note:<\/strong> Low GPS/);
+  assert.doesNotMatch(mineView([{ ...warn, flags: [warn.flags[1]] }]), /Held for a check/);
+  assert.match(mineView([{ kind: "other", held_for_review: true, photo_url: "" }]), /Held for a check/);
+});
+test("confirm card shows before and after photos and both answers", () => {
+  const t = { id: 2, asset_name: "Drain", agency_name: "MCD", pocket_name: "Saucer",
+    incidents: [{ kind: "blocked_drain", note: "plastic", photo_url: "https://h/media/b.png" }],
+    events: [{ event: "completed", note: "cleared", photo_url: "https://h/media/a.png" }] };
+  const html = confirmCard(t);
+  assert.match(html, /media\/b\.png/); assert.match(html, /media\/a\.png/);
+  assert.match(html, /Looks fixed/); assert.match(html, /Still a problem/);
+});

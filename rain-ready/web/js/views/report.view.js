@@ -1,5 +1,6 @@
 // web/js/views/report.view.js — report form and result card. Pure.
 import { esc } from "../ui/format.js";
+import { flagList } from "../ui/components.js";
 
 export function reportForm({ fieldRule, kinds }) {
   return `<h1>Report a problem</h1><p class="rule">${esc(fieldRule)}</p>
@@ -21,9 +22,6 @@ export function reportForm({ fieldRule, kinds }) {
     <button class="primary big" id="send" type="submit">Send report</button>
   </form><div id="out"></div>`;
 }
-
-const flagList = (flags) => flags && flags.length
-  ? `<ul class="flags">${flags.map(f => `<li><strong>${f.level === "warn" ? "Check needed" : "Note"}:</strong> ${esc(f.detail)}</li>`).join("")}</ul>` : "";
 
 export function reportResult(r) {
   const ai = r.incident && r.incident.ai;

@@ -2,7 +2,7 @@
 import { legacy } from "../core/router.js";
 import { login } from "./login.js";
 import { report } from "./report.js";
-import { renderMine, renderConfirm } from "../resident.js";
+import { mine, confirm } from "./resident.js";
 import { renderInbox, renderTask } from "../official.js";
 import { renderAdmin } from "../admin.js";
 import { renderDash } from "../dash.js";
@@ -11,8 +11,8 @@ export const CONTROLLERS = [
   login,
   legacy("dash", null, (root, _me, tab) => renderDash(root, tab)),
   report,
-  legacy("mine", ["resident"], renderMine),
-  legacy("confirm", ["resident"], renderConfirm),
+  mine,
+  confirm,
   legacy("inbox", ["official"], renderInbox),
   legacy("task", ["official", "admin", "resident"], renderTask),
   legacy("admin", ["admin"], renderAdmin),
