@@ -59,8 +59,8 @@ Everything below is the full backlog after these.
 
 - [ ] B1 LICENSE (MIT), push the reset to `main`, confirm both can push
 - [ ] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). **Public URL by hour 3**
-- [ ] B3 Bedrock test with one photo; else `TRIAGE_MODE=manual`
-- [ ] B4 Switch the server to `STORAGE=s3`; check photos load in the UI
+- [ ] B3 Switch the server to `STORAGE=s3`; check photos load in the UI
+- [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`
 - [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
 - [ ] B7 Real drain and pocket data for the ward in `seed.json`; owner source per drain
