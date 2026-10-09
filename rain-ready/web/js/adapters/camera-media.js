@@ -13,7 +13,7 @@ export function createMediaCamera(doc, nav = globalThis.navigator) {
       try { stream = await md.getUserMedia({ video: { facingMode: "environment" }, audio: false }); }
       catch { throw new Error(DENIED); }
       const ov = el("div", { className: "cam-overlay" });
-      ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Camera");
+      ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Camera");
       const video = el("video", { className: "cam-video", srcObject: stream, muted: true, autoplay: true });
       video.setAttribute("playsinline", ""); video.setAttribute("aria-label", "Live camera view");
       const shoot = el("button", { type: "button", className: "primary big", textContent: "Capture", disabled: true });
@@ -23,14 +23,21 @@ export function createMediaCamera(doc, nav = globalThis.navigator) {
       const bar = el("div", { className: "cam-bar" });
       bar.append(cancel, shoot); ov.append(video, bar); doc.body.append(ov);
       return new Promise((resolve, reject) => {
-        const close = () => { stream.getTracks().forEach(t => t.stop()); ov.remove(); };
-        video.onloadedmetadata = () => { shoot.disabled = false; video.play?.(); };
-        cancel.onclick = () => { close(); reject(Object.assign(new Error("Cancelled"), { cancelled: true })); };
+        const close = () => { doc.removeEventListener?.("keydown", onKey); stream.getTracks().forEach(t => t.stop()); ov.remove(); };
+        const abort = () => { close(); reject(Object.assign(new Error("Cancelled"), { cancelled: true })); };
+        const onKey = (e) => { if (e.key === "Escape") abort(); };
+        doc.addEventListener?.("keydown", onKey);
+        video.onloadedmetadata = () => { shoot.disabled = false; shoot.focus?.(); video.play?.(); };
+        cancel.onclick = abort;
         shoot.onclick = () => {
-          const c = el("canvas", { width: video.videoWidth, height: video.videoHeight });
-          c.getContext("2d").drawImage(video, 0, 0, c.width, c.height);
-          close(); resolve(c);
+          try {
+            const c = el("canvas", { width: video.videoWidth, height: video.videoHeight });
+            c.getContext("2d").drawImage(video, 0, 0, c.width, c.height);
+            resolve(c);
+          } catch (e) { reject(e); }
+          finally { close(); }
         };
+        shoot.focus?.();
       });
     },
   };

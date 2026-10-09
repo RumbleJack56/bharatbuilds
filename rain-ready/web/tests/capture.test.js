@@ -8,6 +8,7 @@ import { createIncidentsService } from "../js/services/incidents.service.js";
 import { createMediaCamera } from "../js/adapters/camera-media.js";
 import { report } from "../js/controllers/report.js";
 import { PIN, BANNED } from "../js/ui/copy.js";
+import { task } from "../js/controllers/official.js";
 
 // A Date-like with fixed local fields; offset is getTimezoneOffset() (minutes WEST of UTC, so IST is -330).
 const at = (offset, h = 13, m = 5) => ({ getDate: () => 18, getMonth: () => 9, getFullYear: () => 2026, getHours: () => h, getMinutes: () => m,
@@ -42,7 +43,8 @@ test("drawStamp: dark box bottom-left, white text, font at least 3% of height", 
   assert.ok(tiny.some(v => /^16px/.test(v)), "minimum 16px");
 });
 
-const canvas = () => ({ width: 640, height: 480, getContext: () => ({ measureText: () => ({ width: 50 }), fillRect() {}, fillText() {} }),
+const canvas = () => ({ width: 640, height: 480, drawn: [],
+  getContext() { return { measureText: () => ({ width: 50 }), fillRect() {}, fillText: (t) => this.drawn.push(t) }; },
   toBlob(cb, type, q) { this.args = [type, q]; cb(new Blob(["jpeg"], { type })); } });
 const svc = ({ geo, cv = canvas(), http = createFakeHttp({ "GET /api/capture-token": { token: "tok1", ref: "7QK2" } }) } = {}) =>
   ({ http, cv, s: createCaptureService({ http, camera: { capture: async () => cv }, stamp: { lines: stampLines, draw: drawStamp }, clock: () => at(-330),
@@ -54,6 +56,7 @@ test("takePhoto: token first, JPEG blob 0.85, result carries lat/lon/accuracy/to
   assert.equal(http.calls[0].path, "/api/capture-token");
   assert.equal(r.blob.type, "image/jpeg");
   assert.deepEqual(cv.args, ["image/jpeg", 0.85]);
+  assert.ok(cv.drawn.some(l => l === "Ref 7QK2"), "stamp carries the token Ref");
   assert.deepEqual([r.lat, r.lon, r.accuracy_m, r.capture_token], [28.6, 77.1, 12, "tok1"]);
 });
 test("takePhoto: withToken false makes no token request", async () => {
@@ -62,8 +65,22 @@ test("takePhoto: withToken false makes no token request", async () => {
   assert.equal(http.calls.length, 0);
   assert.equal(r.capture_token, "");
 });
+test("takePhoto: returned lat/lon equal the stamped digits", async () => {
+  const { s, cv } = svc({ geo: async () => ({ lat: 28.64331234567, lon: 77.18461234567, accuracy_m: 10 }) });
+  const r = await s.takePhoto({ withToken: true });
+  assert.deepEqual([r.lat, r.lon], [28.643312, 77.184612]);
+  assert.ok(cv.drawn.includes(`Lat ${r.lat.toFixed(6)}°`) && cv.drawn.includes(`Long ${r.lon.toFixed(6)}°`));
+});
+test("stampLines: no Ref line when ref is empty", () => {
+  const l = stampLines({ lat: 1, lon: 2, when: at(-330), ref: "" });
+  assert.equal(l.length, 3);
+  assert.ok(!l.some(x => x.startsWith("Ref")));
+});
+test("takePhoto: a location failure gets a photo-specific message", async () => {
+  const bad = svc({ geo: async () => { throw new Error("Could not get GPS. Tap the map to move the pin."); } }).s;
+  await assert.rejects(bad.takePhoto({}), e => /Allow location access and retake the photo/.test(e.message) && !/map/.test(e.message));
+});
 test("takePhoto: denied location and poor accuracy reject, nothing stamped", async () => {
-  await assert.rejects(svc({ geo: async () => { throw new Error("Could not get GPS. Tap the map to move the pin."); } }).s.takePhoto({}), /Could not get GPS/);
   await assert.rejects(svc({ geo: async () => ({ lat: 1, lon: 2, accuracy_m: 150 }) }).s.takePhoto({}), /not precise enough \(± 150 m\).*retake/);
   await assert.rejects(svc({ geo: async () => ({ lat: 1, lon: 2, accuracy_m: null }) }).s.takePhoto({}), /could not get your location/i);
 });
@@ -90,6 +107,50 @@ test("camera adapter: available() follows getUserMedia; denied maps to a readabl
   const cam = createMediaCamera({}, nav);
   assert.equal(cam.available(), true);
   await assert.rejects(cam.capture(), /Camera not available\. Allow camera access, or send the report without a photo\./);
+});
+
+// Fake document: body.append collects overlays, elements record handlers; enough to drive the overlay.
+function fakeDoc() {
+  const mk = (tag) => ({ tag, attrs: {}, kids: [], removed: false, focused: false, listeners: {},
+    setAttribute(k, v) { this.attrs[k] = v; }, append(...c) { this.kids.push(...c); }, remove() { this.removed = true; },
+    focus() { this.focused = true; }, addEventListener(t, f) { this.listeners[t] = f; }, getContext: () => ({ drawImage() { throw new Error("boom"); } }) });
+  const doc = { created: [], listeners: {}, createElement(t) { const e = mk(t); doc.created.push(e); return e; },
+    addEventListener(t, f) { doc.listeners[t] = f; }, removeEventListener(t) { delete doc.listeners[t]; } };
+  doc.body = mk("body");
+  return doc;
+}
+const fakeNav = (stops) => ({ mediaDevices: { getUserMedia: async () => ({ getTracks: () => [{ stop: () => stops.push(1) }, { stop: () => stops.push(1) }] }) } });
+const open = async () => {
+  const doc = fakeDoc(), stops = [];
+  const p = createMediaCamera(doc, fakeNav(stops)).capture();
+  await new Promise(r => setTimeout(r, 0));
+  const find = (t, txt) => doc.created.find(e => e.tag === t && (!txt || e.textContent === txt));
+  return { doc, stops, p, ov: doc.created.find(e => e.className === "cam-overlay"), shoot: find("button", "Capture"), cancel: find("button", "Cancel") };
+};
+test("camera adapter: cancel stops tracks and removes the overlay; dialog is modal, focus on Capture", async () => {
+  const { stops, p, ov, cancel, shoot } = await open();
+  assert.equal(ov.attrs["aria-modal"], "true");
+  assert.equal(shoot.focused, true);
+  cancel.onclick();
+  await assert.rejects(p, e => e.cancelled === true);
+  assert.equal(stops.length, 2); assert.equal(ov.removed, true);
+});
+test("camera adapter: Escape cancels", async () => {
+  const { doc, stops, p, ov } = await open();
+  doc.listeners.keydown({ key: "Escape" });
+  await assert.rejects(p, e => e.cancelled === true);
+  assert.equal(stops.length, 2); assert.equal(ov.removed, true);
+});
+test("camera adapter: capture resolves a canvas and cleans up; a draw failure still cleans up", async () => {
+  const ok = await open();
+  ok.doc.createElement = ((orig) => (t) => { const e = orig(t); if (t === "canvas") e.getContext = () => ({ drawImage() {} }); return e; })(ok.doc.createElement);
+  ok.shoot.onclick();
+  assert.equal((await ok.p).tag, "canvas");
+  assert.equal(ok.stops.length, 2); assert.equal(ok.ov.removed, true);
+  const bad = await open();
+  bad.shoot.onclick();
+  await assert.rejects(bad.p, /boom/);
+  assert.equal(bad.stops.length, 2); assert.equal(bad.ov.removed, true);
 });
 
 // Report page with a fake root: elements keyed by selector.
@@ -156,7 +217,6 @@ test("report: no camera says so, the button is off, and copy has no banned words
   assert.doesNotMatch(PIN.photo(3), BANNED);
 });
 
-import { task } from "../js/controllers/official.js";
 test("official: Mark done needs a camera photo; completes with the stamped blob and asks for no token", async () => {
   const els = {};
   const el = (s) => els[s] ??= { textContent: "", innerHTML: "", disabled: false, value: "n", addEventListener() {} };

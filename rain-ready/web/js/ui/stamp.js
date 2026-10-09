@@ -9,7 +9,7 @@ function stampTime(d) {
 }
 
 export function stampLines({ lat, lon, when, ref, address }) {
-  return [...(address ? [address] : []), `Lat ${lat.toFixed(6)}°`, `Long ${lon.toFixed(6)}°`, stampTime(when), `Ref ${ref}`];
+  return [...(address ? [address] : []), `Lat ${lat.toFixed(6)}°`, `Long ${lon.toFixed(6)}°`, stampTime(when), ...(ref ? [`Ref ${ref}`] : [])];
 }
 
 // Bottom-left dark box with white text; font is at least 3% of the image height so OCR can read it.
