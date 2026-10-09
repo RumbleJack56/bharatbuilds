@@ -2,6 +2,16 @@
 
 Ujjwal and Aarush work in parallel on **main** with short-lived branches. The split below is by file, so merges rarely touch the same lines.
 
+## 0. Status on 10 Oct 2026 (read first)
+
+**Done (PR #1, branch `ujjwal/b1-license-deploy-aids`):** LICENSE; CI at the repo root (green); S3 and Bedrock code paths with tests; deploy scripts in `scripts/`; `/api/health?deep=1`; photo checks (perceptual hash, EXIF geotag and time); capture token and on-photo stamp check; held-for-review reports; `docs/CAPTURE.md`. 76 tests pass.
+
+**Blocked on AWS:** nothing has run on real AWS. Aarush owns the account with credits. The deploy playbook was shared with him directly. After it runs he sends Ujjwal the URL.
+
+**Left, Ujjwal:** B2 to B4 once the host exists (Aarush runs the CLI playbook), B5 from Aarush's bug list, B6 APK with the real host, B7 real data (plan sourcing first), B8 rate limit, clustering, fill-time range, admin release of held reports, then report generation and insights, B9 backup cron and AMI.
+
+**Left, Aarush:** V1 bug list, V2 to V5 as below, and **V9 (new): the photo capture camera**. Details in section 4 below. First submission is not before 12:00 noon on the last day. The exact hour is unknown, so keep the freeze rule.
+
 ## 1. Who owns what
 
 | | Ujjwal: backend, AWS, data, APK | Aarush: all views and screens |
@@ -53,19 +63,37 @@ Do these in order. Each has a "done when" so you can merge without asking.
 4. **V4 Confirm screen.** List done tasks, show before and after photos, "Looks fixed" and "Still a problem"; friendly message when the same person did the work. *Done when:* confirming as `res-2` makes the task confirmed and the pocket fill time on the dashboard goes up.
 5. **V5 Dashboard check.** Map, accountability, impact, simulator, capture in a browser. Fix layout and anything that lies (colour-only status, missing banners, banned words). *Done when:* the dashboard tells the demo story with seed data: a "No owner found" row, a bounce, and a pocket that slows after a confirmation.
 
+### Aarush: what the backend now needs from the screens (V9)
+
+Nothing here is a bug. These are new API fields from Ujjwal's work. Read `docs/CAPTURE.md` first and `docs/API.md` for the fields.
+
+1. **In-app camera, no gallery.** Call `GET /api/capture-token` (resident), then open the live camera with `getUserMedia`. Do not use `<input type=file>` for report photos. (`report.js` uses `capture="environment"` now; it still lets the phone pick a gallery photo.)
+2. **Stamp the photo on a canvas** at the moment of capture: address line if known, `Lat`, `Long`, date and time with the GMT offset, and `Ref <ref>` from the token. White text on a dark box, at least 3% of the image height, so Bedrock can read it. Use the same lat and lon in the form fields.
+3. **Send** `photo` (the stamped image), `lat`, `lon`, `accuracy_m` (`coords.accuracy`) and `capture_token` in the existing multipart report. Do this only through `web/js/api.js`.
+4. **Location rules:** if location is denied or `accuracy_m` is above 100, tell the resident and let them retry. Never stamp a guessed position.
+5. **Show the result.** The response has `held_for_review` and `flags` (`code`, `level` warn or info, `detail`). When held, show: "Saved for review. It is not counted yet." plus the `detail` of each warn flag, in plain words. Show info flags small. Do not call a photo "verified" or "proof".
+6. **Show flags on the official side.** Task detail: `incidents[].flags` and the `completed` event `flags`. An official sees a held report with its reason. The confirming resident sees the after-photo flags before choosing "Looks fixed".
+7. **Official after-photo:** the official's complete flow uses the same camera and stamp (the server checks the after-photo for reuse of the report photo).
+8. **Test with the dev server:** with `TRIAGE_MODE=manual` the stamp text is not read, so flags are info only. To see a held report, reuse the same photo twice as two different personas, or send a photo whose geotag is far from the reported point. `tests/test_photocheck.py` shows the cases.
+
+*Done when:* a report taken in the app shows a stamp, reaches `/api/incidents`, and a repeated photo shows "Saved for review".
+
 Everything below is the full backlog after these.
 
 ## 5. Full backlog: Ujjwal
 
-- [ ] B1 LICENSE (MIT), push the reset to `main`, confirm both can push
-- [ ] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). **Public URL by hour 3**
+- [x] B1 LICENSE (MIT) done; reset is in PR #1, merge to `main` and confirm both can push
+- [ ] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**
 - [ ] B3 Switch the server to `STORAGE=s3`; check photos load in the UI
 - [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`
 - [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
-- [ ] B7 Real drain and pocket data for the ward in `seed.json`; owner source per drain
+- [ ] B7 Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
 - [ ] B8 Backend good-to-haves from SCOPE 4.5 to 4.9, in the order listed
-- [ ] B9 Hourly DB copy to S3; AMI before recording
+- [ ] B9 Hourly DB copy to S3 (`scripts/backup.sh` is written; add cron on the server); AMI before recording
+- [x] B10 Photo checks: hash reuse, EXIF geotag and time, capture token, stamp check, held reports (done, PR #1)
+- [ ] B11 Admin action to release or reject a held report
+- [ ] B12 Report generation and actionable insights (after B7)
 
 ## 6. Full backlog: Aarush
 
@@ -78,11 +106,12 @@ Everything below is the full backlog after these.
 - [ ] V6 Stranger test with someone outside the team; fix what confuses them
 - [ ] V7 Good-to-haves from SCOPE 4.1 to 4.4 (screens)
 - [ ] V8 Screenshots and clean empty states for the video
+- [ ] V9 Photo capture camera, stamp, token, flags display (section 4, "what the backend now needs")
 
 ## 7. Shared tasks
 
-- [ ] S1 Both check in on the event page and finish student verification
-- [ ] S2 Pin the real deadline hour; freeze code 6 hours before it
+- [x] S1 Both check in on the event page and finish student verification (done)
+- [ ] S2 Pin the real deadline hour; freeze code 6 hours before it. Known: the first submission is not before 12:00 noon on the last day, and there is time to iterate
 - [ ] S3 Fact-check every number spoken in the video
 - [ ] S4 Video: script from SCOPE section 9, record, upload, test signed out (split: Ujjwal records the AWS part, Aarush the phone part)
 - [ ] S5 Write-up and credits in `README.md`: problem, build, where AWS fits, AI tools used
@@ -97,7 +126,7 @@ Everything below is the full backlog after these.
 | 3-6 | B4, B5 | V4, V5, V5b | Whole loop works on the live URL |
 | 6-8 | B6 | V6 | APK on a phone |
 | 8-12 | B7, B8 | V7 | Real data in; polish |
-| 12-14 | B9, fixes | V8, fixes | **Code freeze** |
+| 12-14 | B9, fixes | V8, V9 fixes | **Code freeze** |
 | 14-16 | S4, S5, S6 | S4, S5 | Submit |
 
 Cut order if late: capture screen, simulator screen, Bedrock, APK polish, dispute flow. Never cut: the loop, the accountability chart, the AWS deploy, the video.
