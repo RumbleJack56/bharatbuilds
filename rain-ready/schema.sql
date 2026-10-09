@@ -12,20 +12,21 @@ CREATE TABLE IF NOT EXISTS assets (
   agency_id TEXT REFERENCES agencies(id),                                -- NULL = no owner found
   owner_source TEXT NOT NULL DEFAULT 'none',                             -- citation or 'none' / 'disputed'
   last_confirmed_clean TEXT,
-  data_source TEXT NOT NULL DEFAULT 'placeholder', confidence TEXT NOT NULL DEFAULT 'low', note TEXT
+  data_source TEXT NOT NULL DEFAULT 'placeholder', confidence TEXT NOT NULL DEFAULT 'low', note TEXT, citation TEXT
 );
 CREATE TABLE IF NOT EXISTS pockets (
   id TEXT PRIMARY KEY, name TEXT NOT NULL, kind TEXT NOT NULL, lat REAL NOT NULL, lon REAL NOT NULL,
   catchment_ha REAL NOT NULL, runoff_c REAL NOT NULL, storage_m3 REAL NOT NULL, drain_mm_h REAL NOT NULL,
   spills_to TEXT REFERENCES pockets(id), linked_asset_ids TEXT NOT NULL DEFAULT '[]',
   exposed_assets INTEGER NOT NULL DEFAULT 0,                             -- placeholder count of basements/shops inside
-  data_source TEXT NOT NULL DEFAULT 'placeholder', confidence TEXT NOT NULL DEFAULT 'low', note TEXT
+  data_source TEXT NOT NULL DEFAULT 'placeholder', confidence TEXT NOT NULL DEFAULT 'low', note TEXT, citation TEXT
 );
 CREATE TABLE IF NOT EXISTS incidents (
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL REFERENCES users(id),
   lat REAL NOT NULL, lon REAL NOT NULL,
   kind TEXT NOT NULL CHECK (kind IN ('blocked_drain','standing_water','overflow','other')),
   note TEXT, photo_key TEXT, ai_json TEXT, photo_hash TEXT, flags TEXT, accuracy_m REAL,
+  reviewed_by TEXT, reviewed_at TEXT, review_decision TEXT CHECK (review_decision IN ('release','reject')), review_note TEXT,
   asset_id TEXT REFERENCES assets(id), pocket_id TEXT REFERENCES pockets(id), task_id INTEGER,
   created_at TEXT NOT NULL
 );
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS sites (
   id TEXT PRIMARY KEY, name TEXT NOT NULL, lat REAL NOT NULL, lon REAL NOT NULL,
   roof_m2 REAL NOT NULL, water_table_m REAL, water_table_verified INTEGER NOT NULL DEFAULT 0,
   soil TEXT, in_floodplain INTEGER NOT NULL DEFAULT 0, wash_runoff INTEGER NOT NULL DEFAULT 0,
-  nearest_septic_m REAL, data_source TEXT NOT NULL DEFAULT 'hypothetical'
+  nearest_septic_m REAL, data_source TEXT NOT NULL DEFAULT 'hypothetical', citation TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_tasks_agency ON tasks(agency_id, status);
 CREATE INDEX IF NOT EXISTS idx_events_task ON task_events(task_id);

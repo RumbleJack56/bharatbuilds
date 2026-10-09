@@ -6,9 +6,11 @@ Ujjwal and Aarush work in parallel on **main** with short-lived branches. The sp
 
 **Done (PR #1, branch `ujjwal/b1-license-deploy-aids`):** LICENSE; CI at the repo root (green); S3 and Bedrock code paths with tests; deploy scripts in `scripts/`; `/api/health?deep=1`; photo checks (perceptual hash, EXIF geotag and time); capture token and on-photo stamp check; held-for-review reports; `docs/CAPTURE.md`. 76 tests pass.
 
+**Done (branch `ujjwal/backend-hardening`):** B8 rate limit, repeat-report hold, fill-time range; B11 admin release or reject of held reports; B12 `/api/insights` and `/api/reports/ward`; seed validator (`make seedcheck`) and `scripts/build_seed.py`; `docs/DATA.md`. 100 tests pass. Aarush: new endpoints need screens (held queue, review buttons, range display, insights and report views).
+
 **Blocked on AWS:** nothing has run on real AWS. Aarush owns the account with credits. The deploy playbook was shared with him directly. After it runs he sends Ujjwal the URL.
 
-**Left, Ujjwal:** B2 to B4 once the host exists (Aarush runs the CLI playbook), B5 from Aarush's bug list, B6 APK with the real host, B7 real data (plan sourcing first), B8 rate limit, clustering, fill-time range, admin release of held reports, then report generation and insights, B9 backup cron and AMI.
+**Left, Ujjwal:** B2 to B4 once the host exists (Aarush runs the CLI playbook), B5 from Aarush's bug list, B6 APK with the real host, B7 real data (plan sourcing first), B9 backup cron and AMI (B8, B11, B12 done).
 
 **Left, Aarush:** V1 bug list, V2 to V5 as below, and **V9 (new): the photo capture camera**. Details in section 4 below. First submission is not before 12:00 noon on the last day. The exact hour is unknown, so keep the freeze rule.
 
@@ -88,12 +90,12 @@ Everything below is the full backlog after these.
 - [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`
 - [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green. The list is `PLAN.md` section 7; item 8 (S3 photo URLs) blocks the video
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
-- [ ] B7 Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
-- [ ] B8 Backend good-to-haves from SCOPE 4.5 to 4.9, in the order listed
+- [ ] B7 (tooling done: `make seedcheck`, `scripts/build_seed.py`, see `docs/DATA.md`) Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
+- [x] B8 Rate limit (`REPORTS_PER_DAY`, 429), repeat-report hold (`duplicate_nearby`), fill-time low and high range (branch `ujjwal/backend-hardening`)
 - [ ] B9 Hourly DB copy to S3 (`scripts/backup.sh` is written; add cron on the server); AMI before recording
 - [x] B10 Photo checks: hash reuse, EXIF geotag and time, capture token, stamp check, held reports (done, PR #1)
-- [ ] B11 Admin action to release or reject a held report
-- [ ] B12 Report generation and actionable insights (after B7)
+- [x] B11 Admin release or reject of a held report (`POST /api/incidents/{id}/review`, `GET /api/incidents?held=true`). Aarush: needs a held queue and review buttons
+- [x] B12 `GET /api/insights` and `GET /api/reports/ward` (rule-based, tested). Value rises when B7 real data is in
 
 ## 6. Full backlog: Aarush
 
