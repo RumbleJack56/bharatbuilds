@@ -81,3 +81,25 @@ test("confirm card shows before and after photos and both answers", () => {
   assert.match(html, /media\/b\.png/); assert.match(html, /media\/a\.png/);
   assert.match(html, /Looks fixed/); assert.match(html, /Still a problem/);
 });
+
+import { taskDetail, openActions, acceptedActions, assignActions } from "../js/views/official.view.js";
+const T = { id: 5, status: "open", agency_id: "mcd", agency_name: "MCD", asset_name: "Drain", pocket_name: "Saucer", gain_h: 1.2,
+  owner_source: "placeholder", due_at: null, overdue: false, incidents: [], events: [] };
+test("task page carries the scenario banner next to the gain number", () => {
+  assert.match(taskDetail(T, { banner: "Scenario, not a forecast." }), /class="banner">Scenario, not a forecast\./);
+});
+test("reassign select lists agencies except the current owner", () => {
+  const html = openActions({ agencies: [{ id: "mcd", name: "MCD" }, { id: "pwd", name: "PWD" }], current: "mcd" });
+  assert.match(html, /value="pwd"/); assert.doesNotMatch(html, /value="mcd"/);
+});
+test("accepted tasks can still be sent back as 'Not ours'", () => {
+  assert.match(acceptedActions({ agencies: [{ id: "pwd", name: "PWD" }], current: "mcd" }), /Not ours/);
+});
+test("a no-owner task offers the admin an assign control", () => {
+  assert.match(assignActions({ agencies: [{ id: "pwd", name: "PWD" }] }), /id="assign"/);
+});
+test("after-photo flags show under the 'Marked done' event", () => {
+  const t = { ...T, events: [{ event: "completed", at: "2026-10-09T10:00:00", actor_name: "Off", agency_id: "mcd", note: "", photo_url: "",
+    flags: [{ code: "old_photo", level: "warn", detail: "Photo is older than 2 days." }] }] };
+  assert.match(taskDetail(t, { banner: "" }), /Marked done[\s\S]*Check needed:<\/strong> Photo is older than 2 days\./);
+});

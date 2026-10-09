@@ -3,7 +3,7 @@ import { legacy } from "../core/router.js";
 import { login } from "./login.js";
 import { report } from "./report.js";
 import { mine, confirm } from "./resident.js";
-import { renderInbox, renderTask } from "../official.js";
+import { inbox, task } from "./official.js";
 import { renderAdmin } from "../admin.js";
 import { renderDash } from "../dash.js";
 
@@ -13,8 +13,8 @@ export const CONTROLLERS = [
   report,
   mine,
   confirm,
-  legacy("inbox", ["official"], renderInbox),
-  legacy("task", ["official", "admin", "resident"], renderTask),
+  inbox,
+  task,
   legacy("admin", ["admin"], renderAdmin),
 ];
 export const TABS = {

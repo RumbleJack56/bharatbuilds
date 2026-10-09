@@ -47,3 +47,5 @@ table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:4px;tex
 input[type=radio],input[type=checkbox]{min-height:auto;width:auto;padding:0;margin:0 8px 0 0;border:0}   /* B-5 */
 label.opt{display:flex;align-items:center;font-weight:400;min-height:44px;margin:0}
 .map-label{font-weight:700;font-size:.75rem}
+
+.tasklink{display:block;text-decoration:none;color:inherit}.wide{width:100%}.gap{margin-top:14px}
