@@ -1,0 +1,233 @@
+openapi: 3.0.3
+info:
+  title: Rain-Ready API
+  version: 0.1.0
+  description: |
+    FROZEN CONTRACT (owner: P1). Frontend (P3) builds against these shapes; backends implement them.
+    Change a shape only by editing this file in a PR and telling the group. `make status` checks the live server against it.
+    Auth: browsers send `X-User-Id` (a UUID in localStorage, no accounts). Operator calls also send `X-Ops-Key`.
+    All user-facing safety text comes from core/safety_copy.py. No LLM text in safety content.
+servers: [{url: /}]
+paths:
+  /api/health:
+    get: {tags: [shared], summary: Liveness + loaded routers, responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Health'}}}}}}
+  /api/state:
+    get: {tags: [shared], summary: "Storm mode + ledger head. Owner P1", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/State'}}}}}}
+  /api/map:
+    get: {tags: [shared], summary: "Assets with score+tier, hotspots, recent reports. Owner P4", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/MapData'}}}}}}
+  /api/board:
+    get: {tags: [shared], summary: "Ward-level aggregate. Owner P1. No names, no tonnage", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Board'}}}}}}
+  /api/reports:
+    post:
+      tags: [reports]
+      summary: "Create a report (camera photo + location). Owner P2"
+      description: "multipart/form-data. If category is live_wire or open_manhole the response MUST include hazard_text (pre-written, from core/safety_copy.hazard_text)."
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [category, lat, lon]
+              properties:
+                category: {type: string, enum: [blocked_drain, waterlogged_road, open_manhole, live_wire, basement_water, other]}
+                lat: {type: number}
+                lon: {type: number}
+                accuracy_m: {type: number}
+                location_verified: {type: boolean, description: "false when the user placed the pin manually"}
+                client_ts: {type: string}
+                note: {type: string}
+                lang: {type: string, enum: [en, hi]}
+                photo: {type: string, format: binary}
+      responses:
+        '200': {description: created, content: {application/json: {schema: {$ref: '#/components/schemas/ReportCreated'}}}}
+        '422': {description: "validation error (e.g. outside NCR)"}
+    get:
+      tags: [reports]
+      summary: "Recent reports (public, coarse). Owner P2"
+      responses: {'200': {description: ok, content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/ReportPublic'}}}}}}
+  /api/jobs:
+    get:
+      tags: [jobs]
+      summary: "Jobs with level/status. Owner P2"
+      responses: {'200': {description: ok, content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/Job'}}}}}}
+    post:
+      tags: [jobs]
+      summary: "Create a job for an asset (ops key). Owner P2"
+      security: [{opsKey: []}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [asset_id], properties: {asset_id: {type: string}, trigger: {type: string, enum: [p1_storm, p2_inspection, report, manual]}, note: {type: string}}}}}}
+      responses: {'200': {description: created, content: {application/json: {schema: {$ref: '#/components/schemas/Job'}}}}}
+  /api/jobs/{id}:
+    get:
+      tags: [jobs]
+      summary: "Job detail with evidence list and flags. Owner P2"
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/JobDetail'}}}}, '404': {description: not found}}
+  /api/jobs/{id}/evidence:
+    post:
+      tags: [jobs]
+      summary: "Add evidence. Level recomputed with core.levels.compute_level. Owner P2"
+      description: "before|after|bank must come from role=crew; confirm from role=resident with a DIFFERENT X-User-Id than any crew evidence. A job reaching level>=2 sets assets.last_confirmed_clean. Every evidence write also appends to the ledger via app/ledger.append."
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [phase, role, lat, lon, photo]
+              properties:
+                phase: {type: string, enum: [before, after, bank, confirm, audit]}
+                role: {type: string, enum: [crew, resident, staff]}
+                lat: {type: number}
+                lon: {type: number}
+                accuracy_m: {type: number}
+                client_ts: {type: string}
+                photo: {type: string, format: binary}
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/EvidenceResult'}}}}}
+  /api/buildings:
+    post:
+      tags: [buildings]
+      summary: "Save a building; level computed from the caretaker's own answers. Owner P4"
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/BuildingIn'}}}}
+      responses: {'200': {description: created, content: {application/json: {schema: {$ref: '#/components/schemas/BuildingOut'}}}}}
+  /api/buildings/{code}:
+    get:
+      tags: [buildings]
+      summary: "Caretaker view with the checklist for the current storm state. Owner P4"
+      parameters: [{name: code, in: path, required: true, schema: {type: string}}, {name: lang, in: query, schema: {type: string, enum: [en, hi]}}]
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/BuildingOut'}}}}, '404': {description: not found}}
+  /api/buildings/{code}/ack:
+    post:
+      tags: [buildings]
+      summary: "Caretaker acknowledges the current warning. Writes ledger. Owner P4"
+      parameters: [{name: code, in: path, required: true, schema: {type: string}}]
+      responses: {'200': {description: ok, content: {application/json: {schema: {type: object, properties: {acknowledged_at: {type: string}, ledger_id: {type: integer}}}}}}}
+  /api/public/b/{code}:
+    get:
+      tags: [buildings]
+      summary: "PUBLIC placard data for the QR page. Self-declared, information only, never a rating. Owner P4"
+      parameters: [{name: code, in: path, required: true, schema: {type: string}}]
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Placard'}}}}, '404': {description: not found}}
+  /api/ops/storm:
+    post:
+      tags: [ops]
+      summary: "Drill switch / enter an official warning (ops key). Writes ledger. Owner P1"
+      security: [{opsKey: []}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [active], properties: {active: {type: boolean}, level: {type: string, enum: [watch, warning]}, source: {type: string}}}}}}
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Storm'}}}}, '401': {description: bad key}}
+  /api/ledger/head:
+    get: {tags: [ledger], summary: "Chain head. Owner P1", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/LedgerHead'}}}}}}
+  /api/ledger/verify/{id}:
+    get:
+      tags: [ledger]
+      summary: "Recompute the chain and show the entry. Owner P1"
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/LedgerVerify'}}}}, '404': {description: not found}}
+  /media/{key}:
+    get:
+      tags: [reports]
+      summary: "Photo bytes (local storage) or 302 to a pre-signed S3 URL. Owner P2"
+      parameters: [{name: key, in: path, required: true, schema: {type: string}}]
+      responses: {'200': {description: image}, '302': {description: redirect to pre-signed URL}}
+components:
+  securitySchemes:
+    opsKey: {type: apiKey, in: header, name: X-Ops-Key}
+  schemas:
+    Health: {type: object, properties: {ok: {type: boolean}, version: {type: string}, routers: {type: array, items: {type: string}}, router_errors: {type: object}}}
+    Storm:
+      type: object
+      properties: {active: {type: boolean}, level: {type: string, enum: [none, watch, warning]}, source: {type: string}, set_at: {type: string, nullable: true}}
+      example: {active: true, level: warning, source: "IMD orange (entered by operator)", set_at: "2026-10-10T09:00:00+00:00"}
+    LedgerHead: {type: object, properties: {count: {type: integer}, head_hash: {type: string}, head_id: {type: integer, nullable: true}, as_of: {type: string, nullable: true}}}
+    State:
+      type: object
+      properties: {storm: {$ref: '#/components/schemas/Storm'}, server_time: {type: string}, version: {type: string}, ledger: {$ref: '#/components/schemas/LedgerHead'}, triage_mode: {type: string, enum: [manual, bedrock]}, storage: {type: string, enum: [local, s3]}}
+    MapAsset:
+      type: object
+      properties:
+        id: {type: string}
+        type: {type: string, enum: [drain_segment, inlet, underpass, pump_station]}
+        name: {type: string}
+        lat: {type: number}
+        lon: {type: number}
+        owner: {type: string}
+        covered: {type: boolean}
+        v: {type: number, description: "0..1 vulnerability"}
+        basis: {type: string, enum: [measured, estimated]}
+        components: {type: object, additionalProperties: {type: number}}
+        tier: {type: string, enum: [P1, P2, WATCH, NONE]}
+        last_confirmed_clean: {type: string, nullable: true}
+        data_source: {type: string}
+        confidence: {type: string}
+        job: {type: object, nullable: true, properties: {id: {type: integer}, level: {type: integer}, status: {type: string}}}
+    Hotspot: {type: object, properties: {id: {type: string}, name: {type: string}, kind: {type: string}, lat: {type: number}, lon: {type: number}, data_source: {type: string}, year: {type: integer, nullable: true}, note: {type: string, nullable: true}}}
+    MapData:
+      type: object
+      properties:
+        storm: {$ref: '#/components/schemas/Storm'}
+        assets: {type: array, items: {$ref: '#/components/schemas/MapAsset'}}
+        hotspots: {type: array, items: {$ref: '#/components/schemas/Hotspot'}}
+        reports: {type: array, items: {$ref: '#/components/schemas/ReportPublic'}}
+        disclaimer: {type: string}
+    Board: {type: object, properties: {assets_total: {type: integer}, assets_independently_confirmed: {type: integer}, pct_confirmed: {type: number}, jobs_by_status: {type: object, additionalProperties: {type: integer}}, note: {type: string}}}
+    ReportPublic: {type: object, properties: {id: {type: integer}, ticket: {type: string}, category: {type: string}, lat: {type: number}, lon: {type: number}, status: {type: string, enum: [reported, unverified, corroborated]}, created_at: {type: string}}}
+    Triage:
+      type: object
+      description: "Bedrock output or {mode: manual}. Display and routing only. NEVER a scoring input."
+      properties: {mode: {type: string}, type: {type: string}, severity: {type: string, enum: [low, medium, high, danger]}, silt_fill_fraction: {type: number, nullable: true}, gauge_rod_visible: {type: boolean}, hazards: {type: array, items: {type: string}}, one_line_summary: {type: string}, needs_human_review: {type: boolean}}
+    ReportCreated:
+      type: object
+      properties:
+        id: {type: integer}
+        ticket: {type: string}
+        status: {type: string}
+        asset_id: {type: string, nullable: true}
+        triage: {$ref: '#/components/schemas/Triage'}
+        hazard_text: {type: string, nullable: true, description: "pre-written; present for live_wire/open_manhole"}
+        forward_text: {type: string, description: "pre-filled message the user can send to 1908 / 311"}
+        footer: {type: string}
+    Job: {type: object, properties: {id: {type: integer}, asset_id: {type: string}, asset_name: {type: string}, created_at: {type: string}, trigger: {type: string}, level: {type: integer, minimum: 0, maximum: 3}, status: {type: string, enum: [CLAIMED, FLAGGED, EVIDENCE_SUBMITTED, CONFIRMED, AUDITED]}}}
+    EvidenceItem: {type: object, properties: {id: {type: integer}, phase: {type: string}, role: {type: string}, lat: {type: number}, lon: {type: number}, accuracy_m: {type: number, nullable: true}, server_ts: {type: string}, photo_url: {type: string}, flags: {type: array, items: {type: string}}, ledger_id: {type: integer, nullable: true}}}
+    JobDetail:
+      allOf:
+        - {$ref: '#/components/schemas/Job'}
+        - type: object
+          properties: {evidence: {type: array, items: {$ref: '#/components/schemas/EvidenceItem'}}, notes: {type: array, items: {type: string}}}
+    EvidenceResult: {type: object, properties: {evidence_id: {type: integer}, flags: {type: array, items: {type: string}}, level: {type: integer}, status: {type: string}, notes: {type: array, items: {type: string}}, ledger_id: {type: integer}}}
+    BuildingIn:
+      type: object
+      required: [name, basement, entrance_below_road, people_inside, ramp_over_drain, consent]
+      properties:
+        name: {type: string}
+        lat: {type: number}
+        lon: {type: number}
+        declared_use: {type: string}
+        declared_exits: {type: integer}
+        basement: {type: boolean}
+        entrance_below_road: {type: boolean}
+        people_inside: {type: boolean}
+        ramp_over_drain: {type: boolean}
+        lang: {type: string, enum: [en, hi]}
+        consent: {type: boolean}
+    BuildingOut:
+      type: object
+      properties:
+        code: {type: string}
+        name: {type: string}
+        level: {type: string, enum: [HIGH_ATTENTION, ELEVATED, NO_SPECIFIC_FLAG]}
+        reasons: {type: array, items: {type: string}}
+        message: {type: object, description: "core.safety_copy.building_message output: headline, items[], always, footer, storm_active, lang"}
+        placard_url: {type: string}
+    Placard:
+      type: object
+      properties:
+        name: {type: string}
+        declared_use: {type: string, nullable: true}
+        declared_exits: {type: integer, nullable: true}
+        last_ack_at: {type: string, nullable: true}
+        nearest_asset: {type: object, nullable: true, properties: {name: {type: string}, status: {type: string}, last_confirmed_clean: {type: string, nullable: true}, distance_m: {type: number}}}
+        storm: {$ref: '#/components/schemas/Storm'}
+        info_only: {type: string, description: "core.safety_copy.INFO_ONLY. Must be shown. No green tick, no rating, no 'safe'."}
+        is_demo: {type: boolean}
+    LedgerVerify: {type: object, properties: {id: {type: integer}, chain_ok: {type: boolean}, first_bad_index: {type: integer, nullable: true}, entry: {type: object}, head: {$ref: '#/components/schemas/LedgerHead'}, proves: {type: string}, does_not_prove: {type: string}}}

@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    env_file: .env
+    volumes: ["./var:/app/var"]      # SQLite + local photos survive redeploys
+    restart: unless-stopped
+  caddy:
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    environment: { DOMAIN: "${DOMAIN}" }
+    volumes: ["./Caddyfile:/etc/caddy/Caddyfile", "caddy_data:/data"]
+    depends_on: [app]
+    restart: unless-stopped
+volumes: { caddy_data: {} }
