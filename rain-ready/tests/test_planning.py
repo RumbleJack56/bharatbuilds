@@ -28,3 +28,17 @@ def test_banned_words():
     assert copy.banned_hits("this is safe, a guarantee") == ["safe", "guarantee"]
     for s in (copy.SCENARIO_BANNER, copy.DEMO_LOGIN, copy.NO_OWNER, copy.FIELD_RULE):
         assert not copy.banned_hits(s)
+
+
+def test_fill_time_range_brackets_the_point_estimate_and_keeps_order(client):
+    r = client.post("/api/simulate", json={"rain_mm_h": 35, "drain_state": "current", "at_h": 1}).json()
+    inf = float("inf")
+    for p in r["results"]:
+        lo = p["time_to_fill_h_low"] if p["time_to_fill_h_low"] is not None else inf
+        hi = p["time_to_fill_h_high"] if p["time_to_fill_h_high"] is not None else inf
+        pt = p["time_to_fill_h"] if p["time_to_fill_h"] is not None else inf
+        assert lo <= pt <= hi, p["id"]
+    assert "range" in r["range_note"].lower() and not copy.banned_hits(r["range_note"])
+    order = [p["id"] for p in r["results"]]
+    base = client.post("/api/simulate", json={"rain_mm_h": 35, "drain_state": "current", "at_h": 1}).json()
+    assert order == [p["id"] for p in base["results"]]

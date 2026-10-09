@@ -3,7 +3,7 @@ import json
 from datetime import date, datetime, timedelta, timezone
 
 from ai import stampread
-from core import geo, photocheck, planning, stamp
+from core import cluster, geo, photocheck, planning, stamp
 
 from . import capture, config
 from .db import now_iso
@@ -90,3 +90,15 @@ def check_stamp(data: bytes, content_type: str, lat: float, lon: float, user_id:
                       "detail": "the photo was not taken with the in-app camera just now"})
     return flags + stamp.assess(stampread.read_stamp(data, content_type), lat, lon, datetime.now(timezone.utc), ref,
                                 "warn" if strict else "info")
+
+
+def check_duplicate(db, user_id: str, lat: float, lon: float) -> list[dict]:
+    """Flag a report that repeats this user's own earlier report of the same spot."""
+    now = datetime.now(timezone.utc)
+    since = (now - cluster.DUPLICATE_WINDOW).isoformat(timespec="seconds")
+    recent = [(r["lat"], r["lon"], datetime.fromisoformat(r["created_at"]))
+              for r in db.execute("SELECT lat, lon, created_at FROM incidents WHERE user_id=? AND created_at>=?", (user_id, since))]
+    if cluster.is_duplicate(lat, lon, now, recent):
+        return [{"code": "duplicate_nearby", "level": "warn",
+                 "detail": f"you already reported this spot (within {cluster.DUPLICATE_M} m) in the last 24 hours"}]
+    return []

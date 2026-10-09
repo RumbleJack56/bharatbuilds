@@ -26,10 +26,13 @@ def me(user=Depends(current_user)):
 
 def run_scenario(db, rain: float, state: str, at_h: float = 1.0):
     pockets = service.pocket_rows(db)
-    res = lp.simulate(planning.build_pockets(pockets, service.asset_silt(db), state), rain, at_h)
+    built = planning.build_pockets(pockets, service.asset_silt(db), state)
+    res = lp.simulate(built, rain, at_h)
+    rng = planning.fill_time_range(built, rain)
     by = {p["id"]: p for p in pockets}
     for r in res:
         p = by[r["id"]]
+        r["time_to_fill_h_low"], r["time_to_fill_h_high"] = rng[r["id"]]
         r.update(lat=p["lat"], lon=p["lon"], catchment_ha=p["catchment_ha"], storage_m3=p["storage_m3"],
                  runoff_c=p["runoff_c"], drain_mm_h=p["drain_mm_h"], exposed_assets=p["exposed_assets"],
                  linked_asset_ids=p["linked_asset_ids"], data_source=p["data_source"], confidence=p["confidence"])
@@ -65,7 +68,7 @@ def simulate(body: SimIn, db=Depends(get_db)):
         res = run_scenario(db, body.rain_mm_h, body.drain_state, body.at_h)
     except ValueError as e:
         raise HTTPException(422, str(e))
-    return {"scenario": body.model_dump(), "results": res, "banner": copy.SCENARIO_BANNER, "date": date.today().isoformat()}
+    return {"scenario": body.model_dump(), "results": res, "banner": copy.SCENARIO_BANNER, "range_note": copy.RANGE_NOTE, "date": date.today().isoformat()}
 
 
 @router.get("/agencies")

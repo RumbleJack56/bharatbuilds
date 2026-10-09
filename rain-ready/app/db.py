@@ -4,6 +4,8 @@ import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
+from core import seedcheck
+
 from . import config
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -53,14 +55,18 @@ def init_db() -> None:
     con.commit()
 
 
-ADDED = {"incidents": {"photo_hash": "TEXT", "flags": "TEXT", "accuracy_m": "REAL"},
-         "task_events": {"photo_hash": "TEXT", "flags": "TEXT"}}
+ADDED = {"incidents": {"photo_hash": "TEXT", "flags": "TEXT", "accuracy_m": "REAL", "reviewed_by": "TEXT",
+                       "reviewed_at": "TEXT", "review_decision": "TEXT", "review_note": "TEXT"},
+         "task_events": {"photo_hash": "TEXT", "flags": "TEXT"},
+         "assets": {"citation": "TEXT"}, "pockets": {"citation": "TEXT"}, "sites": {"citation": "TEXT"}}
 
 
 def _add_missing_columns(con: sqlite3.Connection) -> None:
     """Databases made before a column existed get it added; no data is lost."""
     for table, cols in ADDED.items():
         have = {r["name"] for r in con.execute(f"PRAGMA table_info({table})")}
+        if not have:            # table not created yet; schema.sql makes it with every column
+            continue
         for name, typ in cols.items():
             if name not in have:
                 con.execute(f"ALTER TABLE {table} ADD COLUMN {name} {typ}")
@@ -68,6 +74,9 @@ def _add_missing_columns(con: sqlite3.Connection) -> None:
 
 def seed(con: sqlite3.Connection) -> None:
     data = json.loads((ROOT / "data" / "seed.json").read_text())
+    problems = seedcheck.validate(data)
+    if problems:
+        raise ValueError("seed.json is not valid:\n" + "\n".join(problems))
     for table in ("agencies", "users", "assets", "pockets", "sites"):
         for row in data[table]:
             _insert(con, table, row)

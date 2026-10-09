@@ -95,8 +95,8 @@ Phone (APK) or browser --HTTPS (Caddy, sslip.io)--> FastAPI + SQLite   on EC2 t3
 | MVP | Pocket fill simulator: rain slider; clean, silted and current drains; spill order | built |
 | MVP | Rank = fill time gained by cleaning x repeat-report factor | built |
 | MVP | Simulator screen (slider, three drain states, fill order, "about X h") | written |
-| Good | Show a low and high range, not one number | todo |
-| Good | Cluster nearby reports (50 m, 24 h) and cap reports per user per day | todo (backend) |
+| Good | Show a low and high range, not one number | built (backend: `time_to_fill_h_low` and `_high`; screen todo) |
+| Good | Cluster nearby reports (50 m, 24 h) and cap reports per user per day | built (backend, tested) |
 | Good | Flag a re-used photo (perceptual hash) as a soft warning | built (backend, tested) |
 | MVP | Photo checks on reports and after-photos: perceptual hash, EXIF geotag and time. A warn flag saves the report but does not create or bump a task | built (backend, tested) |
 | MVP | Capture token and on-photo stamp check: the server compares the stamp's Lat, Long, time and Ref with the report | built (backend; stamp reading tested with a mock only) |
@@ -141,8 +141,8 @@ AI never changes rank, owner or status, and never writes safety text.
 | MVP | Tests run in CI on every push | built (workflow at repo root; green) |
 | Good | Hourly database copy to S3 (`scripts/backup.sh`); AMI before recording | script built; cron and AMI todo |
 | Good | CloudFront in front of the static files | todo |
-| Good | Rate limit on report creation | todo (backend) |
-| Good | Admin action to release or reject a held report | todo (backend, then screen) |
+| Good | Rate limit on report creation | built (backend, tested) |
+| Good | Admin action to release or reject a held report | built (backend, tested; screen todo) |
 
 ### 4.10 Mobile (APK)
 | | Item | State |
