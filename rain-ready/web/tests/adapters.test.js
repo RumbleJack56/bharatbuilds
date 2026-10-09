@@ -28,3 +28,13 @@ test("url() prefixes relative paths and keeps absolute ones", () => {
   assert.equal(http.url("https://s3/x"), "https://s3/x");
   assert.equal(http.url(null), "");
 });
+
+import { createBrowserGeo } from "../js/adapters/geo-browser.js";
+test("geo resolves coordinates with accuracy", async () => {
+  const geo = createBrowserGeo({ getCurrentPosition: (ok) => ok({ coords: { latitude: 28.6, longitude: 77.2, accuracy: 12 } }) });
+  assert.deepEqual(await geo.current(), { lat: 28.6, lon: 77.2, accuracy_m: 12 });
+});
+test("geo rejects with a readable message when denied or missing", async () => {
+  await assert.rejects(createBrowserGeo({ getCurrentPosition: (_, fail) => fail({ code: 1 }) }).current(), /Could not get GPS/);
+  await assert.rejects(createBrowserGeo(null).current(), /No GPS/);
+});

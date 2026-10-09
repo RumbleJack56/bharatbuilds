@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const JS = fileURLToPath(new URL("../js/", import.meta.url));
 const LEGACY = new Set(["api.js", "util.js", "app.js", "dashmap.js", "dashmore.js", "login.js", "report.js",
-  "resident.js", "official.js", "admin.js", "dash.js"]);
+  "resident.js", "official.js", "admin.js", "dash.js", "controllers/index.js"]);
 const ALLOWED = { core: ["core"], ports: ["core"], adapters: ["core"], services: ["core"], ui: ["ui"],
   views: ["ui", "views"], controllers: ["controllers", "views", "ui", "core"] };
 
