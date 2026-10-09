@@ -6,6 +6,7 @@ export function parseHash(hash) {
 
 export function resolve(controllers, name, role) {
   const c = controllers.find(x => x.path === name);
+  if (name === "login" && role) return { redirect: true };   // already signed in: go home
   if (!c || (c.roles && !c.roles.includes(role))) return { redirect: true };
   return { controller: c };
 }

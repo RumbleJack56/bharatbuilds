@@ -26,3 +26,7 @@ test("resolve: public routes need no role; guarded routes need a listed role", (
   assert.equal(resolve(C, "report", "admin").controller.path, "report");
   assert.ok(resolve(C, "nope", "admin").redirect);
 });
+test("resolve sends a logged-in user on #/login to their home", () => {
+  assert.ok(resolve(C, "login", "resident").redirect);
+  assert.equal(resolve(C, "login", null).controller.path, "login");
+});
