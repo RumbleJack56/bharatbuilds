@@ -88,12 +88,12 @@ Everything below is the full backlog after these.
 - [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`
 - [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
-- [ ] B7 Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
-- [ ] B8 Backend good-to-haves from SCOPE 4.5 to 4.9, in the order listed
+- [ ] B7 (tooling done: `make seedcheck`, `scripts/build_seed.py`, see `docs/DATA.md`) Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
+- [x] B8 Rate limit (`REPORTS_PER_DAY`, 429), repeat-report hold (`duplicate_nearby`), fill-time low and high range (branch `ujjwal/backend-hardening`)
 - [ ] B9 Hourly DB copy to S3 (`scripts/backup.sh` is written; add cron on the server); AMI before recording
 - [x] B10 Photo checks: hash reuse, EXIF geotag and time, capture token, stamp check, held reports (done, PR #1)
-- [ ] B11 Admin action to release or reject a held report
-- [ ] B12 Report generation and actionable insights (after B7)
+- [x] B11 Admin release or reject of a held report (`POST /api/incidents/{id}/review`, `GET /api/incidents?held=true`). Aarush: needs a held queue and review buttons
+- [x] B12 `GET /api/insights` and `GET /api/reports/ward` (rule-based, tested). Value rises when B7 real data is in
 
 ## 6. Full backlog: Aarush
 

@@ -26,6 +26,8 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `POST /api/tasks/{id}/confirm` | resident (not the one who did the work) | `{ok, note}` -> confirmed or disputed; confirmed resets the drain's silt estimate |
 | `POST /api/plan/generate?top=5` | admin | create tasks for the top-ranked drains with no live task |
 | `GET /api/accountability` | public | per agency: assets owned, tasks by status, overdue, bounced away, median hours to accept and complete; includes the "No owner found" row (`agency_id: null`) |
+| `GET /api/insights` | public | rule-based facts: `[{id, text, why, evidence}]` with `banner`. Rules: reports near a drain with no owner; an agency that bounced 3 or more tasks; a silted, unassigned drain in a fast-filling pocket; a task more than 3 days overdue; a drain of the fastest pocket not confirmed clean for 60 days. Placeholder rows say "placeholder data" |
+| `GET /api/reports/ward?format=json\|md` | public | generated ward report from database facts: open and overdue tasks by agency, held report count, top 5 drains by fill time gained (with low and high), pockets by level, cleans confirmed in 7 days, insights. `md` returns Markdown with the banner. Fixed wording, no model text |
 | `GET /api/impact` | public | headline numbers (SCOPE section 6) |
 | `GET /api/opportunities` | public | rain-capture candidates with decision, rule id, m3/year |
 | `GET /media/{key}` | public | photo (S3 pre-signed redirect when `STORAGE=s3`) |
