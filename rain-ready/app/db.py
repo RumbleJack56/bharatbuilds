@@ -53,7 +53,8 @@ def init_db() -> None:
     con.commit()
 
 
-ADDED = {"incidents": {"photo_hash": "TEXT", "flags": "TEXT", "accuracy_m": "REAL"},
+ADDED = {"incidents": {"photo_hash": "TEXT", "flags": "TEXT", "accuracy_m": "REAL", "reviewed_by": "TEXT",
+                       "reviewed_at": "TEXT", "review_decision": "TEXT", "review_note": "TEXT"},
          "task_events": {"photo_hash": "TEXT", "flags": "TEXT"}}
 
 

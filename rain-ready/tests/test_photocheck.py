@@ -124,3 +124,51 @@ def test_old_database_gets_the_new_columns(tmp_path):
     assert {"photo_hash", "flags", "accuracy_m"} <= {r["name"] for r in c.execute("PRAGMA table_info(incidents)")}
     assert {"photo_hash", "flags"} <= {r["name"] for r in c.execute("PRAGMA table_info(task_events)")}
     db._add_missing_columns(c)   # idempotent
+
+
+def _held(client):
+    post(client, "res-1", picture(5))
+    return post(client, "res-2", picture(5, size=(90, 70)))
+
+
+def test_admin_release_creates_or_bumps_the_task(client):
+    h = _held(client)
+    iid = h["incident"]["id"]
+    listed = client.get("/api/incidents?held=true", headers=as_("admin-1")).json()["incidents"]
+    assert [i["id"] for i in listed] == [iid]
+    r = client.post(f"/api/incidents/{iid}/review", json={"decision": "release", "note": "checked"}, headers=as_("admin-1"))
+    assert r.status_code == 200
+    inc = r.json()["incident"]
+    assert inc["review_decision"] == "release" and inc["reviewed_by"] == "admin-1" and inc["task_id"]
+    assert "photo_hash" not in inc
+    assert client.get(f"/api/tasks/{inc['task_id']}").json()["report_count"] == 2
+    assert client.get("/api/incidents?held=true", headers=as_("admin-1")).json()["incidents"] == []
+
+
+def test_reject_keeps_report_visible_and_does_not_count(client):
+    h = _held(client)
+    iid = h["incident"]["id"]
+    r = client.post(f"/api/incidents/{iid}/review", json={"decision": "reject"}, headers=as_("admin-1")).json()["incident"]
+    assert r["review_decision"] == "reject" and r["task_id"] is None
+    assert any(i["id"] == iid for i in client.get("/api/incidents?mine=true", headers=as_("res-2")).json()["incidents"])
+
+
+def test_review_guards(client):
+    h = _held(client)
+    iid = h["incident"]["id"]
+    assert client.post(f"/api/incidents/{iid}/review", json={"decision": "release"}, headers=as_("res-2")).status_code == 403
+    assert client.post(f"/api/incidents/{iid}/review", json={"decision": "release"}, headers=as_("off-mcd")).status_code == 403
+    assert client.post("/api/incidents/9999/review", json={"decision": "release"}, headers=as_("admin-1")).status_code == 404
+    assert client.post(f"/api/incidents/{iid}/review", json={"decision": "maybe"}, headers=as_("admin-1")).status_code == 422
+    assert client.post(f"/api/incidents/{iid}/review", json={"decision": "reject"}, headers=as_("admin-1")).status_code == 200
+    assert client.post(f"/api/incidents/{iid}/review", json={"decision": "release"}, headers=as_("admin-1")).status_code == 409
+    clean = post(client, "res-1", picture(11))
+    assert client.post(f"/api/incidents/{clean['incident']['id']}/review", json={"decision": "release"},
+                       headers=as_("admin-1")).status_code == 409
+
+
+def test_held_list_is_for_officials_and_admins_only(client):
+    _held(client)
+    assert client.get("/api/incidents?held=true", headers=as_("res-1")).status_code == 403
+    assert len(client.get("/api/incidents?held=true", headers=as_("off-mcd")).json()["incidents"]) == 1
+    assert client.get("/api/incidents?held=true", headers=as_("off-pwd")).json()["incidents"] == []

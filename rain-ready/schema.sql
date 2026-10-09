@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS incidents (
   lat REAL NOT NULL, lon REAL NOT NULL,
   kind TEXT NOT NULL CHECK (kind IN ('blocked_drain','standing_water','overflow','other')),
   note TEXT, photo_key TEXT, ai_json TEXT, photo_hash TEXT, flags TEXT, accuracy_m REAL,
+  reviewed_by TEXT, reviewed_at TEXT, review_decision TEXT CHECK (review_decision IN ('release','reject')), review_note TEXT,
   asset_id TEXT REFERENCES assets(id), pocket_id TEXT REFERENCES pockets(id), task_id INTEGER,
   created_at TEXT NOT NULL
 );
