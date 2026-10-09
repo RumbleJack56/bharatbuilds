@@ -2,7 +2,7 @@
 import io
 import random
 import sqlite3
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from PIL import Image
 
@@ -172,3 +172,17 @@ def test_held_list_is_for_officials_and_admins_only(client):
     assert client.get("/api/incidents?held=true", headers=as_("res-1")).status_code == 403
     assert len(client.get("/api/incidents?held=true", headers=as_("off-mcd")).json()["incidents"]) == 1
     assert client.get("/api/incidents?held=true", headers=as_("off-pwd")).json()["incidents"] == []
+
+
+def test_daily_report_limit_is_per_user_and_rolls(client, monkeypatch):
+    from app import config
+    monkeypatch.setattr(config, "REPORTS_PER_DAY", 2)
+    form = {"lat": 28.6433, "lon": 77.1846, "kind": "blocked_drain"}
+    for _ in range(2):
+        assert client.post("/api/incidents", data=form, headers=as_("res-1")).status_code == 200
+    r = client.post("/api/incidents", data=form, headers=as_("res-1"))
+    assert r.status_code == 429 and "24 hours" in r.json()["detail"]
+    assert client.post("/api/incidents", data=form, headers=as_("res-2")).status_code == 200
+    old = (datetime.now(timezone.utc) - timedelta(hours=25)).isoformat(timespec="seconds")
+    db.get_db().execute("UPDATE incidents SET created_at=? WHERE user_id='res-1'", (old,)); db.get_db().commit()
+    assert client.post("/api/incidents", data=form, headers=as_("res-1")).status_code == 200

@@ -1,5 +1,6 @@
 """Resident reports. A report links to the nearest asset and creates or bumps a task."""
 import json
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
@@ -7,7 +8,7 @@ from pydantic import BaseModel
 from ai import triage
 from core import copy, geo, photocheck
 
-from .. import service, storage
+from .. import config, service, storage
 from ..auth import need
 from ..db import get_db, now_iso
 
@@ -31,6 +32,10 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
                           db=Depends(get_db)):
     if not geo.in_ncr(lat, lon):
         raise HTTPException(422, "location is outside the Delhi-NCR area")
+    since = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat(timespec="seconds")
+    sent = db.execute("SELECT COUNT(*) FROM incidents WHERE user_id=? AND created_at>=?", (user["id"], since)).fetchone()[0]
+    if sent >= config.REPORTS_PER_DAY:
+        raise HTTPException(429, f"You have sent {sent} reports in the last 24 hours. Please try again later.")
     key, ai, phash, flags = None, None, None, []
     if photo is not None:
         data = await photo.read()
