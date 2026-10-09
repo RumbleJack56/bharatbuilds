@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
   title: Rain-Ready API
-  version: 0.1.0
+  version: 0.2.0
   description: |
-    FROZEN CONTRACT (owner: P1). Frontend (P3) builds against these shapes; backends implement them.
+    FROZEN CONTRACT (owner: dev#1). Frontends (dev#2/3/4) builds against these shapes; backends implement them.
     Change a shape only by editing this file in a PR and telling the group. `make status` checks the live server against it.
     Auth: browsers send `X-User-Id` (a UUID in localStorage, no accounts). Operator calls also send `X-Ops-Key`.
     All user-facing safety text comes from core/safety_copy.py. No LLM text in safety content.
@@ -12,15 +12,15 @@ paths:
   /api/health:
     get: {tags: [shared], summary: Liveness + loaded routers, responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Health'}}}}}}
   /api/state:
-    get: {tags: [shared], summary: "Storm mode + ledger head. Owner P1", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/State'}}}}}}
+    get: {tags: [shared], summary: "Storm mode + ledger head. Owner dev#1", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/State'}}}}}}
   /api/map:
-    get: {tags: [shared], summary: "Assets with score+tier, hotspots, recent reports. Owner P4", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/MapData'}}}}}}
+    get: {tags: [shared], summary: "Assets with score+tier, hotspots, recent reports. Owner dev#3", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/MapData'}}}}}}
   /api/board:
-    get: {tags: [shared], summary: "Ward-level aggregate. Owner P1. No names, no tonnage", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Board'}}}}}}
+    get: {tags: [shared], summary: "Ward-level aggregate. Owner dev#1. No names, no tonnage", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Board'}}}}}}
   /api/reports:
     post:
       tags: [reports]
-      summary: "Create a report (camera photo + location). Owner P2"
+      summary: "Create a report (camera photo + location). Owner dev#1"
       description: "multipart/form-data. If category is live_wire or open_manhole the response MUST include hazard_text (pre-written, from core/safety_copy.hazard_text)."
       requestBody:
         required: true
@@ -44,29 +44,29 @@ paths:
         '422': {description: "validation error (e.g. outside NCR)"}
     get:
       tags: [reports]
-      summary: "Recent reports (public, coarse). Owner P2"
+      summary: "Recent reports (public, coarse). Owner dev#1"
       responses: {'200': {description: ok, content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/ReportPublic'}}}}}}
   /api/jobs:
     get:
       tags: [jobs]
-      summary: "Jobs with level/status. Owner P2"
+      summary: "Jobs with level/status. Owner dev#1"
       responses: {'200': {description: ok, content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/Job'}}}}}}
     post:
       tags: [jobs]
-      summary: "Create a job for an asset (ops key). Owner P2"
+      summary: "Create a job for an asset (ops key). Owner dev#1"
       security: [{opsKey: []}]
       requestBody: {required: true, content: {application/json: {schema: {type: object, required: [asset_id], properties: {asset_id: {type: string}, trigger: {type: string, enum: [p1_storm, p2_inspection, report, manual]}, note: {type: string}}}}}}
       responses: {'200': {description: created, content: {application/json: {schema: {$ref: '#/components/schemas/Job'}}}}}
   /api/jobs/{id}:
     get:
       tags: [jobs]
-      summary: "Job detail with evidence list and flags. Owner P2"
+      summary: "Job detail with evidence list and flags. Owner dev#1"
       parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
       responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/JobDetail'}}}}, '404': {description: not found}}
   /api/jobs/{id}/evidence:
     post:
       tags: [jobs]
-      summary: "Add evidence. Level recomputed with core.levels.compute_level. Owner P2"
+      summary: "Add evidence. Level recomputed with core.levels.compute_level. Owner dev#1"
       description: "before|after|bank must come from role=crew; confirm from role=resident with a DIFFERENT X-User-Id than any crew evidence. A job reaching level>=2 sets assets.last_confirmed_clean. Every evidence write also appends to the ledger via app/ledger.append."
       parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
       requestBody:
@@ -88,46 +88,82 @@ paths:
   /api/buildings:
     post:
       tags: [buildings]
-      summary: "Save a building; level computed from the caretaker's own answers. Owner P4"
+      summary: "Save a building; level computed from the caretaker's own answers. Owner dev#3"
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/BuildingIn'}}}}
       responses: {'200': {description: created, content: {application/json: {schema: {$ref: '#/components/schemas/BuildingOut'}}}}}
   /api/buildings/{code}:
     get:
       tags: [buildings]
-      summary: "Caretaker view with the checklist for the current storm state. Owner P4"
+      summary: "Caretaker view with the checklist for the current storm state. Owner dev#3"
       parameters: [{name: code, in: path, required: true, schema: {type: string}}, {name: lang, in: query, schema: {type: string, enum: [en, hi]}}]
       responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/BuildingOut'}}}}, '404': {description: not found}}
   /api/buildings/{code}/ack:
     post:
       tags: [buildings]
-      summary: "Caretaker acknowledges the current warning. Writes ledger. Owner P4"
+      summary: "Caretaker acknowledges the current warning. Writes ledger. Owner dev#3"
       parameters: [{name: code, in: path, required: true, schema: {type: string}}]
       responses: {'200': {description: ok, content: {application/json: {schema: {type: object, properties: {acknowledged_at: {type: string}, ledger_id: {type: integer}}}}}}}
   /api/public/b/{code}:
     get:
       tags: [buildings]
-      summary: "PUBLIC placard data for the QR page. Self-declared, information only, never a rating. Owner P4"
+      summary: "PUBLIC placard data for the QR page. Self-declared, information only, never a rating. Owner dev#3"
       parameters: [{name: code, in: path, required: true, schema: {type: string}}]
       responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Placard'}}}}, '404': {description: not found}}
   /api/ops/storm:
     post:
       tags: [ops]
-      summary: "Drill switch / enter an official warning (ops key). Writes ledger. Owner P1"
+      summary: "Drill switch / enter an official warning (ops key). Writes ledger. Owner dev#1"
       security: [{opsKey: []}]
-      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [active], properties: {active: {type: boolean}, level: {type: string, enum: [watch, warning]}, source: {type: string}}}}}}
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [active], properties: {active: {type: boolean}, level: {type: string, enum: [watch, warning]}, source: {type: string}, notify: {type: boolean, description: "if true and Telegram is configured, send the pre-written storm checklist to TEAM chats (see /api/alerts/telegram)"}}}}}}
       responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Storm'}}}}, '401': {description: bad key}}
   /api/ledger/head:
-    get: {tags: [ledger], summary: "Chain head. Owner P1", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/LedgerHead'}}}}}}
+    get: {tags: [ledger], summary: "Chain head. Owner dev#1", responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/LedgerHead'}}}}}}
   /api/ledger/verify/{id}:
     get:
       tags: [ledger]
-      summary: "Recompute the chain and show the entry. Owner P1"
+      summary: "Recompute the chain and show the entry. Owner dev#1"
       parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
       responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/LedgerVerify'}}}}, '404': {description: not found}}
+  /api/lowpoints:
+    get:
+      tags: [lowpoints]
+      summary: "Hand-placed illustrative low points with their parameters and current silt estimate. Owner dev#3"
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/LowpointsList'}}}}}
+  /api/lowpoints/simulate:
+    post:
+      tags: [lowpoints]
+      summary: "SCENARIO simulator: fill order and time-to-fill for a rain intensity. Not a forecast. Owner dev#3 (logic: core/lowpoints.py)"
+      description: "drain_state clean = no silt; silted = 25% of design depth is silt; current = silt estimated from each pocket's linked assets (so a confirmed cleaning (L2) slows the fill). at_h is the time at which fill_pct_at is reported, for animation."
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [rain_mm_h], properties: {rain_mm_h: {type: number, minimum: 0, maximum: 250}, drain_state: {type: string, enum: [clean, silted, current]}, at_h: {type: number, minimum: 0, maximum: 24}}}}}}
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/SimResult'}}}}, '422': {description: invalid}}
+  /api/replay:
+    get:
+      tags: [lowpoints]
+      summary: "Forecast-miss timeline for 27 Jul 2024 with real model numbers and a labelled hindsight reconstruction. Owner dev#4"
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/Replay'}}}}}
+  /api/capture/presets:
+    get:
+      tags: [capture]
+      summary: "Hypothetical demo plots (water-table values are assumptions). Owner dev#4"
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/CapturePresets'}}}}}
+  /api/capture/plan:
+    post:
+      tags: [capture]
+      summary: "EXPERIMENTAL rain-capture decision with the rule that decided it. Owner dev#4 (logic: core/m4_rules.py)"
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/CapturePlanIn'}}}}
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/CapturePlan'}}}}, '422': {description: invalid}}
+  /api/alerts/telegram:
+    post:
+      tags: [alerts]
+      summary: "Send a PRE-WRITTEN alert to TEAM Telegram chats only (ops key). Owner dev#1"
+      description: "kind lowpoint_high uses core/safety_copy text for the language; storm_checklist sends the building checklist text. Never free text, never an LLM. If TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_IDS are unset, returns sent=0 with a reason (the demo then shows the card only). Writes alerts row + ledger."
+      security: [{opsKey: []}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [kind], properties: {kind: {type: string, enum: [lowpoint_high, storm_checklist]}, lang: {type: string, enum: [en, hi]}, lowpoint_id: {type: string}}}}}}
+      responses: {'200': {description: ok, content: {application/json: {schema: {$ref: '#/components/schemas/AlertResult'}}}}, '401': {description: bad key}}
   /media/{key}:
     get:
       tags: [reports]
-      summary: "Photo bytes (local storage) or 302 to a pre-signed S3 URL. Owner P2"
+      summary: "Photo bytes (local storage) or 302 to a pre-signed S3 URL. Owner dev#1"
       parameters: [{name: key, in: path, required: true, schema: {type: string}}]
       responses: {'200': {description: image}, '302': {description: redirect to pre-signed URL}}
 components:
@@ -231,3 +267,82 @@ components:
         info_only: {type: string, description: "core.safety_copy.INFO_ONLY. Must be shown. No green tick, no rating, no 'safe'."}
         is_demo: {type: boolean}
     LedgerVerify: {type: object, properties: {id: {type: integer}, chain_ok: {type: boolean}, first_bad_index: {type: integer, nullable: true}, entry: {type: object}, head: {$ref: '#/components/schemas/LedgerHead'}, proves: {type: string}, does_not_prove: {type: string}}}
+    Lowpoint:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        kind: {type: string, enum: [underpass, saucer, low_lane, other]}
+        lat: {type: number}
+        lon: {type: number}
+        spills_to: {type: string, nullable: true}
+        catchment_ha: {type: number}
+        storage_m3: {type: number}
+        runoff_c: {type: number}
+        drain_mm_h: {type: number}
+        silt_fraction_used: {type: number}
+        silt_basis: {type: string, description: "estimated | measured | none | clean | silted"}
+        linked_asset_ids: {type: array, items: {type: string}}
+        data_source: {type: string}
+        confidence: {type: string}
+        note: {type: string, nullable: true}
+    LowpointsList: {type: object, properties: {lowpoints: {type: array, items: {$ref: '#/components/schemas/Lowpoint'}}, banner: {type: string}}}
+    SimResultItem:
+      allOf:
+        - {$ref: '#/components/schemas/Lowpoint'}
+        - type: object
+          properties:
+            time_to_fill_h: {type: number, nullable: true, description: "null = no net inflow in this scenario"}
+            level: {type: string, enum: [none, watch, elevated, high], description: "watch >3 h, elevated 1-3 h, high <= 1 h"}
+            fill_pct_at: {type: number}
+            fill_order: {type: integer, nullable: true}
+            own_inflow_m3_h: {type: number}
+            effective_drain_mm_h: {type: number}
+    SimResult:
+      type: object
+      properties:
+        scenario: {type: object}
+        results: {type: array, items: {$ref: '#/components/schemas/SimResultItem'}, description: "sorted by fill order; never-filling pockets last"}
+        alert: {type: object, properties: {active: {type: boolean}, high_ids: {type: array, items: {type: string}}, level: {type: string, enum: [none, elevated, high]}}}
+        banner: {type: string, description: "Scenario, not a forecast. Must be shown."}
+    ReplayEvent: {type: object, properties: {id: {type: string}, label: {type: string}, date: {type: string}, forecast_day_before_mm_day: {type: number}, model_archive_mm_day: {type: number}, reported_mm: {type: number}, reported_basis: {type: string}, verify: {type: boolean}, reported_outcome: {type: string, nullable: true}}}
+    Replay:
+      type: object
+      properties:
+        model: {type: string}
+        events: {type: array, items: {$ref: '#/components/schemas/ReplayEvent'}}
+        caveats: {type: array, items: {type: string}}
+        timeline: {type: array, items: {type: object, properties: {step: {type: integer}, label: {type: string}, text: {type: string}}}}
+        hindsight: {type: object, nullable: true, properties: {asset_id: {type: string}, asset_name: {type: string}, v: {type: number}, tier_if_warning_entered: {type: string}, state: {type: string}}}
+        footer: {type: string}
+    CapturePreset: {type: object, properties: {id: {type: string}, label: {type: string}, roof_m2: {type: number}, water_table_m: {type: number}, soil: {type: string}, in_floodplain: {type: boolean}, has_vehicular_or_wash_runoff: {type: boolean}, nearest_septic_or_sewer_m: {type: number}, water_table_verified: {type: boolean}, area_hint: {type: string}}}
+    CapturePresets: {type: object, properties: {presets: {type: array, items: {$ref: '#/components/schemas/CapturePreset'}}, banner: {type: string}}}
+    CapturePlanIn:
+      type: object
+      required: [roof_m2]
+      properties:
+        roof_m2: {type: number, exclusiveMinimum: 0}
+        water_table_m: {type: number, nullable: true}
+        in_floodplain: {type: boolean}
+        soil: {type: string, enum: [sandy_loam, loam, clay_loam], nullable: true}
+        infiltration_mm_h: {type: number, nullable: true}
+        has_vehicular_or_wash_runoff: {type: boolean}
+        nearest_septic_or_sewer_m: {type: number, nullable: true}
+        poor_groundwater_quality: {type: boolean}
+        water_table_verified: {type: boolean}
+    CapturePlan:
+      type: object
+      properties:
+        decision: {type: string, enum: [STORE_REUSE, DETAIN_ONLY, SHALLOW_PIT_ROOF_ONLY, PIT_TRENCH_SHAFT, PIT_PLUS_RECHARGE_BORE, TANK_OR_BORE, NEEDS_DATA]}
+        rule_id: {type: string}
+        reason: {type: string}
+        source: {type: string}
+        banner: {type: string, description: "Experimental banner. Must be shown."}
+        capture: {type: object, properties: {design_storm_mm: {type: number}, storm_volume_m3: {type: number}, annual_roof_capture_m3: {type: number}}}
+        structure: {type: object, nullable: true}
+        checks: {type: array, items: {type: object}}
+        warnings: {type: array, items: {type: string}}
+        maintenance: {type: array, items: {type: string}}
+        first_flush: {type: string}
+        inputs: {type: object}
+    AlertResult: {type: object, properties: {sent: {type: integer}, recipients_n: {type: integer}, skipped_reason: {type: string, nullable: true}, text: {type: string}, kind: {type: string}, ledger_id: {type: integer, nullable: true}}}

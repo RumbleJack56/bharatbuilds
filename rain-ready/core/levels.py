@@ -1,4 +1,4 @@
-"""Evidence-backed closure levels (L0..L3) and soft flags. Pure functions. Owner: P2 (logic reviewed by P4).
+"""Evidence-backed closure levels (L0..L3) and soft flags. Pure functions. Owner: dev#1 (logic reviewed by dev#4).
 
 A contractor's own photos can NEVER make an asset 'confirmed'. Independent confirmation (L2) is the control.
 Soft flags are advisory: they are shown to reviewers and can withhold L1, but they are defeatable and we say so.

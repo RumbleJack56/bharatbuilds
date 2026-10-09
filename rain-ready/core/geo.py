@@ -1,4 +1,4 @@
-"""Pure geo helpers. No dependencies. Owner: P4."""
+"""Pure geo helpers. No dependencies. Owner: dev#3."""
 import math
 
 EARTH_R_M = 6_371_000.0

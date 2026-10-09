@@ -1,4 +1,4 @@
-"""SQLite access + schema/seed bootstrap. Owner: P1.
+"""SQLite access + schema/seed bootstrap. Owner: dev#1.
 Routers get a connection with `db: sqlite3.Connection = Depends(get_db)`; rows behave like dicts."""
 import json
 import sqlite3
@@ -53,6 +53,12 @@ def seed(con: sqlite3.Connection) -> None:
     for h in data["hotspots"]:
         cols = ",".join(h.keys())
         con.execute(f"INSERT OR REPLACE INTO hotspots({cols}) VALUES({','.join('?' * len(h))})", list(h.values()))
+    for j in data.get("jobs", []):
+        cols = ",".join(j.keys())
+        con.execute(f"INSERT OR REPLACE INTO jobs({cols}) VALUES({','.join('?' * len(j))})", list(j.values()))
+    for lp in data.get("lowpoints", []):
+        cols = ",".join(lp.keys())
+        con.execute(f"INSERT OR REPLACE INTO lowpoints({cols}) VALUES({','.join('?' * len(lp))})", list(lp.values()))
     for b in data.get("buildings", []):
         level, reasons = core_building.building_level(
             bool(b["basement"]), bool(b["entrance_below_road"]), bool(b["people_inside"]),

@@ -1,10 +1,10 @@
-"""Map data. Owner: P4. THIS FILE IS THE REFERENCE PATTERN: a router that reads the DB, calls pure core/ functions,
+"""Map data. Owner: dev#3. THIS FILE IS THE REFERENCE PATTERN: a router that reads the DB, calls pure core/ functions,
 and returns the shape promised in openapi.yaml."""
 from datetime import date
 
 from fastapi import APIRouter, Depends
 
-from core import scoring
+from core import safety_copy, scoring
 
 from ..db import get_db
 from .ops import read_storm
@@ -42,4 +42,4 @@ def map_data(db=Depends(get_db)):
     reports = [dict(r) for r in db.execute(
         "SELECT id,ticket,category,lat,lon,status,created_at FROM reports ORDER BY id DESC LIMIT 200")]
     return {"storm": storm, "assets": assets, "hotspots": hotspots, "reports": reports,
-            "disclaimer": "Information only. Not a safety guarantee. Official warnings: IMD / NDMA Sachet."}
+            "disclaimer": safety_copy.FOOTER["en"]}

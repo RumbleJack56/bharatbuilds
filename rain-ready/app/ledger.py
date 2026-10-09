@@ -1,4 +1,4 @@
-"""Append-only hash chain over core.ledger_hash. Owner: P1. ONLY this module writes the ledger table.
+"""Append-only hash chain over core.ledger_hash. Owner: dev#1. ONLY this module writes the ledger table.
 Other routers call `ledger.append(db, kind, ref_id, record, photo_sha256)` after their own writes."""
 import json
 

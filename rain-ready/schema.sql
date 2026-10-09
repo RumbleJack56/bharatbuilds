@@ -1,4 +1,4 @@
--- FROZEN CONTRACT. Change only via a PR that also updates openapi.yaml and pings the group. Owner: P1.
+-- FROZEN CONTRACT. Change only via a PR that also updates openapi.yaml and pings the group. Owner: dev#1.
 -- SQLite. Timestamps are ISO-8601 UTC strings. JSON columns are TEXT.
 -- Anonymous users: the browser generates a UUID kept in localStorage and sends it as X-User-Id. No accounts.
 
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS settings (
   value_json TEXT NOT NULL
 );                                   -- e.g. key='storm' -> {"active":true,"level":"warning","source":"IMD orange","set_at":"..."}
 
-CREATE TABLE IF NOT EXISTS assets (  -- hand-digitised drains/inlets/underpasses/pumps. WRITE: P4 (seed). READ: all
+CREATE TABLE IF NOT EXISTS assets (  -- hand-digitised drains/inlets/underpasses/pumps. WRITE: dev#3 (seed). READ: all
   id TEXT PRIMARY KEY,               -- e.g. DR-RN-007
   type TEXT NOT NULL CHECK (type IN ('drain_segment','inlet','underpass','pump_station')),
   name TEXT NOT NULL,
@@ -26,13 +26,38 @@ CREATE TABLE IF NOT EXISTS assets (  -- hand-digitised drains/inlets/underpasses
   note TEXT
 );
 
-CREATE TABLE IF NOT EXISTS hotspots ( -- named known hotspots / underpasses (watch list). WRITE: P4 (seed). READ: all
+CREATE TABLE IF NOT EXISTS hotspots ( -- named known hotspots / underpasses (watch list). WRITE: dev#3 (seed). READ: all
   id TEXT PRIMARY KEY, name TEXT NOT NULL, kind TEXT NOT NULL,   -- underpass | low_colony | other
   lat REAL NOT NULL, lon REAL NOT NULL,
   data_source TEXT NOT NULL, year INTEGER, note TEXT
 );
 
-CREATE TABLE IF NOT EXISTS reports (  -- WRITE: P2
+CREATE TABLE IF NOT EXISTS lowpoints ( -- hand-placed ILLUSTRATIVE pockets for the scenario simulator. WRITE: dev#3 (seed). READ: all
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK (kind IN ('underpass','saucer','low_lane','other')),
+  lat REAL NOT NULL, lon REAL NOT NULL,
+  catchment_ha REAL NOT NULL, runoff_c REAL NOT NULL, storage_m3 REAL NOT NULL,
+  drain_mm_h REAL NOT NULL,            -- design drainage capacity as mm/h over the catchment
+  spills_to TEXT REFERENCES lowpoints(id),   -- downstream pocket, NULL = outlet (must form a forest: no cycles)
+  linked_asset_ids TEXT NOT NULL DEFAULT '[]',   -- JSON array of assets.id whose silt state applies to this pocket
+  data_source TEXT NOT NULL DEFAULT 'placeholder',  -- placeholder | field | satellite | inquiry_report
+  confidence TEXT NOT NULL DEFAULT 'low',
+  note TEXT
+);
+
+CREATE TABLE IF NOT EXISTS alerts (   -- outbound Telegram sends to TEAM phones. WRITE: dev#1 (alerts router)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  at TEXT NOT NULL,
+  channel TEXT NOT NULL DEFAULT 'telegram',
+  kind TEXT NOT NULL,                  -- lowpoint_high | storm_checklist
+  lang TEXT NOT NULL,
+  recipients_n INTEGER NOT NULL,
+  text_sha256 TEXT NOT NULL,
+  ref TEXT                             -- e.g. lowpoint id or storm set_at
+);
+
+CREATE TABLE IF NOT EXISTS reports (  -- WRITE: dev#1
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   ticket TEXT NOT NULL UNIQUE,       -- RR-000123
   created_at TEXT NOT NULL,
@@ -49,7 +74,7 @@ CREATE TABLE IF NOT EXISTS reports (  -- WRITE: P2
   status TEXT NOT NULL DEFAULT 'reported'   -- reported | unverified | corroborated
 );
 
-CREATE TABLE IF NOT EXISTS jobs (     -- one cleaning job per asset visit. WRITE: P2 (and P1 /ops creates)
+CREATE TABLE IF NOT EXISTS jobs (     -- one cleaning job per asset visit. WRITE: dev#1 (reports/jobs routers; /ops creates)
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   asset_id TEXT NOT NULL REFERENCES assets(id),
   created_at TEXT NOT NULL,
@@ -60,7 +85,7 @@ CREATE TABLE IF NOT EXISTS jobs (     -- one cleaning job per asset visit. WRITE
   note TEXT
 );
 
-CREATE TABLE IF NOT EXISTS evidence ( -- WRITE: P2
+CREATE TABLE IF NOT EXISTS evidence ( -- WRITE: dev#1
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   job_id INTEGER NOT NULL REFERENCES jobs(id),
   phase TEXT NOT NULL CHECK (phase IN ('before','after','bank','confirm','audit')),
@@ -72,7 +97,7 @@ CREATE TABLE IF NOT EXISTS evidence ( -- WRITE: P2
   flags_json TEXT NOT NULL DEFAULT '[]'
 );
 
-CREATE TABLE IF NOT EXISTS buildings ( -- WRITE: P4
+CREATE TABLE IF NOT EXISTS buildings ( -- WRITE: dev#3
   code TEXT PRIMARY KEY,             -- unguessable, e.g. 8 chars [a-z0-9]
   name TEXT NOT NULL,
   lat REAL, lon REAL,
@@ -87,16 +112,16 @@ CREATE TABLE IF NOT EXISTS buildings ( -- WRITE: P4
   is_demo INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS acks (     -- caretaker acknowledged the checklist for a warning. WRITE: P4
+CREATE TABLE IF NOT EXISTS acks (     -- caretaker acknowledged the checklist for a warning. WRITE: dev#3
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   building_code TEXT NOT NULL REFERENCES buildings(code),
   warning_set_at TEXT NOT NULL, at TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS ledger (   -- append-only hash chain. WRITE: P1 only, via app/ledger.py
+CREATE TABLE IF NOT EXISTS ledger (   -- append-only hash chain. WRITE: dev#1 only, via app/ledger.py
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   prev_hash TEXT NOT NULL, hash TEXT NOT NULL UNIQUE,
-  kind TEXT NOT NULL,                -- report | evidence | job_level | storm | building_ack
+  kind TEXT NOT NULL,                -- report | evidence | job_level | storm | building_ack | alert
   ref_id TEXT NOT NULL,
   record_json TEXT NOT NULL,
   photo_sha256 TEXT,

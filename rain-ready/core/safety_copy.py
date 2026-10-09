@@ -1,4 +1,4 @@
-"""ALL user-facing safety text lives here, pre-written. NO LLM writes or rephrases any of it. Owner: P4.
+"""ALL user-facing safety text lives here, pre-written. NO LLM writes or rephrases any of it. Owner: dev#4.
 
 Hindi/English. The Hindi MUST be checked by a native speaker and the English by someone with
 disaster-management judgement before any real (non-team) send. See HANDOFF.md section 9.

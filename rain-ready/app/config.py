@@ -1,4 +1,4 @@
-"""Settings from environment. Owner: P1. Everything has a demo-safe default."""
+"""Settings from environment. Owner: dev#1. Everything has a demo-safe default."""
 import os
 from pathlib import Path
 
@@ -11,4 +11,6 @@ S3_BUCKET = os.getenv("S3_BUCKET", "")
 AWS_REGION = os.getenv("AWS_REGION", "ap-south-1")
 TRIAGE_MODE = os.getenv("TRIAGE_MODE", "manual")        # manual | bedrock
 BEDROCK_MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "")    # read it from your account; do not guess
-VERSION = "0.1.0"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")      # @BotFather; empty = alerts fail soft
+TELEGRAM_CHAT_IDS = [c.strip() for c in os.getenv("TELEGRAM_CHAT_IDS", "").split(",") if c.strip()]   # TEAM chats only
+VERSION = "0.2.0"

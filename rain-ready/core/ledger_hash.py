@@ -1,4 +1,4 @@
-"""Tamper-evident hash chain. Pure functions. Owner: P1 (app/ledger.py wraps this with the DB and S3).
+"""Tamper-evident hash chain. Pure functions. Owner: dev#1 (app/ledger.py wraps this with the DB and S3).
 
 Proves records were not changed after being written. It does NOT prove a photo is true.
 """

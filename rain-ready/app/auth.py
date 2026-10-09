@@ -1,4 +1,4 @@
-"""Tiny auth helpers. Owner: P1. No accounts: a device UUID and a shared ops key."""
+"""Tiny auth helpers. Owner: dev#1. No accounts: a device UUID and a shared ops key."""
 from fastapi import Header, HTTPException
 
 from . import config

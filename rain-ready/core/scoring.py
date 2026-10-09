@@ -1,4 +1,4 @@
-"""Drain vulnerability score and tiers. Pure functions. Owner: P4.
+"""Drain vulnerability score and tiers. Pure functions. Owner: dev#3.
 
 Design notes (see docs/Rain_Ready_Adversarial_Review.md item 12):
 - Unmeasured silt must NOT mean zero silt: we use a time-since-confirmed-clean prior.

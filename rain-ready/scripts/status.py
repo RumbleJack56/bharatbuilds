@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Contract status board. Owner: P1.  Usage: python scripts/status.py [base_url] [--strict]
+"""Contract status board. Owner: dev#1.  Usage: python scripts/status.py [base_url] [--strict]
 
-Calls every read endpoint in openapi.yaml against a running server and validates the JSON against the
+Calls the endpoints listed in CHECKS (reads plus safe POSTs) from openapi.yaml against a running server and validates the JSON against the
 contract's schemas. PASS = matches contract. TODO = not implemented yet (404/405). FAIL = wrong shape or 5xx.
 Everybody runs this before merging. Exit code 1 on any FAIL (and on TODO with --strict)."""
 import json
@@ -33,24 +33,31 @@ def fix_nullable(o):
 
 fix_nullable(spec)
 
-# (owner, method, path, schema ref or 'array:Ref' or status int, headers)
+# (owner, method, path, expect, body)  expect = schema name | 'array:Name' | http status int
 CHECKS = [
-    ("P1", "GET", "/api/health", "Health"),
-    ("P1", "GET", "/api/state", "State"),
-    ("P4", "GET", "/api/map", "MapData"),
-    ("P1", "GET", "/api/board", "Board"),
-    ("P1", "GET", "/api/ledger/head", "LedgerHead"),
-    ("P1", "POST", "/api/ops/storm", 401),          # no ops key -> must be rejected
-    ("P2", "GET", "/api/reports", "array:ReportPublic"),
-    ("P2", "GET", "/api/jobs", "array:Job"),
-    ("P4", "GET", "/api/buildings/demo0001", "BuildingOut"),
-    ("P4", "GET", "/api/public/b/demo0001", "Placard"),
-    ("P4", "GET", "/api/public/b/doesnotexist", 404),
+    ("dev#1", "GET", "/api/health", "Health", None),
+    ("dev#1", "GET", "/api/state", "State", None),
+    ("dev#1", "GET", "/api/board", "Board", None),
+    ("dev#1", "GET", "/api/ledger/head", "LedgerHead", None),
+    ("dev#1", "POST", "/api/ops/storm", 401, {"active": False}),                 # no ops key -> rejected
+    ("dev#1", "POST", "/api/alerts/telegram", 401, {"kind": "lowpoint_high"}),   # no ops key -> rejected
+    ("dev#1", "GET", "/api/reports", "array:ReportPublic", None),
+    ("dev#1", "GET", "/api/jobs", "array:Job", None),
+    ("dev#3", "GET", "/api/map", "MapData", None),
+    ("dev#3", "GET", "/api/lowpoints", "LowpointsList", None),
+    ("dev#3", "POST", "/api/lowpoints/simulate", "SimResult", {"rain_mm_h": 40, "drain_state": "current"}),
+    ("dev#3", "GET", "/api/buildings/demo0001", "BuildingOut", None),
+    ("dev#3", "GET", "/api/public/b/demo0001", "Placard", None),
+    ("dev#3", "GET", "/api/public/b/doesnotexist", 404, None),
+    ("dev#4", "GET", "/api/replay", "Replay", None),
+    ("dev#4", "GET", "/api/capture/presets", "CapturePresets", None),
+    ("dev#4", "POST", "/api/capture/plan", "CapturePlan", {"roof_m2": 600, "water_table_m": 12, "soil": "sandy_loam"}),
 ]
 
 
-def call(method, path):
-    req = urllib.request.Request(base + path, method=method, data=b"{}" if method == "POST" else None,
+def call(method, path, body=None):
+    data = json.dumps(body if body is not None else {}).encode() if method == "POST" else None
+    req = urllib.request.Request(base + path, method=method, data=data,
                                  headers={"content-type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=10) as r:
@@ -67,8 +74,8 @@ def validate(ref, data):
 
 
 counts = {"PASS": 0, "TODO": 0, "FAIL": 0}
-for owner, method, path, expect, *_ in CHECKS:
-    status, body = call(method, path)
+for owner, method, path, expect, req_body in CHECKS:
+    status, body = call(method, path, req_body)
     verdict, why = "FAIL", ""
     if isinstance(expect, int):
         verdict = "PASS" if status == expect else ("TODO" if status in (404, 405) and expect != 404 else "FAIL")

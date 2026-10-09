@@ -1,4 +1,4 @@
-"""App wiring. Owner: P1. Routers are auto-discovered: drop a file in app/routers/ that exposes `router`.
+"""App wiring. Owner: dev#1. Routers are auto-discovered: drop a file in app/routers/ that exposes `router`.
 A missing or broken router is skipped with a log line, so one dev's WIP cannot stop everyone else's demo."""
 import importlib
 import logging

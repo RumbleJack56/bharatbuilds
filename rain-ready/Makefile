@@ -10,5 +10,5 @@ status:           ## contract status board vs the running server (BASE=http://ho
 	$(PY) scripts/status.py $(or $(BASE),http://localhost:8010)
 reset:            ## wipe local DB + photos and re-seed on next start
 	rm -f var/rainready.db var/rainready.db-wal var/rainready.db-shm && rm -rf var/photos
-deploy:           ## owner P1: needs HOST=ec2-user@<elastic-ip>
+deploy:           ## owner dev#1: needs HOST=ec2-user@<elastic-ip>
 	ssh $(HOST) 'cd rain-ready && git pull --rebase && docker compose up -d --build'
