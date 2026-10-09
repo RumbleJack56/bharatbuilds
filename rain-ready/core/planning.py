@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 from datetime import date
 
 from . import lowpoints as lp
@@ -11,6 +12,7 @@ TAU_DAYS = 75
 NEVER_DAYS = 365
 REF_RAIN_MM_H = 35.0
 GAIN_CAP_H = 6.0
+RANGE_FRAC = 0.25        # pocket size, catchment and drain capacity are each uncertain by this much
 
 
 def silt_fraction(last_clean: date | None, today: date) -> float:
@@ -54,3 +56,13 @@ def gain_if_cleaned(pockets: list[dict], asset_silt: dict[str, float], asset_id:
 
 def rank_score(gain_h: float, reports: int) -> float:
     return round(gain_h * (1 + 0.25 * max(0, reports - 1)), 3)
+
+
+def fill_time_range(pockets: list[lp.Pocket], rain: float, frac: float = RANGE_FRAC) -> dict[str, tuple[float | None, float | None]]:
+    """(low_h, high_h) of time to fill per pocket. Low: catchment and storage and drain all 25% worse. High: all 25% better.
+    None means no fill in that case. The point estimate always lies between the two."""
+    def run(c: float, st: float, d: float) -> dict[str, float | None]:
+        return _ttf(lp.simulate([replace(p, catchment_ha=p.catchment_ha * c, storage_m3=p.storage_m3 * st,
+                                         drain_mm_h=p.drain_mm_h * d) for p in pockets], rain))
+    worse, better = run(1 + frac, 1 - frac, 1 - frac), run(1 - frac, 1 + frac, 1 + frac)
+    return {p.id: (worse[p.id], better[p.id]) for p in pockets}
