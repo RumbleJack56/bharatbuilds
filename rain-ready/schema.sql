@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS incidents (
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL REFERENCES users(id),
   lat REAL NOT NULL, lon REAL NOT NULL,
   kind TEXT NOT NULL CHECK (kind IN ('blocked_drain','standing_water','overflow','other')),
-  note TEXT, photo_key TEXT, ai_json TEXT,
+  note TEXT, photo_key TEXT, ai_json TEXT, photo_hash TEXT, flags TEXT, accuracy_m REAL,
   asset_id TEXT REFERENCES assets(id), pocket_id TEXT REFERENCES pockets(id), task_id INTEGER,
   created_at TEXT NOT NULL
 );
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS tasks (
 );
 CREATE TABLE IF NOT EXISTS task_events (
   id INTEGER PRIMARY KEY AUTOINCREMENT, task_id INTEGER NOT NULL REFERENCES tasks(id),
-  actor_id TEXT, event TEXT NOT NULL, note TEXT, photo_key TEXT, agency_id TEXT, at TEXT NOT NULL
+  actor_id TEXT, event TEXT NOT NULL, note TEXT, photo_key TEXT, photo_hash TEXT, flags TEXT, agency_id TEXT, at TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS sites (
   id TEXT PRIMARY KEY, name TEXT NOT NULL, lat REAL NOT NULL, lon REAL NOT NULL,

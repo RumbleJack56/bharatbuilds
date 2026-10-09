@@ -47,9 +47,23 @@ def _insert(con, table: str, row: dict) -> None:
 def init_db() -> None:
     con = get_db()
     con.executescript((ROOT / "schema.sql").read_text())
+    _add_missing_columns(con)
     if con.execute("SELECT COUNT(*) FROM agencies").fetchone()[0] == 0:
         seed(con)
     con.commit()
+
+
+ADDED = {"incidents": {"photo_hash": "TEXT", "flags": "TEXT", "accuracy_m": "REAL"},
+         "task_events": {"photo_hash": "TEXT", "flags": "TEXT"}}
+
+
+def _add_missing_columns(con: sqlite3.Connection) -> None:
+    """Databases made before a column existed get it added; no data is lost."""
+    for table, cols in ADDED.items():
+        have = {r["name"] for r in con.execute(f"PRAGMA table_info({table})")}
+        for name, typ in cols.items():
+            if name not in have:
+                con.execute(f"ALTER TABLE {table} ADD COLUMN {name} {typ}")
 
 
 def seed(con: sqlite3.Connection) -> None:

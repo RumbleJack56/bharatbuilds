@@ -1,4 +1,5 @@
 """Task lifecycle: open -> accepted -> done -> confirmed | disputed. Every step writes a task_events row."""
+import json
 from datetime import date, datetime, timezone
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
@@ -25,11 +26,12 @@ def _out(db, r, detail=False) -> dict:
     d = dict(r)
     d["overdue"] = _overdue(d)
     if detail:
-        d["events"] = [dict(e, photo_url=storage.photo_url(e["photo_key"])) for e in
+        d["events"] = [dict(e, photo_url=storage.photo_url(e["photo_key"]), photo_hash=None,
+                            flags=json.loads(e["flags"]) if e["flags"] else []) for e in
                        db.execute("SELECT e.*, COALESCE(u.name, e.actor_id) AS actor_name FROM task_events e "
                                   "LEFT JOIN users u ON u.id=e.actor_id WHERE task_id=? ORDER BY e.id", (d["id"],))]
-        d["incidents"] = [dict(i, photo_url=storage.photo_url(i["photo_key"])) for i in
-                          db.execute("SELECT id,kind,note,photo_key,created_at FROM incidents WHERE task_id=? ORDER BY id", (d["id"],))]
+        d["incidents"] = [dict(i, photo_url=storage.photo_url(i["photo_key"]), flags=json.loads(i["flags"]) if i["flags"] else []) for i in
+                          db.execute("SELECT id,kind,note,photo_key,flags,created_at FROM incidents WHERE task_id=? ORDER BY id", (d["id"],))]
     return d
 
 
@@ -125,12 +127,14 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
 async def complete(tid: int, note: str = Form(""), photo: UploadFile = File(...),
                    user=Depends(need("official", "admin")), db=Depends(get_db)):
     t = _task(db, tid); _own(user, t); _need_status(t, "accepted")
+    data = await photo.read()
     try:
-        key = storage.save_photo(await photo.read(), photo.content_type or "")
+        key = storage.save_photo(data, photo.content_type or "")
     except ValueError as e:
         raise HTTPException(422, str(e))
+    phash, flags = service.check_photo(db, data, t["lat"], t["lon"], user["id"])   # flags are shown to the confirming resident
     _set(db, tid, status="done", done_by=user["id"])
-    service.log_event(db, tid, user["id"], "completed", note[:300], key, t["agency_id"]); db.commit()
+    service.log_event(db, tid, user["id"], "completed", note[:300], key, t["agency_id"], phash, flags); db.commit()
     return _out(db, _task(db, tid), True)
 
 

@@ -2,7 +2,7 @@
 import json
 from datetime import date, datetime, timedelta, timezone
 
-from core import geo, planning
+from core import geo, photocheck, planning
 
 from . import config
 from .db import now_iso
@@ -32,9 +32,23 @@ def nearest_asset(db, lat: float, lon: float):
 
 
 def log_event(db, task_id: int, actor: str | None, event: str, note: str | None = None,
-              photo_key: str | None = None, agency_id: str | None = None) -> None:
-    db.execute("INSERT INTO task_events(task_id,actor_id,event,note,photo_key,agency_id,at) VALUES(?,?,?,?,?,?,?)",
-               (task_id, actor, event, note, photo_key, agency_id, now_iso()))
+              photo_key: str | None = None, agency_id: str | None = None,
+              photo_hash: str | None = None, flags: list | None = None) -> None:
+    db.execute("INSERT INTO task_events(task_id,actor_id,event,note,photo_key,photo_hash,flags,agency_id,at) VALUES(?,?,?,?,?,?,?,?,?)",
+               (task_id, actor, event, note, photo_key, photo_hash, json.dumps(flags) if flags else None, agency_id, now_iso()))
+
+
+def prior_photos(db) -> list[tuple[str, str | None]]:
+    """(hash, user_id) of every earlier report photo and after-photo."""
+    rows = [(r["photo_hash"], r["user_id"]) for r in db.execute("SELECT photo_hash, user_id FROM incidents WHERE photo_hash IS NOT NULL")]
+    rows += [(r["photo_hash"], r["actor_id"]) for r in db.execute("SELECT photo_hash, actor_id FROM task_events WHERE photo_hash IS NOT NULL")]
+    return rows
+
+
+def check_photo(db, data: bytes, lat: float, lon: float, user_id: str, accuracy_m: float | None = None):
+    """-> (hash, flags). Compares the picture with earlier ones and its geotag with the claimed spot."""
+    info = photocheck.analyze(data)
+    return info["hash"], photocheck.assess(info, lat, lon, datetime.now(timezone.utc), prior_photos(db), user_id, accuracy_m)
 
 
 def refresh_rank(db, task_id: int) -> None:
