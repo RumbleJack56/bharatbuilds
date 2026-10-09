@@ -66,3 +66,13 @@ def fill_time_range(pockets: list[lp.Pocket], rain: float, frac: float = RANGE_F
                                          drain_mm_h=p.drain_mm_h * d) for p in pockets], rain))
     worse, better = run(1 + frac, 1 - frac, 1 - frac), run(1 - frac, 1 + frac, 1 + frac)
     return {p.id: (worse[p.id], better[p.id]) for p in pockets}
+
+
+def gain_range(pockets: list[dict], asset_silt: dict[str, float], asset_id: str, rain: float = REF_RAIN_MM_H,
+               frac: float = RANGE_FRAC) -> tuple[float, float]:
+    """(low_h, high_h) of fill time gained by cleaning `asset_id`, with pocket parameters 25% worse and 25% better."""
+    def shifted(sign: int) -> list[dict]:
+        return [{**p, "catchment_ha": p["catchment_ha"] * (1 + sign * frac), "storage_m3": p["storage_m3"] * (1 - sign * frac),
+                 "drain_mm_h": p["drain_mm_h"] * (1 - sign * frac)} for p in pockets]
+    a, b = (gain_if_cleaned(shifted(s), asset_silt, asset_id, rain)["gain_h"] for s in (1, -1))
+    return min(a, b), max(a, b)
