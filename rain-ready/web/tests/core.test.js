@@ -30,3 +30,10 @@ test("resolve sends a logged-in user on #/login to their home", () => {
   assert.ok(resolve(C, "login", "resident").redirect);
   assert.equal(resolve(C, "login", null).controller.path, "login");
 });
+
+import { readFileSync } from "node:fs";
+import { MapViewPort } from "../js/ports/index.js";
+test("map adapter's MapViewPort copy matches ports/index.js", () => {
+  const src = readFileSync(new URL("../js/adapters/map-leaflet.js", import.meta.url), "utf8");
+  for (const m of MapViewPort.methods) assert.match(src, new RegExp(`"${m}"`));
+});

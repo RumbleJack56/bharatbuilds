@@ -1,4 +1,4 @@
-// web/js/controllers/index.js — route table. Each entry is a Controller (PLAN.md 2.2); legacy() until migrated.
+// web/js/controllers/index.js — route table. every entry is a Controller (PLAN.md 2.2).
 import { login } from "./login.js";
 import { report } from "./report.js";
 import { mine, confirm } from "./resident.js";
