@@ -1,6 +1,8 @@
 // web/js/controllers/official.js — inbox and the task page with role-aware actions.
 import { inboxView, taskDetail, openActions, acceptedActions, assignActions, waitingActions } from "../views/official.view.js";
 import { guard } from "../ui/components.js";
+import { esc } from "../ui/format.js";
+import { CAMERA } from "../ui/copy.js";
 
 const BACK = { official: "#/inbox", admin: "#/admin", resident: "#/mine" };
 
@@ -43,11 +45,23 @@ export const task = {
       if (!reason) return ctx.toast.show("Please give a short reason.");
       act(e.target, () => ctx.services.tasks.reject(t.id, { reason, reassignTo: box.querySelector("#to").value }), "Sent back.");
     });
+    // After-photo: live camera, stamped; officials get no capture token.
+    let photo = null, url = "";
+    const cam = box.querySelector("#ph");
+    if (cam && !ctx.camera.available()) { cam.disabled = true; box.querySelector("#camnote").textContent = CAMERA.none; }
+    if (cam) cam.onclick = (ev) => guard(ev.target, async () => {
+      try {
+        const p = await ctx.services.capture.takePhoto({ withToken: false });
+        if (url) URL.revokeObjectURL(url);
+        photo = p; url = URL.createObjectURL(p.blob);
+        box.querySelector("#prev").innerHTML = `<img alt="After-photo, location and time stamped" src="${esc(url)}">`;
+        cam.textContent = "Retake after-photo"; box.querySelector("#camnote").textContent = "";
+      } catch (e) { if (!e.cancelled) { box.querySelector("#camnote").textContent = e.message; ctx.toast.show(e.message); } }
+    }, ctx.toast.show);
     box.querySelector("#done")?.addEventListener("submit", ev => {
       ev.preventDefault();
-      const photo = box.querySelector("#ph").files[0];
       if (!photo) return ctx.toast.show("An after-photo is required.");
-      act(ev.submitter || box.querySelector("#done button"), () => ctx.services.tasks.complete(t.id, { photo, note: box.querySelector("#nt").value }),
+      act(ev.submitter || box.querySelector("#done button[type=submit]"), () => ctx.services.tasks.complete(t.id, { photo: photo.blob, note: box.querySelector("#nt").value }),
         "Marked done. A resident will check it.");
     });
   },

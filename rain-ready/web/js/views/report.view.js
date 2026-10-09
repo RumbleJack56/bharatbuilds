@@ -5,10 +5,12 @@ import { flagList } from "../ui/components.js";
 export function reportForm({ fieldRule, kinds }) {
   return `<h1>Report a problem</h1><p class="rule">${esc(fieldRule)}</p>
   <form id="f">
-    <label for="photo">Photo (from the footpath)</label>
-    <input id="photo" type="file" accept="image/*" capture="environment" hidden>
-    <button type="button" id="cam" class="big primary">Take or choose a photo</button>
+    <label>Photo (from the footpath)</label>
+    <button type="button" id="cam" class="big primary">Take photo</button>
+    <p class="small muted">The photo is location and time stamped.</p>
+    <p class="small" id="camnote" role="alert"></p>
     <div id="prev" class="photos"></div>
+    <button type="button" id="rm" hidden>Remove photo</button>
     <label>Where is it?</label>
     <div class="row"><button type="button" id="gps">Use my location</button></div>
     <p class="small muted" id="coords"></p>
