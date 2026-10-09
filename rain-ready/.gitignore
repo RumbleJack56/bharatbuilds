@@ -4,3 +4,5 @@ __pycache__/
 var/
 .env
 *.pyc
+*.pem
+.aws-state

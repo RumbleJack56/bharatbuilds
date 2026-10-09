@@ -53,6 +53,8 @@ Phone (APK) or browser --HTTPS (Caddy, sslip.io)--> FastAPI + SQLite   on EC2 t3
 | MVP | Persona login | written |
 | MVP | Report: camera, GPS, optional tap-to-move pin, kind, note; result card with the linked drain | written |
 | MVP | My reports list | written |
+| MVP | Live in-app camera that stamps place, time and a reference code on the photo; no gallery (spec: `docs/CAPTURE.md`) | backend built, screen todo |
+| MVP | Result card shows `flags` and "saved for review, not counted yet" when `held_for_review` is true | backend built, screen todo |
 | MVP | Confirm screen: before/after photos, "Looks fixed" / "Still a problem" | written |
 | Good | Offline queue: store a report and send when online | todo |
 | Good | Client-side photo shrink before upload | todo |
@@ -94,8 +96,10 @@ Phone (APK) or browser --HTTPS (Caddy, sslip.io)--> FastAPI + SQLite   on EC2 t3
 | MVP | Rank = fill time gained by cleaning x repeat-report factor | built |
 | MVP | Simulator screen (slider, three drain states, fill order, "about X h") | written |
 | Good | Show a low and high range, not one number | todo |
-| Good | Cluster nearby reports (50 m, 24 h) and cap reports per user per day | todo |
-| Good | Flag a re-used photo (perceptual hash) as a soft warning | todo |
+| Good | Cluster nearby reports (50 m, 24 h) and cap reports per user per day | todo (backend) |
+| Good | Flag a re-used photo (perceptual hash) as a soft warning | built (backend, tested) |
+| MVP | Photo checks on reports and after-photos: perceptual hash, EXIF geotag and time. A warn flag saves the report but does not create or bump a task | built (backend, tested) |
+| MVP | Capture token and on-photo stamp check: the server compares the stamp's Lat, Long, time and Ref with the report | built (backend; stamp reading tested with a mock only) |
 | Good | Elevation data to suggest where runoff concentrates (suggestion only) | todo |
 
 ### 4.6 Rain capture
@@ -109,7 +113,8 @@ Phone (APK) or browser --HTTPS (Caddy, sslip.io)--> FastAPI + SQLite   on EC2 t3
 ### 4.7 AI (kept small)
 | | Item | State |
 |---|---|---|
-| MVP | Bedrock: photo and note to a report category. Falls back to the resident's choice | built |
+| MVP | Bedrock: photo and note to a report category. Falls back to the resident's choice | built (parser hardened, tested with a fake client) |
+| MVP | Bedrock reads the on-photo stamp text (reads only, judges nothing) | built (mock only) |
 | Good | Plain-language questions over the dashboard data (Bedrock with read-only queries) | todo |
 | Good | Draft work orders (see 4.2) | todo |
 
@@ -128,13 +133,16 @@ AI never changes rank, owner or status, and never writes safety text.
 | | Item | State |
 |---|---|---|
 | MVP | EC2 + Docker + Caddy HTTPS on sslip.io | todo |
-| MVP | S3 for photos (`STORAGE=s3`, pre-signed redirects) | written |
+| MVP | S3 for photos (`STORAGE=s3`, pre-signed redirects) | built, tested with a fake client; not tried on AWS |
+| MVP | Deploy scripts: bucket and role setup, EC2 bootstrap, IAM policy (`scripts/`) | built, not run on AWS |
+| MVP | `/api/health` shows config warnings; `?deep=1` probes S3 and Bedrock | built |
 | MVP | Bedrock model enabled and tested once | todo |
 | MVP | Upload size and type checks | built |
-| MVP | Tests run in CI on every push | todo |
-| Good | Hourly database copy to S3; AMI before recording | todo |
+| MVP | Tests run in CI on every push | built (workflow at repo root; green) |
+| Good | Hourly database copy to S3 (`scripts/backup.sh`); AMI before recording | script built; cron and AMI todo |
 | Good | CloudFront in front of the static files | todo |
-| Good | Rate limit on report creation | todo |
+| Good | Rate limit on report creation | todo (backend) |
+| Good | Admin action to release or reject a held report | todo (backend, then screen) |
 
 ### 4.10 Mobile (APK)
 | | Item | State |
@@ -146,11 +154,33 @@ AI never changes rank, owner or status, and never writes safety text.
 ### 4.11 Demo and submission
 | | Item | State |
 |---|---|---|
-| MVP | Public repo with a LICENSE and a credits list (open source used, AI tools used) | todo |
+| MVP | Public repo with a LICENSE and a credits list (open source used, AI tools used) | LICENSE done; credits todo |
 | MVP | 3-minute video on YouTube showing the loop, the dashboard, the APK and the AWS console | todo |
 | MVP | Write-up: problem, build, where AWS fits | todo |
 | MVP | Stranger test on the live URL | todo |
 | Good | Blog on AWS Builder Center | todo |
+
+### 4.12 Status on 10 Oct 2026
+
+**Done and in the repo (PR #1):**
+- Backend loop: report, task, accept, complete, confirm, dashboard. 76 tests pass, CI green.
+- Deploy prep: S3 and Bedrock code paths with tests, deploy scripts, health checks, `docs/DEPLOY.md`.
+- Photo integrity: hash reuse, EXIF geotag and time, capture token, stamp check, held-for-review reports.
+- APK wrapper builds (placeholder API host).
+
+**Left, backend and AWS (Ujjwal):**
+1. Create the AWS resources and a public HTTPS URL (account owner: Aarush). Then run the S3 test and the Bedrock test. Nothing has run on real AWS.
+2. Real Delhi data: drains, pockets, owners with sources. Plan the sourcing first.
+3. Rate limit, report clustering, fill-time range, admin release of held reports.
+4. Backend report generation and actionable insights, after the data is real.
+5. Build the APK with the real host; test camera and GPS on a phone.
+6. Hourly backup cron and an AMI before recording.
+
+**Left, screens (Aarush):** see `TASKS.md` section 4 and V9. The new work is the stamping camera and the flags display.
+
+**Left, shared:** pin the deadline hour (first submission is not before 12:00 noon on the last day; the exact hour is unknown), credits and write-up, video, make the repo public.
+
+**Wording rule for photo checks:** say "location and time stamped, checked against the report". Never say "unspoofable". A rooted phone with a fake-GPS app can still stamp a false place.
 
 ---
 
@@ -179,6 +209,7 @@ AI never changes rank, owner or status, and never writes safety text.
 7. Label every placeholder (`data_source`, `confidence`). Do not invent facts or coordinates.
 8. Nothing in the product asks anyone to open a manhole or enter a drain.
 9. Only features that run appear in the video.
+10. Photo checks are soft flags. They hold a report for review. They never delete it and never claim proof. Held reports stay visible to officials with the reason.
 
 ## 8. Out of scope
 

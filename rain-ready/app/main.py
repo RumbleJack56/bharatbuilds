@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from . import config, routers
+from . import checks, config, routers
 from .db import init_db
 
 log = logging.getLogger("rainready")
@@ -20,6 +20,8 @@ FAILED: dict[str, str] = {}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    for w in checks.config_warnings():
+        log.warning("config: %s", w)
     yield
 
 
@@ -36,9 +38,12 @@ for m in pkgutil.iter_modules(routers.__path__):
 
 
 @app.get("/api/health")
-def health():
-    return {"ok": True, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED,
-            "storage": config.STORAGE, "triage": config.TRIAGE_MODE}
+def health(deep: bool = False):
+    out = {"ok": True, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED,
+           "storage": config.STORAGE, "triage": config.TRIAGE_MODE, "config_warnings": checks.config_warnings()}
+    if deep:
+        out["aws"] = checks.aws_probe()
+    return out
 
 
 WEB = Path(__file__).resolve().parent.parent / "web"

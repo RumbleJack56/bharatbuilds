@@ -14,3 +14,6 @@ TASK_DUE_DAYS = int(os.getenv("TASK_DUE_DAYS", "7"))
 LINK_RADIUS_M = float(os.getenv("LINK_RADIUS_M", "150"))
 CORS_ORIGINS = [o for o in os.getenv("CORS_ORIGINS", "*").split(",") if o]   # APK webview needs this
 VERSION = "0.3.0"
+CAPTURE_SECRET = os.getenv("CAPTURE_SECRET", "")        # signs capture tokens; set a long random value on the server
+CAPTURE_MAX_AGE_S = int(os.getenv("CAPTURE_MAX_AGE_S", "900"))
+REQUIRE_LIVE_CAPTURE = os.getenv("REQUIRE_LIVE_CAPTURE", "0") == "1"   # 1: a report photo without a valid capture token is held

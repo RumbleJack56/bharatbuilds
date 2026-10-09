@@ -2,9 +2,10 @@
 import json
 from datetime import date, datetime, timedelta, timezone
 
-from core import geo, planning
+from ai import stampread
+from core import geo, photocheck, planning, stamp
 
-from . import config
+from . import capture, config
 from .db import now_iso
 
 ACTIVE = ("open", "accepted", "done", "disputed")
@@ -32,9 +33,23 @@ def nearest_asset(db, lat: float, lon: float):
 
 
 def log_event(db, task_id: int, actor: str | None, event: str, note: str | None = None,
-              photo_key: str | None = None, agency_id: str | None = None) -> None:
-    db.execute("INSERT INTO task_events(task_id,actor_id,event,note,photo_key,agency_id,at) VALUES(?,?,?,?,?,?,?)",
-               (task_id, actor, event, note, photo_key, agency_id, now_iso()))
+              photo_key: str | None = None, agency_id: str | None = None,
+              photo_hash: str | None = None, flags: list | None = None) -> None:
+    db.execute("INSERT INTO task_events(task_id,actor_id,event,note,photo_key,photo_hash,flags,agency_id,at) VALUES(?,?,?,?,?,?,?,?,?)",
+               (task_id, actor, event, note, photo_key, photo_hash, json.dumps(flags) if flags else None, agency_id, now_iso()))
+
+
+def prior_photos(db) -> list[tuple[str, str | None]]:
+    """(hash, user_id) of every earlier report photo and after-photo."""
+    rows = [(r["photo_hash"], r["user_id"]) for r in db.execute("SELECT photo_hash, user_id FROM incidents WHERE photo_hash IS NOT NULL")]
+    rows += [(r["photo_hash"], r["actor_id"]) for r in db.execute("SELECT photo_hash, actor_id FROM task_events WHERE photo_hash IS NOT NULL")]
+    return rows
+
+
+def check_photo(db, data: bytes, lat: float, lon: float, user_id: str, accuracy_m: float | None = None):
+    """-> (hash, flags). Compares the picture with earlier ones and its geotag with the claimed spot."""
+    info = photocheck.analyze(data)
+    return info["hash"], photocheck.assess(info, lat, lon, datetime.now(timezone.utc), prior_photos(db), user_id, accuracy_m)
 
 
 def refresh_rank(db, task_id: int) -> None:
@@ -63,3 +78,15 @@ def ensure_task(db, asset_id: str, actor: str | None, *, from_report: bool) -> t
     log_event(db, tid, actor, "created", "from resident report" if from_report else "from ranked plan", agency_id=asset["agency_id"])
     refresh_rank(db, tid)
     return tid, True
+
+
+def check_stamp(data: bytes, content_type: str, lat: float, lon: float, user_id: str, token: str | None) -> list[dict]:
+    """Flags for the on-photo stamp and the capture token (see app/capture.py)."""
+    ref = capture.verify(token, user_id)
+    strict = config.REQUIRE_LIVE_CAPTURE
+    flags = []
+    if ref is None:
+        flags.append({"code": "photo_not_live", "level": "warn" if strict else "info",
+                      "detail": "the photo was not taken with the in-app camera just now"})
+    return flags + stamp.assess(stampread.read_stamp(data, content_type), lat, lon, datetime.now(timezone.utc), ref,
+                                "warn" if strict else "info")
