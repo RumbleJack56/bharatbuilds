@@ -6,9 +6,11 @@ Ujjwal and Aarush work in parallel on **main** with short-lived branches. The sp
 
 **Done (PR #1, branch `ujjwal/b1-license-deploy-aids`):** LICENSE; CI at the repo root (green); S3 and Bedrock code paths with tests; deploy scripts in `scripts/`; `/api/health?deep=1`; photo checks (perceptual hash, EXIF geotag and time); capture token and on-photo stamp check; held-for-review reports; `docs/CAPTURE.md`. 76 tests pass.
 
+**Done (branch `ujjwal/backend-hardening`):** B8 rate limit, repeat-report hold, fill-time range; B11 admin release or reject of held reports; B12 `/api/insights` and `/api/reports/ward`; seed validator (`make seedcheck`) and `scripts/build_seed.py`; `docs/DATA.md`. 100 tests pass. Aarush: new endpoints need screens (held queue, review buttons, range display, insights and report views).
+
 **Blocked on AWS:** nothing has run on real AWS. Aarush owns the account with credits. The deploy playbook was shared with him directly. After it runs he sends Ujjwal the URL.
 
-**Left, Ujjwal:** B2 to B4 once the host exists (Aarush runs the CLI playbook), B5 from Aarush's bug list, B6 APK with the real host, B7 real data (plan sourcing first), B8 rate limit, clustering, fill-time range, admin release of held reports, then report generation and insights, B9 backup cron and AMI.
+**Left, Ujjwal:** B2 to B4 once the host exists (Aarush runs the CLI playbook), B5 from Aarush's bug list, B6 APK with the real host, B7 real data (plan sourcing first), B9 backup cron and AMI (B8, B11, B12 done).
 
 **Left, Aarush:** V1 bug list, V2 to V5 as below, and **V9 (new): the photo capture camera**. Details in section 4 below. First submission is not before 12:00 noon on the last day. The exact hour is unknown, so keep the freeze rule.
 
