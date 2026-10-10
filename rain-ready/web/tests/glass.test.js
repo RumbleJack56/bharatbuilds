@@ -62,7 +62,7 @@ function rig({ images = [], els = [mkEl()], liquid } = {}) {
     dispatchEvent: (e) => { events.push(e.type); return true; }, Event: class { constructor(t) { this.type = t; } },
   };
   const glass = createLiquidGlass(win, { settleMs: 10, imgTimeoutMs: 100, setTimeoutFn: (fn) => { timers.push(fn); } });
-  const flush = async () => { await ticks(); while (timers.length) timers.shift()(); await ticks(); };
+  const flush = async () => { for (let i = 0; i < 4; i++) { await ticks(); while (timers.length) timers.shift()(); } await ticks(); };
   return { glass, win, root, events, handlers, calls, els, flush, canvases, appended, appCanvas };
 }
 function mkEl() { const e = { cls: [], isConnected: true }; e.classList = { add: (c) => e.cls.push(c) }; return e; }
@@ -148,4 +148,16 @@ test("liquidGL loads from the exact pinned URL with async (a module script, beca
 test("glass adapters are in the import map", () => {
   for (const m of ["glass-liquidgl", "glass-css"]) assert.match(html, new RegExp(`"./js/adapters/${m}\\.js": "./js/adapters/${m}\\.js\\?v=`));
   assert.match(html, /"\.\/js\/core\/glass\.js": "\.\/js\/core\/glass\.js\?v=/);
+});
+
+test("a canvas liquidGL creates during a refresh re-snapshot is adopted and hidden on context loss; unrelated later canvases are not", async () => {
+  const r = rig({ els: [el()] });
+  r.glass.mount(".lg");
+  const late = { style: {} }, p = r.glass.refresh();
+  await ticks(); r.canvases.push(late);             // appears while the re-snapshot runs
+  for (let i = 0; i < 4; i++) await r.flush();
+  await p;
+  const later = { style: {} }; r.canvases.push(later);   // an app canvas added after the refresh window
+  r.handlers.webglcontextlost({});
+  assert.equal(late.style.display, "none"); assert.equal(later.style.display, undefined);
 });

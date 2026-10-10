@@ -26,7 +26,7 @@ export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml
     let ran = false, redirected = false;
     const swap = async () => {
       ran = true;
-      if (cleanup) { cleanup(); cleanup = null; }
+      if (cleanup) { try { cleanup(); } catch (e) { console.error(e); } cleanup = null; }
       const host = document.createElement("div");      // a stale render writes into a host nobody sees
       root.replaceChildren(host);
       let done = null;

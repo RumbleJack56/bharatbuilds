@@ -1,6 +1,7 @@
 // web/tests/e2e/walk.mjs — end-to-end walk on a FRESH database (never the dev DB).
 // Usage: NODE_PATH=<dir with node_modules/playwright> PW_CHROME=<chromium binary> \
 //        node web/tests/e2e/walk.mjs http://localhost:8010 [screenshotDir]
+// Env: WALK_QS = query string put before the hash ("?glass=css"); WALK_ARGS = extra Chromium flags, space separated (software WebGL for liquid mode).
 // Flow: resident reports (live camera) at the real-seed drain DR-DN-PUSA (MCD) -> official accepts -> completes with a camera photo ->
 // a different resident confirms -> dashboard. Runs on the real seed (data/seed.json, no SEED_PATH). DR-DN-PUSA is in no pocket, so the
 // observable change after confirmation is the task chip reading confirmed and Impact counting 1 confirmed task (fill time gained stays 0 h). Exit code 1 on any failure
@@ -14,13 +15,14 @@ const { chromium } = createRequire(import.meta.url)("playwright");
 const BASE = (process.argv[2] || "http://localhost:8010").replace(/\/$/, "");
 const SHOTS = process.argv[3] || process.env.WALK_SHOTS || join(tmpdir(), "rr-walk-shots");
 mkdirSync(SHOTS, { recursive: true });
+const QS = process.env.WALK_QS || "";   // e.g. "?glass=css" or "?glass=liquid&liquidGL-engine=webgl"
 
 const DRAIN = [28.643592, 77.186944];       // DR-DN-PUSA in data/seed.json: Daryai Nallah barrel, Pusa Road crossing, MCD
 const results = [], problems = [], expected = [];
 const ok = (name, pass, detail = "") => { results.push({ name, pass, detail }); console.log(`${pass ? "PASS" : "FAIL"}  ${name}${detail ? "  " + detail : ""}`); };
 // The fake camera feeds a test pattern, so the live-camera flow runs without a device.
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROME,
-  args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] });
+  args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", ...(process.env.WALK_ARGS || "").split(" ").filter(Boolean)] });
 // Opens the camera from `openSel`, takes the shot, waits for the stamped preview.
 async function takePhoto(page, openSel) {
   await page.click(openSel); await page.waitForSelector(".cam-overlay video");
@@ -46,7 +48,7 @@ async function persona(user, expect4xx = []) {
   });
   await page.addInitScript(u => { try { if (!sessionStorage.__s) { localStorage.setItem("rr_user", u); sessionStorage.__s = 1; } } catch {} }, user);
   const shot = (n) => page.screenshot({ path: join(SHOTS, `${n}.png`), fullPage: true });
-  const go = async (hash) => { await page.goto(`${BASE}/${hash}`); await page.waitForLoadState("networkidle"); };
+  const go = async (hash) => { await page.goto(`${BASE}/${QS}${hash}`); await page.waitForLoadState("networkidle"); };
   return { ctx, page, shot, go };
 }
 // Impact tile "fill time gained by confirmed work" as the text before its label.

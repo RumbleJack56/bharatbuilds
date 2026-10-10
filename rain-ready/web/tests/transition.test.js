@@ -148,3 +148,27 @@ test("stagger sets --i and caps at 7 so at most 8 items animate with a delay", (
   assert.equal(stagger(0), 'style="--i:0"'); assert.equal(stagger(3), 'style="--i:3"');
   assert.equal(stagger(20), 'style="--i:7"'); assert.equal(stagger(-2), 'style="--i:0"'); assert.equal(stagger(undefined), 'style="--i:0"');
 });
+
+test("router: a throwing cleanup is logged and does not freeze navigation; it is not run twice", async () => {
+  env("#/a");
+  let calls = 0, shownB = null; const logged = [], orig = console.error; console.error = (...a) => logged.push(a);
+  const a = { path: "a", roles: null, mount: async () => () => { calls++; throw new Error("cleanup boom"); } };
+  const b = { path: "b", roles: null, mount: async (h) => { h.innerHTML = "B"; } };
+  const { router, root } = mkRt([a, b], passThrough);
+  try { await router.start(); location.hash = "#/b"; await router.refresh(); shownB = root.children[0].innerHTML; location.hash = "#/a"; await router.refresh(); }
+  finally { console.error = orig; }
+  assert.equal(calls, 1, "ran once"); assert.equal(logged.length, 1); assert.match(String(logged[0][0]), /cleanup boom/);
+  assert.equal(shownB, "B", "navigation went on after the throw");
+});
+
+test("adapter: a skipped transition (ready/finished reject with AbortError) raises no unhandled rejection", async () => {
+  const seen = [], h = (e) => seen.push(e);
+  process.on("unhandledRejection", h);
+  try {
+    const abort = () => Promise.reject(new Error("Transition was skipped"));
+    const doc = { startViewTransition(cb) { return { updateCallbackDone: Promise.resolve().then(cb), ready: abort(), finished: abort() }; } };
+    assert.equal(await createViewTransition(doc, win(false)).run(async () => 3), 3);
+    await new Promise(r => setImmediate(r)); await new Promise(r => setImmediate(r));
+  } finally { process.off("unhandledRejection", h); }
+  assert.deepEqual(seen, []);
+});

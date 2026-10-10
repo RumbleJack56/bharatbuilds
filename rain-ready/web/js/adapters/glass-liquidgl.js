@@ -1,7 +1,7 @@
 // web/js/adapters/glass-liquidgl.js — GlassPort over liquidGL 2.2.4 (MIT, github.com/naughtyduk/liquidGL). The ONLY file that touches window.liquidGL.
 const OPTS = { snapshot: "body", resolution: 1.5, refraction: 0.01, bevelDepth: 0.06, bevelWidth: 0.15, frost: 1,
   shadow: true, specular: false, tilt: false, reveal: "none" };
-const MAX_LENSES = 12;
+const MAX_LENSES = 12, RESNAP_MS = 300;   // liquidGL re-captures on a 250 ms debounced resize
 
 export function createLiquidGlass(win = globalThis.window, { settleMs = 150, imgTimeoutMs = 1500, setTimeoutFn = setTimeout } = {}) {
   const doc = win.document, root = doc.documentElement;
@@ -40,12 +40,15 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
     // Called after each route render. Only the newest call re-snapshots; liquidGL re-captures on a debounced window "resize".
     async refresh() {
       if (state !== "liquid") return;
-      const my = ++gen;
+      const my = ++gen, seen = new Set(canvases());
       try {
         await imagesSettled();
         await new Promise(r => setTimeoutFn(r, settleMs));
         if (my !== gen || state !== "liquid") return;
-        if (state === "liquid") win.dispatchEvent(new win.Event("resize"));
+        win.dispatchEvent(new win.Event("resize"));
+        await new Promise(r => setTimeoutFn(r, RESNAP_MS));       // the re-snapshot may create canvases late: adopt those (and only those) so context loss can hide them
+        for (const c of canvases()) if (!seen.has(c)) owned.add(c);
+        if (state !== "liquid") hideCanvases();
       } catch { fallback(); }
     },
     destroy() { gen++; hideCanvases(); lenses.clear(); win.removeEventListener("webglcontextlost", fallback, true); },
