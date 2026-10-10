@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from . import lowpoints as lp
 from . import planning
 
-RAINS = (20.0, 35.0, 50.0)         # mm/h, Delhi short-burst scenarios; 35 is the reference rain used everywhere else
+RAINS = tuple(sorted({20.0, planning.REF_RAIN_MM_H, 35.0, 50.0}))   # mm/h, Delhi short-burst scenarios; the reference rain is used everywhere else
 HORIZONS = (0, 30, 60, 90)         # days from today with no cleaning in between
 
 

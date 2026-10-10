@@ -9,6 +9,7 @@ from pathlib import Path
 
 import httpx
 
+from core import planning
 from scripts.demo_kit import Api
 
 SPOT = (28.63925, 77.18386)            # Old Rajinder Nagar, on the Bazaar Marg drain: the pocket that started this
@@ -69,15 +70,15 @@ def run(base: str) -> int:
          f"{a['silt_now']:.0%} / " + " / ".join(f"{a['silt_if_not_cleaned'][k]:.0%}" for k in ("30", "60", "90")))
     show("pocket it serves", [f"{p['name']}: {p['level']}, fills in about {p['time_to_fill_h']} h" for p in a["pockets"]])
 
-    act(3, "Runoff, drain use and silt: scenario projections", "What the pocket does at three rain rates, now and if nothing is cleaned for 60 days.")
+    act(3, "Runoff, drain use and silt: scenario projections", "What the pocket does at four rain rates, now and if nothing is cleaned for 60 days.")
     rows = []
-    for rain in (20, 35, 50):
+    for rain in (20, planning.REF_RAIN_MM_H, 35, 50):
         for h in (0, 60):
             p = pocket(c, rain, h)
             rows.append(p)
             show(f"{rain} mm/h, +{h} days", f"runoff {p['runoff_m3_h']} m3/h, drain used {p['utilisation_pct']}%, silt {p['silt_fraction']:.0%}, "
                  f"fills in {p['time_to_fill_h_low']} to {p['time_to_fill_h_high']} h ({p['level']})")
-    before = pocket(c, 35)
+    before = pocket(c, planning.REF_RAIN_MM_H)
 
     act(4, "The action plan and who it goes to", "Each drain gets one action, routed to the agency its owner record names, with the reason.")
     plan = c.get("/api/actions", params={"top": 4}).json()
@@ -101,8 +102,8 @@ def run(base: str) -> int:
     ok = api.confirm("res-2", tid, True, "water drained within minutes of the next shower")
     show("a different resident confirms", ok.json()["status"])
 
-    act(6, "Did it help?", "The same projection after the confirmed clean. A scenario at 35 mm/h with illustrative parameters, not a forecast.")
-    after = pocket(c, 35)
+    act(6, "Did it help?", f"The same projection after the confirmed clean. A scenario at {planning.REF_RAIN_MM_H:g} mm/h with illustrative parameters, not a forecast.")
+    after = pocket(c, planning.REF_RAIN_MM_H)
     show("silt", f"{before['silt_fraction']:.0%} → {after['silt_fraction']:.0%}")
     show("drain used", f"{before['utilisation_pct']}% → {after['utilisation_pct']}%")
     show("fills in", f"{before['time_to_fill_h']} h → {after['time_to_fill_h']} h ({before['time_to_fill_h_low']}-{before['time_to_fill_h_high']} → "

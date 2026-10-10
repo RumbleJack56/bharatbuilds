@@ -182,7 +182,7 @@ AI never changes rank, owner or status, and never writes safety text.
 
 ## 5. Ranking rule
 
-`gain_h` = (time for the linked pocket to fill after cleaning this drain) minus (time now), at a reference rain of 35 mm/h, capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`. Pocket size, catchment and drain capacity are illustrative parameters. Always shown with the scenario banner and as "about".
+`gain_h` = (time for the linked pocket to fill after cleaning this drain) minus (time now), at a reference rain of 25 mm/h (about the design capacity cited for Delhi drains), capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`. Pocket size, catchment and drain capacity are illustrative parameters. Always shown with the scenario banner and as "about".
 
 ## 6. Impact numbers we may show
 
