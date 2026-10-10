@@ -7,10 +7,10 @@
 <meta name="color-scheme" content="dark">
 <title>Rain-Ready</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
-<link rel="stylesheet" href="css/tokens.css?v=1">
-<link rel="stylesheet" href="css/app.css?v=1">
-<link rel="stylesheet" href="css/glass.css?v=1">
-<link rel="stylesheet" href="css/motion.css?v=1">
+<link rel="stylesheet" href="css/tokens.css?v=2">
+<link rel="stylesheet" href="css/app.css?v=2">
+<link rel="stylesheet" href="css/glass.css?v=2">
+<link rel="stylesheet" href="css/motion.css?v=2">
 </head>
 <body>
 <div class="backdrop" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
@@ -25,63 +25,63 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <!-- Cache-busting: Cloudflare caches /css and /js for 4 h. On every deploy bump ?v= here on the css link, on main.js and on EVERY
      line of the import map (a module import has no query of its own, the map adds it). web/tests/cache-bust.test.js fails if one differs.
-     Bump command (from the repo root): sed -i 's/?v=1/?v=2/g' rain-ready/web/index.html -- the test guards it. -->
+     Bump command (from the repo root): sed -i 's/?v=2/?v=2/g' rain-ready/web/index.html -- the test guards it. -->
 <script type="importmap">
 {"imports": {
-  "./js/adapters/camera-media.js": "./js/adapters/camera-media.js?v=1",
-  "./js/adapters/download-dom.js": "./js/adapters/download-dom.js?v=1",
-  "./js/adapters/geo-browser.js": "./js/adapters/geo-browser.js?v=1",
-  "./js/adapters/glass-css.js": "./js/adapters/glass-css.js?v=1",
-  "./js/adapters/glass-liquidgl.js": "./js/adapters/glass-liquidgl.js?v=1",
-  "./js/adapters/http-fetch.js": "./js/adapters/http-fetch.js?v=1",
-  "./js/adapters/image-canvas.js": "./js/adapters/image-canvas.js?v=1",
-  "./js/adapters/map-leaflet.js": "./js/adapters/map-leaflet.js?v=1",
-  "./js/adapters/storage-local.js": "./js/adapters/storage-local.js?v=1",
-  "./js/adapters/toast-dom.js": "./js/adapters/toast-dom.js?v=1",
-  "./js/adapters/transition-vt.js": "./js/adapters/transition-vt.js?v=1",
-  "./js/controllers/actions.js": "./js/controllers/actions.js?v=1",
-  "./js/controllers/admin.js": "./js/controllers/admin.js?v=1",
-  "./js/controllers/board.js": "./js/controllers/board.js?v=1",
-  "./js/controllers/dash.js": "./js/controllers/dash.js?v=1",
-  "./js/controllers/dashmap.js": "./js/controllers/dashmap.js?v=1",
-  "./js/controllers/held.js": "./js/controllers/held.js?v=1",
-  "./js/controllers/index.js": "./js/controllers/index.js?v=1",
-  "./js/controllers/insights.js": "./js/controllers/insights.js?v=1",
-  "./js/controllers/login.js": "./js/controllers/login.js?v=1",
-  "./js/controllers/official.js": "./js/controllers/official.js?v=1",
-  "./js/controllers/report.js": "./js/controllers/report.js?v=1",
-  "./js/controllers/resident.js": "./js/controllers/resident.js?v=1",
-  "./js/controllers/sim.js": "./js/controllers/sim.js?v=1",
-  "./js/core/errors.js": "./js/core/errors.js?v=1",
-  "./js/core/glass.js": "./js/core/glass.js?v=1",
-  "./js/core/port.js": "./js/core/port.js?v=1",
-  "./js/core/router.js": "./js/core/router.js?v=1",
-  "./js/ports/index.js": "./js/ports/index.js?v=1",
-  "./js/services/capture.service.js": "./js/services/capture.service.js?v=1",
-  "./js/services/dashboard.service.js": "./js/services/dashboard.service.js?v=1",
-  "./js/services/incidents.service.js": "./js/services/incidents.service.js?v=1",
-  "./js/services/session.service.js": "./js/services/session.service.js?v=1",
-  "./js/services/tasks.service.js": "./js/services/tasks.service.js?v=1",
-  "./js/ui/components.js": "./js/ui/components.js?v=1",
-  "./js/ui/copy.js": "./js/ui/copy.js?v=1",
-  "./js/ui/format.js": "./js/ui/format.js?v=1",
-  "./js/ui/geo.js": "./js/ui/geo.js?v=1",
-  "./js/ui/stamp.js": "./js/ui/stamp.js?v=1",
-  "./js/views/actions.view.js": "./js/views/actions.view.js?v=1",
-  "./js/views/admin.view.js": "./js/views/admin.view.js?v=1",
-  "./js/views/board.view.js": "./js/views/board.view.js?v=1",
-  "./js/views/dash.view.js": "./js/views/dash.view.js?v=1",
-  "./js/views/held.view.js": "./js/views/held.view.js?v=1",
-  "./js/views/insights.view.js": "./js/views/insights.view.js?v=1",
-  "./js/views/login.view.js": "./js/views/login.view.js?v=1",
-  "./js/views/official.view.js": "./js/views/official.view.js?v=1",
-  "./js/views/report.view.js": "./js/views/report.view.js?v=1",
-  "./js/views/resident.view.js": "./js/views/resident.view.js?v=1",
-  "./js/views/sim.view.js": "./js/views/sim.view.js?v=1"
+  "./js/adapters/camera-media.js": "./js/adapters/camera-media.js?v=2",
+  "./js/adapters/download-dom.js": "./js/adapters/download-dom.js?v=2",
+  "./js/adapters/geo-browser.js": "./js/adapters/geo-browser.js?v=2",
+  "./js/adapters/glass-css.js": "./js/adapters/glass-css.js?v=2",
+  "./js/adapters/glass-liquidgl.js": "./js/adapters/glass-liquidgl.js?v=2",
+  "./js/adapters/http-fetch.js": "./js/adapters/http-fetch.js?v=2",
+  "./js/adapters/image-canvas.js": "./js/adapters/image-canvas.js?v=2",
+  "./js/adapters/map-leaflet.js": "./js/adapters/map-leaflet.js?v=2",
+  "./js/adapters/storage-local.js": "./js/adapters/storage-local.js?v=2",
+  "./js/adapters/toast-dom.js": "./js/adapters/toast-dom.js?v=2",
+  "./js/adapters/transition-vt.js": "./js/adapters/transition-vt.js?v=2",
+  "./js/controllers/actions.js": "./js/controllers/actions.js?v=2",
+  "./js/controllers/admin.js": "./js/controllers/admin.js?v=2",
+  "./js/controllers/board.js": "./js/controllers/board.js?v=2",
+  "./js/controllers/dash.js": "./js/controllers/dash.js?v=2",
+  "./js/controllers/dashmap.js": "./js/controllers/dashmap.js?v=2",
+  "./js/controllers/held.js": "./js/controllers/held.js?v=2",
+  "./js/controllers/index.js": "./js/controllers/index.js?v=2",
+  "./js/controllers/insights.js": "./js/controllers/insights.js?v=2",
+  "./js/controllers/login.js": "./js/controllers/login.js?v=2",
+  "./js/controllers/official.js": "./js/controllers/official.js?v=2",
+  "./js/controllers/report.js": "./js/controllers/report.js?v=2",
+  "./js/controllers/resident.js": "./js/controllers/resident.js?v=2",
+  "./js/controllers/sim.js": "./js/controllers/sim.js?v=2",
+  "./js/core/errors.js": "./js/core/errors.js?v=2",
+  "./js/core/glass.js": "./js/core/glass.js?v=2",
+  "./js/core/port.js": "./js/core/port.js?v=2",
+  "./js/core/router.js": "./js/core/router.js?v=2",
+  "./js/ports/index.js": "./js/ports/index.js?v=2",
+  "./js/services/capture.service.js": "./js/services/capture.service.js?v=2",
+  "./js/services/dashboard.service.js": "./js/services/dashboard.service.js?v=2",
+  "./js/services/incidents.service.js": "./js/services/incidents.service.js?v=2",
+  "./js/services/session.service.js": "./js/services/session.service.js?v=2",
+  "./js/services/tasks.service.js": "./js/services/tasks.service.js?v=2",
+  "./js/ui/components.js": "./js/ui/components.js?v=2",
+  "./js/ui/copy.js": "./js/ui/copy.js?v=2",
+  "./js/ui/format.js": "./js/ui/format.js?v=2",
+  "./js/ui/geo.js": "./js/ui/geo.js?v=2",
+  "./js/ui/stamp.js": "./js/ui/stamp.js?v=2",
+  "./js/views/actions.view.js": "./js/views/actions.view.js?v=2",
+  "./js/views/admin.view.js": "./js/views/admin.view.js?v=2",
+  "./js/views/board.view.js": "./js/views/board.view.js?v=2",
+  "./js/views/dash.view.js": "./js/views/dash.view.js?v=2",
+  "./js/views/held.view.js": "./js/views/held.view.js?v=2",
+  "./js/views/insights.view.js": "./js/views/insights.view.js?v=2",
+  "./js/views/login.view.js": "./js/views/login.view.js?v=2",
+  "./js/views/official.view.js": "./js/views/official.view.js?v=2",
+  "./js/views/report.view.js": "./js/views/report.view.js?v=2",
+  "./js/views/resident.view.js": "./js/views/resident.view.js?v=2",
+  "./js/views/sim.view.js": "./js/views/sim.view.js?v=2"
 }}
 </script>
 <script async type="module" src="https://cdn.jsdelivr.net/npm/liquid-gl@2.2.4/liquidGL.min.js"></script>
 <script src="config.js"></script>
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>
