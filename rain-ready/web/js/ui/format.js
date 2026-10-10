@@ -6,3 +6,6 @@ export function when(iso) {
 }
 const h1 = (h) => h < 10 ? Math.round(h * 10) / 10 : Math.round(h);
 export const hrRange = (lo, hi) => lo == null || hi == null ? "not available" : `about ${h1(lo)} to ${h1(hi)} h`;
+// Zero reads as a phrase, not a figure. Other values keep the plain format.
+export const gainPhrase = (h) => h === 0 ? "gains no fill time at this rain" : "gains " + hrs(h) + " of fill time";
+export const rankPhrase = (r) => r === 0 ? "no rank score" : "rank " + Math.round(r * 10) / 10;

@@ -1,5 +1,5 @@
 // web/js/views/official.view.js — inbox and task page. Pure.
-import { esc, hrs, when } from "../ui/format.js";
+import { esc, hrs, when, gainPhrase, rankPhrase } from "../ui/format.js";
 import { chip, banner, photos, flagList } from "../ui/components.js";
 import { KINDS, FIELD_RULE, EVENT, EMPTY } from "../ui/copy.js";
 
@@ -10,11 +10,11 @@ const lastEvent = (t, name) => [...(t.events || [])].reverse().find(e => e.event
 export const disputeNote = (t) => lastEvent(t, "disputed")?.note || "";
 
 export const taskCard = (t, note = "") => `<a class="card tasklink" href="#/task/${esc(t.id)}">
-  <div>${chip(t.status)} ${overdue(t)} <span class="muted small">rank ${esc(Math.round(t.rank_score * 10) / 10)}</span></div>
+  <div>${chip(t.status)} ${overdue(t)} <span class="muted small">${esc(rankPhrase(t.rank_score))}</span></div>
   <h3>${esc(t.asset_name)}</h3>
   <p class="small muted">${esc(t.agency_name)} - ${esc(t.pocket_name || "no pocket")} - ${esc(t.report_count)} report(s)</p>
   ${t.status === "disputed" ? `<p class="small"><strong>Resident's note:</strong> ${esc(note || "(no note)")}</p>` : ""}
-  <p class="small">Cleaning this gains ${esc(hrs(t.gain_h))} of fill time (scenario).</p></a>`;
+  <p class="small">Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</p></a>`;
 
 export const inboxView = ({ tasks, banner: b }, notes = {}) => `<h1>Inbox</h1>${banner(b)}` +
   (tasks.length ? tasks.map(t => taskCard(t, notes[t.id])).join("") : `<p class="muted">${EMPTY.inbox}</p>`);
@@ -33,7 +33,7 @@ function redoBanner(t) {
 export const taskDetail = (t, { banner: b, back }) => `<p><a class="back" href="${esc(back)}">Back</a></p>
   <h1>${esc(t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
   <p>Owner: <strong>${esc(t.agency_name || "No owner found")}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
-  ${banner(b)}${redoBanner(t)}<p>${esc(t.pocket_name || "")} - cleaning this gains ${esc(hrs(t.gain_h))} of fill time.</p>
+  ${banner(b)}${redoBanner(t)}<p>${esc(t.pocket_name || "")} - cleaning this ${esc(gainPhrase(t.gain_h))}.</p>
   ${t.due_at ? `<p class="small muted">Due ${esc(when(t.due_at))}</p>` : ""}
   <p class="rule">${esc(FIELD_RULE)}</p><div id="actions"></div>
   <h2>Reports (${t.incidents.length})</h2>
