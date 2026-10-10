@@ -6,7 +6,7 @@
 // observable change after confirmation is the task chip reading confirmed and Impact counting 1 confirmed task (fill time gained stays 0 h). Exit code 1 on any failure
 // or any unexpected console error / 4xx / 5xx. No package.json or npm dependency lives in web/.
 import { createRequire } from "node:module";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const { chromium } = createRequire(import.meta.url)("playwright");
@@ -143,6 +143,14 @@ try {
   ok("release empties the queue and links the task", /No reports are waiting/.test(await u.page.innerText("#view")));
   await u.go("#/board"); await u.page.waitForSelector("#log details"); await u.shot("16-board");
   ok("public board shows the method and the action log", /How the score works/.test(await u.page.innerText("#view")) && (await u.page.locator("#log details").count()) > 0);
+  // 8. Actions and insights tabs (public); the Markdown report really downloads.
+  await u.go("#/dash/actions"); await u.page.waitForSelector("#alist .card"); await u.shot("17-actions");
+  ok("actions tab lists drains with a type chip and the scenario banner", (await u.page.locator("#alist .card .chip").count()) > 0 && (await u.page.locator("#pane .banner").count()) > 0);
+  await u.go("#/dash/insights"); await u.page.waitForSelector("#dl"); await u.shot("18-insights");
+  const [dl] = await Promise.all([u.page.waitForEvent("download"), u.page.click("#dl")]);
+  const path = join(SHOTS, "ward-report.md"); await dl.saveAs(path);
+  const md = readFileSync(path, "utf8");
+  ok("Markdown report downloads as ward-report.md", dl.suggestedFilename() === "ward-report.md" && /^# Rain-Ready ward report/.test(md), `${md.length} bytes`);
   await u.ctx.close();
 } catch (e) { ok("walk ran to the end", false, e.message); }
 await browser.close();
