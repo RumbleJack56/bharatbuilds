@@ -21,6 +21,7 @@
 <main id="view" tabindex="-1"></main>
 <nav id="tabs" class="tabs" aria-label="Main"></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script async src="https://cdn.jsdelivr.net/npm/liquid-gl@2.2.4/liquidGL.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <!-- Cache-busting: Cloudflare caches /css and /js for 4 h. On every deploy bump ?v= here on the css link, on main.js and on EVERY
      line of the import map (a module import has no query of its own, the map adds it). web/tests/cache-bust.test.js fails if one differs.
@@ -30,6 +31,8 @@
   "./js/adapters/camera-media.js": "./js/adapters/camera-media.js?v=1",
   "./js/adapters/download-dom.js": "./js/adapters/download-dom.js?v=1",
   "./js/adapters/geo-browser.js": "./js/adapters/geo-browser.js?v=1",
+  "./js/adapters/glass-css.js": "./js/adapters/glass-css.js?v=1",
+  "./js/adapters/glass-liquidgl.js": "./js/adapters/glass-liquidgl.js?v=1",
   "./js/adapters/http-fetch.js": "./js/adapters/http-fetch.js?v=1",
   "./js/adapters/image-canvas.js": "./js/adapters/image-canvas.js?v=1",
   "./js/adapters/map-leaflet.js": "./js/adapters/map-leaflet.js?v=1",
@@ -49,6 +52,7 @@
   "./js/controllers/resident.js": "./js/controllers/resident.js?v=1",
   "./js/controllers/sim.js": "./js/controllers/sim.js?v=1",
   "./js/core/errors.js": "./js/core/errors.js?v=1",
+  "./js/core/glass.js": "./js/core/glass.js?v=1",
   "./js/core/port.js": "./js/core/port.js?v=1",
   "./js/core/router.js": "./js/core/router.js?v=1",
   "./js/ports/index.js": "./js/ports/index.js?v=1",

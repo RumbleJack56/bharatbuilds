@@ -1,7 +1,7 @@
 // web/js/main.js — composition root: the only file that picks implementations. Swap an adapter here.
 import { implement } from "./core/port.js";
 import { createRouter } from "./core/router.js";
-import { HttpPort, StoragePort, GeoPort, MapPort, ToastPort, CameraPort, ImagePort, DownloadPort } from "./ports/index.js";
+import { HttpPort, StoragePort, GeoPort, MapPort, ToastPort, CameraPort, ImagePort, DownloadPort, GlassPort } from "./ports/index.js";
 import { createFetchHttp } from "./adapters/http-fetch.js";
 import { createLocalStorage } from "./adapters/storage-local.js";
 import { createBrowserGeo } from "./adapters/geo-browser.js";
@@ -10,6 +10,9 @@ import { createMediaCamera } from "./adapters/camera-media.js";
 import { createCanvasImage } from "./adapters/image-canvas.js";
 import { createDomDownload } from "./adapters/download-dom.js";
 import { createDomToast } from "./adapters/toast-dom.js";
+import { createLiquidGlass, hasLiquidGL } from "./adapters/glass-liquidgl.js";
+import { createCssGlass } from "./adapters/glass-css.js";
+import { chooseGlass, waitFor } from "./core/glass.js";
 import { createSessionService } from "./services/session.service.js";
 import { createIncidentsService } from "./services/incidents.service.js";
 import { createTasksService } from "./services/tasks.service.js";
@@ -21,6 +24,16 @@ import { esc } from "./ui/format.js";
 import { errBox } from "./ui/components.js";
 
 const $ = (s) => document.querySelector(s);
+// Glass: wait briefly for the async CDN script, then pick lens or css (core/glass.js holds the rules).
+const media = (q) => !!window.matchMedia?.(q).matches;
+function hasGL() {
+  if (navigator.gpu) return true;
+  try { const gl = document.createElement("canvas").getContext("webgl2"); gl?.getExtension("WEBGL_lose_context")?.loseContext(); return !!gl; }
+  catch { return false; }
+}
+await waitFor(() => hasLiquidGL(window), 1200);
+const glass = implement(GlassPort, chooseGlass({ hasLiquid: hasLiquidGL(window), hasGL: hasGL(), reducedMotion: media("(prefers-reduced-motion: reduce)"),
+  deviceMemory: navigator.deviceMemory, search: location.search, phone: media("(max-width: 640px)") }) === "liquid" ? createLiquidGlass(window) : createCssGlass(document));
 const storage = implement(StoragePort, createLocalStorage());
 const http = implement(HttpPort, createFetchHttp({ base: window.API_BASE || "", getUserId: () => storage.get("user") }));
 const session = createSessionService(http, storage);
@@ -36,6 +49,7 @@ const ctx = Object.freeze({
   camera,
   download: implement(DownloadPort, createDomDownload(document)),
   toast: implement(ToastPort, createDomToast($("#toast"))),
+  glass,
   home: HOME,
   nav,
 });
@@ -49,4 +63,5 @@ function drawChrome(me, hash) {
 
 const router = createRouter({ controllers: CONTROLLERS, root: $("#view"), ctx, home: HOME, onChrome: drawChrome, errorHtml: errBox });
 $("#logout").addEventListener("click", () => { session.logout(); nav.go("#/login"); });
+glass.mount(".lg:not([data-lg-css])");
 router.start();
