@@ -27,3 +27,9 @@ test("every stylesheet link carries the same version", () => {
   assert.deepEqual(links.map(l => l[1]), ["css/tokens.css", "css/app.css", "css/ui.css", "css/motion.css"]);
   for (const [, href, v] of links) assert.equal(v, V, href);
 });
+test("every icons.svg reference carries the same version", () => {
+  const files = [join(WEB, "index.html"), ...walk(join(WEB, "js")).filter(f => f.endsWith(".js"))];
+  const refs = files.flatMap(f => [...readFileSync(f, "utf8").matchAll(/img\/icons\.svg\?v=([\w.-]+)/g)].map(m => [relative(WEB, f), m[1]]));
+  assert.ok(refs.length >= 3, "sprite refs not found");
+  for (const [f, v] of refs) assert.equal(v, V, f);
+});

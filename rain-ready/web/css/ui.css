@@ -53,7 +53,8 @@ input::placeholder,textarea::placeholder{color:var(--fg-muted)}
 .menu-item{width:100%;justify-content:flex-start;gap:8px;border:0;text-align:left}
 .menu-inline .avatar{display:none}
 .menu-inline .menu{position:static;display:flex;align-items:center;gap:8px;min-width:0;background:none;border:0;box-shadow:none;padding:0}
-.menu-inline .menu-item{width:auto}
+.menu-inline .menu-item{width:auto;white-space:nowrap}
+.menu-inline .menu-role{display:none}
 .empty{text-align:center;padding:32px;color:var(--fg-muted)}
 .empty .ic{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}.empty p{margin:8px 0 0}
 table{border-collapse:separate;border-spacing:0;font-size:14px}

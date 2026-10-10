@@ -34,7 +34,7 @@ test("header markup: popover account menu, no #who", () => {
 });
 test("main.js guards for popover support", () => assert.match(web("js/main.js"), /"popover" in HTMLElement\.prototype/));
 test("task rows carry the sprite chevron; the CSS chevron is gone", () => {
-  assert.match(web("js/views/official.view.js"), /class="ic chev" aria-hidden="true"><use href="img\/icons\.svg\?v=2#i-chevron-right"/);
+  assert.match(web("js/views/official.view.js"), /class="ic chev" aria-hidden="true"><use href="img\/icons\.svg\?v=\d+#i-chevron-right"/);
   assert.doesNotMatch(web("css/ui.css"), /tasklink::after/);
 });
 test("flat chrome CSS", () => {

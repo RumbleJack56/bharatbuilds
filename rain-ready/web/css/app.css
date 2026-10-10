@@ -1,7 +1,7 @@
 /* web/css/app.css — layout and screen rules. Tokens: tokens.css. Components: ui.css. Motion: motion.css. */
 a{color:var(--accent)}
 .top{display:flex;align-items:center;gap:8px;padding:8px 12px;position:sticky;top:0;z-index:1000;min-height:var(--top-h)}
-.brand{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none;color:var(--fg);font-size:1.1rem}
+.brand{white-space:nowrap;display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none;color:var(--fg);font-size:1.1rem}
 main{width:100%;max-width:760px;margin:0 auto;padding:16px;flex:1}
 h1{margin:.2em 0 .5em}h2{margin:1em 0 .4em}h3{margin:.2em 0}
 .card{margin:0 0 12px}
