@@ -36,7 +36,7 @@ aws sts get-caller-identity --query Account --output text
 aws ec2 describe-instances --instance-ids $INSTANCE --query \
   'Reservations[0].Instances[0].[State.Name,PublicIpAddress,IamInstanceProfile.Arn,MetadataOptions.HttpPutResponseHopLimit]'
 aws s3api get-public-access-block --bucket $BUCKET
-curl -fsS "https://$HOST/api/health?deep=1"
+curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 ```
 
 **Check:** the account is `896128818776`; the instance is `running` with IP `15.207.177.122`, profile `rainready-ec2` and hop limit `2`; all four public-access flags are `true`; health shows `"ok":true` and `"s3":"ok"`.
@@ -113,7 +113,7 @@ $SSH "ls -la $APP"
 ```bash
 git switch main && git pull --rebase
 BUCKET=$BUCKET INSTANCE=$INSTANCE bash rain-ready/scripts/deploy-ssm.sh
-curl -fsS "https://$HOST/api/health?deep=1"
+curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 $SSH 'crontab -l'
 ```
 
@@ -185,7 +185,7 @@ aws bedrock-runtime converse --model-id "$MODEL" \
 ```bash
 $SSH "cd $APP && sed -i -e 's|^TRIAGE_MODE=.*|TRIAGE_MODE=bedrock|' -e 's|^BEDROCK_MODEL_ID=.*|BEDROCK_MODEL_ID=$MODEL|' .env \
   && docker compose up -d --force-recreate app"
-sleep 10; curl -fsS "https://$HOST/api/health?deep=1"
+sleep 10; curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 ```
 
 **Check:** health shows `"triage":"bedrock"` and `"bedrock":"ok"`. Then report one photo in the app with no category chosen; the incident's `ai` field must be filled. If the health check shows an error, set `TRIAGE_MODE=manual` again with the same command and report the error text.
@@ -249,7 +249,7 @@ $SSH "cd $APP && docker compose stop app \
   && sudo mv var/rainready.db var/rainready.db.bak-\$(date +%H%M) \
   && sudo rm -f var/rainready.db-wal var/rainready.db-shm \
   && docker compose start app"
-sleep 10; curl -fsS "https://$HOST/api/health?deep=1"
+sleep 10; curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 ```
 
 2. An image of the server to roll back to:
