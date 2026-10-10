@@ -127,7 +127,7 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
 async def complete(tid: int, note: str = Form(""), photo: UploadFile = File(...),
                    user=Depends(need("official", "admin")), db=Depends(get_db)):
     t = _task(db, tid); _own(user, t); _need_status(t, "accepted")
-    data, ctype = await photo.read(), photo.content_type or ""
+    data, ctype = await photo.read(storage.MAX_BYTES + 1), photo.content_type or ""
     try:
         storage.validate_photo(data, ctype)
     except ValueError as e:

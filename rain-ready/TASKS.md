@@ -89,7 +89,7 @@ Everything below is the full backlog after these.
 - [x] B1 LICENSE (MIT) done; reset is in PR #1, merge to `main` and confirm both can push
 - [x] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**. Live: https://15-207-177-122.sslip.io (details in `PLAN.md` section 7)
 - [ ] B3 Server is on `STORAGE=s3` (done by Aarush); photos do not open yet. Fix is B13, phone check is A4
-- [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`. Aarush runs it (A3); do B18 and B19 first
+- [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`. Aarush runs it (A3); B18 and B19 are done, so it can go ahead
 - [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green. The list is `PLAN.md` section 7; item 8 (S3 photo URLs) blocks the video
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
 - [ ] B7 (tooling done: `make seedcheck`, `scripts/build_seed.py`, see `docs/DATA.md`) Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
@@ -111,11 +111,11 @@ Do first (demo blocker and loop bugs):
 
 Do next:
 
-- [ ] B18 **Bedrock calls block the whole server.** Move `create_incident` and `complete` off the event loop (plain `def`, or `run_in_threadpool` for the AWS calls). Give the Bedrock client short timeouts (`connect_timeout=3, read_timeout=15, retries 1`)
-- [ ] B19 **Large photos fail triage without a message.** Bedrock's image limit is below our 8 MB limit (check the current figure). Downscale a copy server-side before the two model calls; Aarush shrinks on the phone too (V10)
-- [ ] B20 **`/api/health?deep=1` is public and does paid AWS work.** Limit it (admin persona, or cache the result for 60 s)
-- [ ] B21 **No upload size cap before memory.** Add `request_body { max_size 10MB }` to the `Caddyfile` and stop reading at the limit in the API
-- [ ] B22 **Missing `CAPTURE_SECRET` is silent.** Add a `config_warnings` line when it is empty; tokens then die on every deploy. Aarush sets it on the server (A8)
+- [x] B18 **Bedrock calls block the whole server.** Move `create_incident` and `complete` off the event loop (plain `def`, or `run_in_threadpool` for the AWS calls). Give the Bedrock client short timeouts (`connect_timeout=3, read_timeout=15, retries 1`)
+- [x] B19 **Large photos fail triage without a message.** Bedrock's image limit is below our 8 MB limit (check the current figure). Downscale a copy server-side before the two model calls; Aarush shrinks on the phone too (V10)
+- [x] B20 **`/api/health?deep=1` is public and does paid AWS work.** Done: admin persona only (`X-User-Id: admin-1`) and cached for 30 s; the AWS playbook curls send the header
+- [x] B21 **No upload size cap before memory.** Add `request_body { max_size 10MB }` to the `Caddyfile` and stop reading at the limit in the API
+- [x] B22 **Missing `CAPTURE_SECRET` is silent.** Add a `config_warnings` line when it is empty; tokens then die on every deploy. Done: it shows in `config_warnings` until Aarush sets it on the server (A8)
 
 If time allows:
 

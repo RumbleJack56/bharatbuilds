@@ -6,8 +6,10 @@ import pytest
 from ai import stampread
 from app import capture, config
 from core import stamp
-from .conftest import as_
+from .conftest import as_, fresh_png
 from .test_photocheck import codes, picture
+
+IMG = fresh_png()
 
 TEXT = """New Delhi, Delhi, India
 B4, Block A, Qutab Institutional Area, New Delhi, Delhi 110016, India
@@ -93,7 +95,7 @@ def test_valid_token_passes_required_mode_when_stamp_is_unreadable(client, monke
 
 def test_stamp_read_wiring(monkeypatch):
     monkeypatch.setattr(config, "TRIAGE_MODE", "manual")
-    assert stampread.read_stamp(b"x", "image/jpeg") is None
+    assert stampread.read_stamp(IMG, "image/png") is None
     monkeypatch.setattr(config, "TRIAGE_MODE", "bedrock")
     monkeypatch.setattr(config, "BEDROCK_MODEL_ID", "m")
     import boto3
@@ -103,11 +105,11 @@ def test_stamp_read_wiring(monkeypatch):
         def converse(self, **kw): return {"output": {"message": {"content": [{"text": self.text}]}}}
 
     monkeypatch.setattr(boto3, "client", lambda *a, **k: Br("NONE"))
-    assert stampread.read_stamp(b"x", "image/jpeg") == ""
+    assert stampread.read_stamp(IMG, "image/png") == ""
     monkeypatch.setattr(boto3, "client", lambda *a, **k: Br(TEXT))
-    assert "28.54159" in stampread.read_stamp(b"x", "image/jpeg")
+    assert "28.54159" in stampread.read_stamp(IMG, "image/png")
     monkeypatch.setattr(boto3, "client", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("denied")))
-    assert stampread.read_stamp(b"x", "image/jpeg") is None
+    assert stampread.read_stamp(IMG, "image/png") is None
 
 
 def test_wrong_stamp_through_the_api_is_held(client, monkeypatch):

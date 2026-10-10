@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
+from starlette.concurrency import run_in_threadpool
 
 from ai import triage
 from core import copy, geo, photocheck
@@ -38,7 +39,7 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
         raise HTTPException(429, f"You have sent {sent} reports in the last 24 hours. Please try again later.")
     data, ctype, ai, phash, flags = None, "", None, None, []
     if photo is not None:
-        data, ctype = await photo.read(), photo.content_type or ""
+        data, ctype = await photo.read(storage.MAX_BYTES + 1), photo.content_type or ""
         try:
             storage.validate_photo(data, ctype)
         except ValueError as e:
@@ -46,8 +47,8 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
         phash, flags = service.check_photo(db, data, lat, lon, user["id"], accuracy_m)
         if phash is None:
             raise HTTPException(422, "the photo could not be read as an image; please take it again")
-        ai = triage.triage_photo(data, ctype, note)
-        flags += service.check_stamp(data, ctype, lat, lon, user["id"], capture_token)
+        ai = await run_in_threadpool(triage.triage_photo, data, ctype, note)          # AWS calls: not on the event loop
+        flags += await run_in_threadpool(service.check_stamp, data, ctype, lat, lon, user["id"], capture_token)
     flags += service.check_duplicate(db, user["id"], lat, lon)
     kind = kind if kind in KINDS else (ai["kind"] if ai else "")
     if kind not in KINDS:

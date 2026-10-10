@@ -12,6 +12,8 @@ def config_warnings() -> list[str]:
         w.append(f"TRIAGE_MODE={config.TRIAGE_MODE!r} is not manual or bedrock")
     if config.TRIAGE_MODE == "bedrock" and not config.BEDROCK_MODEL_ID:
         w.append("TRIAGE_MODE=bedrock but BEDROCK_MODEL_ID is empty (triage stays off)")
+    if not config.CAPTURE_SECRET:
+        w.append("CAPTURE_SECRET is empty: camera tokens stop working on every restart or deploy (openssl rand -hex 24)")
     return w
 
 
@@ -27,8 +29,8 @@ def aws_probe() -> dict:
             out["s3"] = f"error: {e!r}"[:300]
     if config.TRIAGE_MODE == "bedrock" and config.BEDROCK_MODEL_ID:
         try:
-            import boto3
-            r = boto3.client("bedrock-runtime", region_name=config.AWS_REGION).converse(
+            from ai import client
+            r = client.runtime().converse(
                 modelId=config.BEDROCK_MODEL_ID, messages=[{"role": "user", "content": [{"text": "Reply with: ok"}]}],
                 inferenceConfig={"maxTokens": 5, "temperature": 0})
             out["bedrock"] = "ok" if r.get("output") else "empty reply"

@@ -2,7 +2,11 @@
 import pytest
 
 from ai import triage
-from app import config, storage
+from app import config, main, storage
+
+from .conftest import as_, fresh_png
+
+IMG = fresh_png()      # a readable image: the model copy is prepared before the call
 
 
 class FakeS3:
@@ -86,7 +90,7 @@ def test_summary_is_trimmed():
 
 def test_triage_off_by_default(monkeypatch):
     monkeypatch.setattr(config, "TRIAGE_MODE", "manual")
-    assert triage.triage_photo(b"x", "image/jpeg") is None
+    assert triage.triage_photo(IMG, "image/png") is None
 
 
 def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
@@ -101,7 +105,7 @@ def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
 
     import boto3
     monkeypatch.setattr(boto3, "client", lambda name, **kw: Br())
-    out = triage.triage_photo(b"x", "image/jpeg", "note")
+    out = triage.triage_photo(IMG, "image/png", "note")
     assert out == {"kind": "standing_water", "summary": "Puddle.", "model": "m-1"}
     assert calls[0]["modelId"] == "m-1"
 
@@ -110,7 +114,7 @@ def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
             raise RuntimeError("AccessDenied")
 
     monkeypatch.setattr(boto3, "client", lambda name, **kw: Boom())
-    assert triage.triage_photo(b"x", "image/jpeg") is None
+    assert triage.triage_photo(IMG, "image/png") is None
 
 
 def test_health_flags_bad_config(client, monkeypatch):
@@ -119,8 +123,14 @@ def test_health_flags_bad_config(client, monkeypatch):
     assert any("S3_BUCKET" in w for w in client.get("/api/health").json()["config_warnings"])
 
 
+@pytest.fixture(autouse=True)
+def fresh_deep_cache():
+    main._deep.update(at=0.0, value=None)      # the deep result is cached for a few seconds
+    yield
+
+
 def test_health_deep_probes_aws(s3, client):
-    r = client.get("/api/health?deep=1").json()
+    r = client.get("/api/health?deep=1", headers=as_("admin-1")).json()
     assert r["aws"] == {"s3": "ok"}
     assert s3.puts[-1]["Key"] == "healthcheck.txt"
 
@@ -133,4 +143,4 @@ def test_health_deep_reports_aws_errors(client, monkeypatch):
     def boom(*a, **k):
         raise RuntimeError("no credentials")
     monkeypatch.setattr(boto3, "client", boom)
-    assert "no credentials" in client.get("/api/health?deep=1").json()["aws"]["s3"]
+    assert "no credentials" in client.get("/api/health?deep=1", headers=as_("admin-1")).json()["aws"]["s3"]
