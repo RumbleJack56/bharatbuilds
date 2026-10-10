@@ -1,7 +1,7 @@
 // web/js/views/official.view.js — inbox and task page. Pure.
 import { esc, hrs, when, gainPhrase, rankPhrase } from "../ui/format.js";
 import { chip, banner, photos, flagList, stagger } from "../ui/components.js";
-import { KINDS, FIELD_RULE, EVENT, EMPTY } from "../ui/copy.js";
+import { KINDS, FIELD_RULE, EVENT, EMPTY, NO_OWNER } from "../ui/copy.js";
 
 const overdue = (t) => t.overdue ? '<span class="chip overdue">overdue</span>' : "";
 
@@ -12,7 +12,7 @@ export const disputeNote = (t) => lastEvent(t, "disputed")?.note || "";
 export const taskCard = (t, note = "", n = 0) => `<a class="card glass rise tasklink" ${stagger(n)} href="#/task/${esc(t.id)}">
   <div>${chip(t.status)} ${overdue(t)} <span class="muted small">${esc(rankPhrase(t.rank_score))}</span></div>
   <h3>${esc(t.asset_name)}</h3>
-  <p class="small muted">${esc(t.agency_name)} - ${esc(t.pocket_name || "no pocket")} - ${esc(t.report_count)} report(s)</p>
+  <p class="small muted">${[t.agency_name || "No owner found", t.pocket_name || "no pocket", `${t.report_count} report(s)`].map(esc).join(" - ")}</p>
   ${t.status === "disputed" ? `<p class="small"><strong>Resident's note:</strong> ${esc(note || "(no note)")}</p>` : ""}
   <p class="small">Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</p></a>`;
 
@@ -33,7 +33,7 @@ function redoBanner(t) {
 export const taskDetail = (t, { banner: b, back }) => `<p><a class="back" href="${esc(back)}">Back</a></p>
   <h1>${esc(t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
   <p>Owner: <strong>${esc(t.agency_name || "No owner found")}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
-  ${banner(b)}${redoBanner(t)}<p>${esc(t.pocket_name || "")} - cleaning this ${esc(gainPhrase(t.gain_h))}.</p>
+  ${t.agency_id ? "" : `<p>${esc(NO_OWNER)}</p>`}${banner(b)}${redoBanner(t)}<p>${t.pocket_name ? esc(t.pocket_name) + " - cleaning" : "Cleaning"} this ${esc(gainPhrase(t.gain_h))}.</p>
   ${t.due_at ? `<p class="small muted">Due ${esc(when(t.due_at))}</p>` : ""}
   <p class="rule">${esc(FIELD_RULE)}</p><div id="actions"></div>
   <h2>Reports (${t.incidents.length})</h2>

@@ -14,6 +14,10 @@ export const PIN = {
   photo: (m) => `Pin from your photo (\u00b1 ${Math.round(m)} m)`,
   gps: (m) => `Your GPS (\u00b1 ${Math.round(m)} m)`,
 };
+export const NO_OWNER = "No agency owns this drain yet. A coordinator will assign it.";
+export const NEAREST = (name, m) => `Nearest drain: ${name}, about ${m} m away. A report links to a drain within 150 m - tap the map closer to a drain.`;
+export const APPROX = (m) => `Your location is approximate (\u00b1 ${Math.round(m)} m). Tap the map to set the exact spot.`;
+export const ANDROID_PRECISE = "On Android, turn on Precise location for your browser.";
 export const CAMERA = { none: "Camera not available on this device. You can still send a report without a photo: pick what you see." };
 export const ACTION = { clean: "Clean", inspect: "Inspect", clarify_owner: "Clarify owner", monitor: "Monitor" };
 // One plain line per empty list screen (V8).
