@@ -16,6 +16,7 @@ export function createDashboardService(http) {
       return http.request("GET", "/api/transparency?" + q);
     },
     agencies: async () => (await http.request("GET", "/api/agencies")).agencies,
+    actions: (top = 10) => http.request("GET", `/api/actions?top=${encodeURIComponent(top)}`),
     generatePlan: (top = 5) => http.request("POST", `/api/plan/generate?top=${encodeURIComponent(top)}`),
   };
 }

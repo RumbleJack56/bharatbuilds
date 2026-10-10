@@ -15,3 +15,4 @@ export const PIN = {
   gps: (m) => `Your GPS (\u00b1 ${Math.round(m)} m)`,
 };
 export const CAMERA = { none: "Camera not available on this device. You can still send a report without a photo: pick what you see." };
+export const ACTION = { clean: "Clean", inspect: "Inspect", clarify_owner: "Clarify owner", monitor: "Monitor" };

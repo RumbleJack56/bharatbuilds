@@ -4,3 +4,5 @@ export const hrs = (h) => h == null ? "not available" : "about " + (h < 10 ? Mat
 export function when(iso) {
   try { return new Date(iso).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }); } catch { return iso || ""; }
 }
+const h1 = (h) => h < 10 ? Math.round(h * 10) / 10 : Math.round(h);
+export const hrRange = (lo, hi) => lo == null || hi == null ? "not available" : `about ${h1(lo)} to ${h1(hi)} h`;
