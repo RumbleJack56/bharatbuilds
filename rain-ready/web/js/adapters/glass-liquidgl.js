@@ -13,6 +13,8 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
   const owned = new Set(), canvases = () => [...doc.querySelectorAll("body > canvas")];
   const hideCanvases = () => { for (const c of owned) if (c.style) c.style.display = "none"; };
   const fallback = () => { state = "css"; gen++; root.classList.add("glass-css"); hideCanvases(); lenses.clear(); };   // context lost or library threw
+  // liquidGL sets pointer-events:none inline on each target (clicks would fall through to <body>): hand them back.
+  const unblock = () => { for (const el of lenses.keys()) { if (el.style) el.style.pointerEvents = "auto"; for (const k of el.querySelectorAll?.("a, button, input, select, textarea") || []) if (k.style) k.style.pointerEvents = "auto"; } };
   win.addEventListener("webglcontextlost", fallback, true);
 
   function add() {
@@ -25,6 +27,7 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
       catch { for (const c of canvases()) if (!before.has(c)) owned.add(c); fallback(); return; }
       for (const c of canvases()) if (!before.has(c)) owned.add(c);
     }
+    unblock();
     if (state === "liquid") root.classList.remove("glass-css");
   }
   const imagesSettled = () => {
@@ -48,7 +51,7 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
         win.dispatchEvent(new win.Event("resize"));
         await new Promise(r => setTimeoutFn(r, RESNAP_MS));       // the re-snapshot may create canvases late: adopt those (and only those) so context loss can hide them
         for (const c of canvases()) if (!seen.has(c)) owned.add(c);
-        if (state !== "liquid") hideCanvases();
+        if (state !== "liquid") hideCanvases(); else unblock();
       } catch { fallback(); }
     },
     destroy() { gen++; hideCanvases(); lenses.clear(); win.removeEventListener("webglcontextlost", fallback, true); },
