@@ -2,6 +2,7 @@
 import { esc } from "./format.js";
 
 export const chip = (status) => `<span class="chip ${esc(status)}">${esc(status)}</span>`;
+export const empty = (text) => `<div class="empty"><svg class="ic" aria-hidden="true"><use href="img/icons.svg?v=2#i-inbox"/></svg><p>${esc(text)}</p></div>`;
 export const banner = (t) => t ? `<p class="banner">${esc(t)}</p>` : "";
 export const errBox = (e) => `<p class="err" role="alert">${esc(e && e.message || e)}</p>`;
 export function photos(urls, alt) {

@@ -20,15 +20,15 @@ test("index.html has no backdrop and links Inter with display=swap", () => {
 });
 test("motion.css has no drift keyframes", () => assert.doesNotMatch(css("motion.css"), /@keyframes drift/));
 test("glass has the solid fallback when backdrop-filter is unsupported", () => {
-  const g = css("glass.css");
+  const g = css("ui.css");
   assert.match(g, /@supports not \(\(backdrop-filter:blur\(1px\)\) or \(-webkit-backdrop-filter:blur\(1px\)\)\)/);
   assert.match(g, /-webkit-backdrop-filter/);
 });
 test("liquid mode drops the CSS blur and keeps a tint on .lg", () => {
-  assert.match(css("glass.css"), /html:not\(\.glass-css\) \.lg:not\(\[data-lg-css\]\)\{[^}]*background:var\(--lg-tint\)[^}]*backdrop-filter:none/);
+  assert.match(css("ui.css"), /html:not\(\.glass-css\) \.lg:not\(\[data-lg-css\]\)\{[^}]*background:var\(--lg-tint\)[^}]*backdrop-filter:none/);
 });
 test("focus ring and 44 px controls exist", () => {
-  const g = css("glass.css");
+  const g = css("ui.css");
   assert.match(g, /:focus-visible\{outline:2px solid var\(--accent\)/);
   assert.match(g, /min-height:44px/);
 });
@@ -58,4 +58,4 @@ test("E2: the toast clears the fixed tab bar at <= 640 px and honours the safe-a
   const m = css("app.css").match(/\.toast\{[^}]*bottom:calc\((\d+)px \+ env\(safe-area-inset-bottom\)\)/);
   assert.ok(m && Number(m[1]) >= 56 + 8, "tab bar is min 56 px tall plus border");
 });
-test("the programmatically focused view container shows no focus ring (it is not a control)", () => assert.match(css("glass.css"), /#view:focus-visible\{outline:none\}/));
+test("the programmatically focused view container shows no focus ring (it is not a control)", () => assert.match(css("ui.css"), /#view:focus-visible\{outline:none\}/));

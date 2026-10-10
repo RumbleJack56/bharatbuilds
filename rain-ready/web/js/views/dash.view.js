@@ -1,6 +1,6 @@
 // web/js/views/dash.view.js — dashboard shell and the read-only tabs. Pure.
 import { esc, hrs } from "../ui/format.js";
-import { banner } from "../ui/components.js";
+import { banner, empty } from "../ui/components.js";
 import { LEVEL, USE, EMPTY } from "../ui/copy.js";
 
 export const TAB_TITLES = { map: "Map", accountability: "Who is responsible", impact: "Impact", simulator: "Simulator", capture: "Rain capture", actions: "Actions", insights: "Insights" };
@@ -23,7 +23,7 @@ export const taskPopup = (t, rank) => `<strong>Task ${esc(t.id)}</strong> (${esc
 export const assetPopup = (a) => `<strong>${esc(a.name)}</strong><br>Owner: ${esc(a.agency_name)}
   <br><span class="small">Source: ${esc(a.owner_source || "none")}</span><br>Last cleaning confirmed: ${esc(a.last_confirmed_clean || "never recorded")}`;
 
-export const accountabilityView = (d) => `<p class="muted small">${esc(d.note)}</p>` + (d.agencies.length ? d.agencies.map(a => {
+export const accountabilityView = (d) => `<p class="muted small">${esc(d.note)}</p>` + (d.agencies.length ? `<div class="list">` + d.agencies.map(a => {
   const max = Math.max(1, ...d.agencies.map(x => x.assets_owned));
   return `<div class="card glass ${a.agency_id ? "" : "hl"}"><h3>${esc(a.agency_name)}</h3>
   <p>Assets owned: <strong>${esc(a.assets_owned)}</strong></p>
@@ -31,7 +31,7 @@ export const accountabilityView = (d) => `<p class="muted small">${esc(d.note)}<
   <p class="small">${STATUS.map(s => `${s}: <strong>${esc(a.tasks[s] || 0)}</strong>`).join(" &middot; ")}</p>
   <p class="small">Overdue: <strong>${esc(a.overdue)}</strong> &middot; Bounced away: <strong>${esc(a.bounced_away)}</strong><br>
   Median time to accept: ${esc(hrs(a.median_hours_to_accept))} &middot; to complete: ${esc(hrs(a.median_hours_to_complete))}</p></div>`;
-}).join("") : `<p class="muted">${EMPTY.accountability}</p>`);
+}).join("") + `</div>` : empty(EMPTY.accountability));
 
 const big = (n, l) => `<div class="card glass"><div class="big-num">${esc(n)}</div><div class="small">${esc(l)}</div></div>`;
 export const impactView = (d) => `${banner(d.banner)}<div class="grid">
@@ -45,9 +45,9 @@ export const impactView = (d) => `${banner(d.banner)}<div class="grid">
   <h2>Rain capture, cubic metres per year</h2><div class="grid">${Object.entries(d.capture_m3_per_year_by_use).map(([k, v]) => big(v, USE[k] || k)).join("")}</div>
   <p class="small muted">Not claimed: ${esc(d.not_claimed)}</p>`;
 
-export const captureView = (d) => banner(d.banner) + (d.sites.length ? d.sites.map(s => `<div class="card glass"><h3>${esc(s.name)}</h3>
+export const captureView = (d) => banner(d.banner) + (d.sites.length ? `<div class="list">` + d.sites.map(s => `<div class="card glass"><h3>${esc(s.name)}</h3>
   <p><strong>${esc(USE[s.use] || s.use)}</strong> <span class="chip">${esc(s.rule_id)}</span></p>
   <p>${esc(s.reason)}</p><p>About <strong>${esc(s.annual_m3)}</strong> m&sup3; per year from the roof</p>
   ${s.structure ? `<p class="small">Structure: ${Object.entries(s.structure).map(([k, v]) => `${esc(k.replace(/_/g, " "))} ${esc(v)}`).join(", ")}</p>` : ""}
   ${(s.warnings || []).map(w => `<p class="banner">${esc(w)}</p>`).join("")}
-  <p class="small muted">Data: ${esc(s.data_source)}</p></div>`).join("") : `<p class="muted">${EMPTY.capture}</p>`);
+  <p class="small muted">Data: ${esc(s.data_source)}</p></div>`).join("") + `</div>` : empty(EMPTY.capture));

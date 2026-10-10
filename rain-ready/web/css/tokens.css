@@ -10,11 +10,8 @@
   --radius:12px;--radius-sm:8px;--top-h:56px;
   --shadow-menu:0 8px 24px rgba(0,0,0,.5);
   --ease:cubic-bezier(.2,.8,.2,1);--dur-fast:120ms;--dur:220ms;
-  /* legacy aliases, still used by glass.css, app.css and inline styles */
-  --card:var(--s1);--ink:var(--fg);--mute:var(--fg-muted);--none:var(--fg-muted);
-  --glass-bg:var(--s1);--glass-bg-strong:var(--s2);--glass-border:var(--line);--lg-tint:var(--bar-bg);
-  --glass-blur:12px;--glass-sat:140%;--shadow:var(--shadow-menu);--hl:inset 0 1px 0 rgba(255,255,255,.04);
-  --accent-2:var(--accent-fill-hover);--accent-ink:#fff;
+  /* legacy aliases, still used by app.css and inline styles */
+  --card:var(--s1);--ink:var(--fg);--mute:var(--fg-muted);--none:var(--fg-muted);--lg-tint:var(--bar-bg);
 }
 *{box-sizing:border-box}
 html{min-height:100%;background:radial-gradient(1200px 600px at 50% -10%,rgba(139,124,246,.06),transparent 70%) fixed,var(--bg)}

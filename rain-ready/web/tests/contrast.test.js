@@ -24,7 +24,7 @@ for (const h of ["high", "elev", "low", "info", "accent"]) {
 }
 test("white on accent-fill and its hover is >= 4.5:1", () => {
   assert.ok(ratio([255, 255, 255], rgb("accent-fill")) >= 4.5);
-  assert.ok(ratio([255, 255, 255], parseColor("#7060ea").slice(0, 3)) >= 4.5, "hover #7060ea");
+  assert.ok(ratio([255, 255, 255], parseColor(t["accent-fill-hover"]).slice(0, 3)) >= 4.5, "accent-fill-hover");
 });
 test("high-dot and field-border on s1 are >= 3:1", () => {
   for (const k of ["high-dot", "field-border"]) assert.ok(ratio(rgb(k), rgb("s1")) >= 3, k);

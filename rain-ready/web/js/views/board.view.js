@@ -1,6 +1,6 @@
 // web/js/views/board.view.js — public leaderboard and action log. Pure. Roles only, never names.
 import { esc, hrs, when } from "../ui/format.js";
-import { banner, photos, flagList } from "../ui/components.js";
+import { banner, photos, flagList, empty } from "../ui/components.js";
 import { EMPTY } from "../ui/copy.js";
 
 const STATUS = ["open", "accepted", "done", "confirmed", "disputed", "rejected"];
@@ -49,4 +49,4 @@ const item = (x) => `<details class="card glass"><summary><strong>#${esc(x.task_
   <ol class="tl">${x.timeline.map(step).join("")}</ol></details>`;
 
 export const logView = (tr) => `${tr.demo ? `<p><span class="chip">Rehearsal data</span></p>` : ""}${banner(tr.banner)}<p class="small muted">${esc(tr.gain_note)}</p>
-  ${tr.actions.length ? tr.actions.map(item).join("") : `<p class="muted">${EMPTY.log}</p>`}`;
+  ${tr.actions.length ? `<div class="list">${tr.actions.map(item).join("")}</div>` : empty(EMPTY.log)}`;

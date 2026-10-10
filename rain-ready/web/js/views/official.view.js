@@ -1,6 +1,6 @@
 // web/js/views/official.view.js — inbox and task page. Pure.
 import { esc, hrs, when, gainPhrase, rankPhrase } from "../ui/format.js";
-import { chip, banner, photos, flagList, stagger } from "../ui/components.js";
+import { chip, banner, photos, flagList, stagger, empty } from "../ui/components.js";
 import { KINDS, FIELD_RULE, EVENT, EMPTY, NO_OWNER } from "../ui/copy.js";
 
 const overdue = (t) => t.overdue ? '<span class="chip overdue">overdue</span>' : "";
@@ -17,7 +17,7 @@ export const taskCard = (t, note = "", n = 0) => `<a class="card glass rise task
   <p class="small">Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</p></a>`;
 
 export const inboxView = ({ tasks, banner: b }, notes = {}) => `<h1>Inbox</h1>${banner(b)}` +
-  (tasks.length ? tasks.map((t, n) => taskCard(t, notes[t.id], n)).join("") : `<p class="muted">${EMPTY.inbox}</p>`);
+  (tasks.length ? `<div class="list">${tasks.map((t, n) => taskCard(t, notes[t.id], n)).join("")}</div>` : empty(EMPTY.inbox));
 
 const eventItem = (e) => `<li><strong>${esc(EVENT[e.event] || e.event)}</strong>
     <span class="small muted">${esc(when(e.at))} - ${esc(e.actor_name)}${e.agency_id ? " - " + esc(e.agency_id.toUpperCase()) : ""}</span>
@@ -38,8 +38,8 @@ export const taskDetail = (t, { banner: b, back }) => `<p><a class="back" href="
   <p class="rule">${esc(FIELD_RULE)}</p><div id="actions"></div>
   <h2>Reports (${t.incidents.length})</h2>
   ${t.incidents.length ? t.incidents.map(i => `<div class="card glass"><strong>${esc(KINDS[i.kind] || i.kind)}</strong> <span class="small muted">${esc(when(i.created_at))}</span>
-    ${i.note ? `<p>${esc(i.note)}</p>` : ""}${photos([i.photo_url], "Report photo")}</div>`).join("") : `<p class="muted">${EMPTY.reports}</p>`}
-  <h2>History</h2>${t.events.length ? `<ul class="tl">${t.events.map(eventItem).join("")}</ul>` : `<p class="muted">${EMPTY.history}</p>`}`;
+    ${i.note ? `<p>${esc(i.note)}</p>` : ""}${photos([i.photo_url], "Report photo")}</div>`).join("") : empty(EMPTY.reports)}
+  <h2>History</h2>${t.events.length ? `<ul class="tl">${t.events.map(eventItem).join("")}</ul>` : empty(EMPTY.history)}`;
 
 const options = (agencies, current) => agencies.filter(a => a.id !== current)
   .map(a => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join("");

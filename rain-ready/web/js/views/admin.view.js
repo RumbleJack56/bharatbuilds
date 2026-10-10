@@ -1,6 +1,6 @@
 // web/js/views/admin.view.js — coordinator screen. Pure.
 import { esc } from "../ui/format.js";
-import { chip, banner } from "../ui/components.js";
+import { chip, banner, empty } from "../ui/components.js";
 import { EMPTY } from "../ui/copy.js";
 
 export const adminView = ({ tasks, agencies, banner: b, result = "" }) => `<h1>Coordinator</h1>${banner(b)}
@@ -10,4 +10,4 @@ export const adminView = ({ tasks, agencies, banner: b, result = "" }) => `<h1>C
   ${tasks.length ? tasks.map(t => `<div class="card glass" data-task="${esc(t.id)}">${chip(t.status)}
     <h3><a href="#/task/${esc(t.id)}">${esc(t.asset_name)}</a></h3><p class="small muted">${esc(t.owner_source || "")}</p>
     <label>Assign to</label><div class="row"><select>${agencies.map(a => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join("")}</select>
-    <button class="primary">Assign</button></div></div>`).join("") : `<p class="muted">${EMPTY.admin}</p>`}`;
+    <button class="primary">Assign</button></div></div>`).join("") : empty(EMPTY.admin)}`;

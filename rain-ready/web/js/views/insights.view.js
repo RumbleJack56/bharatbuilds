@@ -1,6 +1,6 @@
 // web/js/views/insights.view.js — rule-based insights and the ward report sections. Pure.
 import { esc, hrRange, hrs, when } from "../ui/format.js";
-import { banner } from "../ui/components.js";
+import { banner, empty } from "../ui/components.js";
 import { LEVEL, EMPTY } from "../ui/copy.js";
 
 // Evidence labels with units; values are printed as the API gives them (fill time goes through hrs).
@@ -11,7 +11,7 @@ const card = (i) => `<div class="card glass"><p>${esc(i.text)}${/placeholder dat
   <p class="small">Why: ${esc(i.why)}<br>Evidence: ${evid(i.evidence)}</p></div>`;
 
 export const insightsView = (d) => `${banner(d.banner)}<h2>Insights</h2>
-  ${d.insights.length ? d.insights.map(card).join("") : `<p class="muted">${EMPTY.insights}</p>`}`;
+  ${d.insights.length ? d.insights.map(card).join("") : empty(EMPTY.insights)}`;
 
 export const reportView = (r) => `<h2>Ward report</h2>${banner(r.banner)}<p class="small muted">Generated ${esc(when(r.generated_at))}. ${esc(r.range_note)}</p>
   <div class="card glass"><h3>Open tasks by agency</h3>${r.tasks_by_agency.length

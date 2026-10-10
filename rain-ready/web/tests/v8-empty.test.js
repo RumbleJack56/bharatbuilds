@@ -23,7 +23,7 @@ const cases = {
 for (const [k, html] of Object.entries(cases)) {
   test(`empty state: ${k}`, () => {
     assert.ok(EMPTY[k], `EMPTY.${k} missing`);
-    assert.ok(html.includes(`<p class="muted">${EMPTY[k]}</p>`), html.slice(0, 200));
+    assert.ok(html.includes(`<p>${EMPTY[k]}</p>`) && html.includes('class="empty"'), html.slice(0, 200));
     assert.doesNotMatch(EMPTY[k], BANNED); assert.doesNotMatch(html, /undefined|NaN/);
   });
 }
