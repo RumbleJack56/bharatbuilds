@@ -8,8 +8,10 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
   const lenses = new Map();                       // element -> lens. liquid-gl 2.2.4 has no lens destroy(), so lenses are mounted once, on persistent chrome only
   let state = "liquid", selector = "", serial = 0, gen = 0;
 
-  // The library appends its shared renderer canvas (and mirror canvases) straight to <body> with no teardown API: hide them.
-  const hideCanvases = () => { for (const c of doc.querySelectorAll("body > canvas")) if (c.style) c.style.display = "none"; };
+  // The library appends its shared renderer canvas (and mirror canvases) straight to <body> with no teardown API.
+  // Hide only those: adopt the body canvases that appear while liquidGL mounts (diff before/after), never a blanket "body > canvas".
+  const owned = new Set(), canvases = () => [...doc.querySelectorAll("body > canvas")];
+  const hideCanvases = () => { for (const c of owned) if (c.style) c.style.display = "none"; };
   const fallback = () => { state = "css"; gen++; root.classList.add("glass-css"); hideCanvases(); lenses.clear(); };   // context lost or library threw
   win.addEventListener("webglcontextlost", fallback, true);
 
@@ -17,10 +19,11 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
     if (state !== "liquid" || !selector) return;
     for (const el of doc.querySelectorAll(selector)) {
       if (lenses.has(el) || lenses.size >= MAX_LENSES) continue;
-      const cls = `lgl-${++serial}`;
+      const before = new Set(canvases()), cls = `lgl-${++serial}`;
       el.classList.add(cls);
       try { lenses.set(el, [].concat(win.liquidGL({ ...OPTS, target: "." + cls }))[0] || {}); }
-      catch { fallback(); return; }
+      catch { for (const c of canvases()) if (!before.has(c)) owned.add(c); fallback(); return; }
+      for (const c of canvases()) if (!before.has(c)) owned.add(c);
     }
     if (state === "liquid") root.classList.remove("glass-css");
   }

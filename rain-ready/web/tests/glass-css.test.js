@@ -44,3 +44,14 @@ test("motion.css: reduced motion switches off drift, stagger, view transitions, 
   assert.match(r, /::view-transition-group\(\*\),::view-transition-old\(\*\),::view-transition-new\(\*\)\{[^}]*animation:none/);
   assert.match(r, /button:active,\.btn:active\{transform:none/);
 });
+
+test("E1: nav comes before main in the DOM; no order: reshuffle of the chrome; no stray ;} in .top", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8"), app = css("app.css");
+  assert.ok(html.indexOf('<nav id="tabs"') > 0 && html.indexOf('<nav id="tabs"') < html.indexOf('<main id="view"'));
+  assert.doesNotMatch(app, /\.(top|tabs)\{[^}]*order:/);
+  assert.doesNotMatch(app, /;\}/);
+});
+test("E2: the toast clears the fixed tab bar at <= 640 px and honours the safe-area inset", () => {
+  const m = css("app.css").match(/\.toast\{[^}]*bottom:calc\((\d+)px \+ env\(safe-area-inset-bottom\)\)/);
+  assert.ok(m && Number(m[1]) >= 56 + 8, "tab bar is min 56 px tall plus border");
+});

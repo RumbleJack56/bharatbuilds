@@ -50,18 +50,20 @@ test("waitFor resolves true as soon as the predicate holds and false at the dead
 // ---- liquid adapter with a fake window ----
 const ticks = async (n = 8) => { for (let i = 0; i < n; i++) await Promise.resolve(); };
 function rig({ images = [], els = [mkEl()], liquid } = {}) {
-  const canvases = [{ style: {} }, { style: {} }];
+  const appCanvas = { style: {} };                 // the app's own canvas (already on body): must never be hidden
+  const appended = [{ style: {} }, { style: {} }]; // what liquidGL appends at mount
+  const canvases = [appCanvas];
   const timers = [], events = [], handlers = {}, calls = [];
   const root = { classes: new Set(["glass-css"]), classList: { add(c) { root.classes.add(c); }, remove(c) { root.classes.delete(c); }, contains: (c) => root.classes.has(c) } };
   const win = {
     document: { documentElement: root, images, querySelectorAll: (q) => q === "body > canvas" ? canvases : els },
-    liquidGL: liquid || ((o) => { calls.push(o); return {}; }),
+    liquidGL: liquid || ((o) => { calls.push(o); canvases.push(...appended); return {}; }),
     addEventListener: (t, f) => { handlers[t] = f; }, removeEventListener() {},
     dispatchEvent: (e) => { events.push(e.type); return true; }, Event: class { constructor(t) { this.type = t; } },
   };
   const glass = createLiquidGlass(win, { settleMs: 10, imgTimeoutMs: 100, setTimeoutFn: (fn) => { timers.push(fn); } });
   const flush = async () => { await ticks(); while (timers.length) timers.shift()(); await ticks(); };
-  return { glass, win, root, events, handlers, calls, els, flush, canvases };
+  return { glass, win, root, events, handlers, calls, els, flush, canvases, appended, appCanvas };
 }
 function mkEl() { const e = { cls: [], isConnected: true }; e.classList = { add: (c) => e.cls.push(c) }; return e; }
 const el = mkEl;
@@ -88,7 +90,8 @@ test("webglcontextlost (phone GPU reset) -> css look returns and the library can
   r.glass.mount(".lg");
   r.handlers.webglcontextlost({});
   assert.equal(r.glass.mode(), "css"); assert.equal(r.root.classes.has("glass-css"), true);
-  assert.deepEqual(r.canvases.map(c => c.style.display), ["none", "none"]);
+  assert.deepEqual(r.appended.map(c => c.style.display), ["none", "none"]);
+  assert.equal(r.appCanvas.style.display, undefined, "only the library's canvases are hidden");
 });
 
 test("refresh waits for an image that is still loading, then re-snapshots once via a resize event", async () => {

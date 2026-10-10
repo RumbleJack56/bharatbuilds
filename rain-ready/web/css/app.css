@@ -1,6 +1,6 @@
 /* web/css/app.css — layout and screen rules. Tokens: tokens.css. Surfaces: glass.css. Motion: motion.css. */
 a{color:var(--accent)}
-.top{display:flex;align-items:center;gap:8px;padding:8px 12px;position:sticky;top:0;z-index:1000;min-height:var(--top-h);}
+.top{display:flex;align-items:center;gap:8px;padding:8px 12px;position:sticky;top:0;z-index:1000;min-height:var(--top-h)}
 .brand{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none;color:var(--fg);font-size:1.1rem}
 .who{flex:1;text-align:right;font-size:.8rem;color:var(--fg-muted)}
 main{width:100%;max-width:720px;margin:0 auto;padding:12px;flex:1}
@@ -51,8 +51,7 @@ fieldset.plain{border:0;padding:0;margin:8px 0}
 }
 @media (min-width:641px){
   body{padding-bottom:16px}
-  .top{order:-2}
-  .tabs{position:sticky;top:var(--top-h);order:-1;width:min(720px,calc(100% - 24px));margin:8px auto 0;border-radius:var(--radius);z-index:999}
+  .tabs{position:sticky;top:var(--top-h);width:min(720px,calc(100% - 24px));margin:8px auto 0;border-radius:var(--radius);z-index:999}
   .fab{bottom:16px}
   .toast{left:50%;right:auto;width:min(480px,calc(100% - 24px));transform:translateX(-50%);bottom:24px}
 }
