@@ -138,7 +138,7 @@ If time allows:
 - [x] B30 Put the latest dispute note on `GET /api/tasks` list items so the inbox stops making one detail call per disputed task. Report item 6
 - [x] B31 After-photo stamp checks: allow officials on `GET /api/capture-token`; `POST /api/tasks/{id}/complete` accepts `lat`, `lon`, `accuracy_m`, `capture_token` and returns the same flags as a report. Report item 5. Biggest backend item; Aarush then adds the token call to the after-photo flow
 - [x] B32 Note that `DOMAIN` may list several hosts (comma separated) in `.env.example` and `docs/DEPLOY.md`. Report item 7
-- [ ] B33 Refresh demo docs at the reference rain: run `make demo` against a local server on a scratch DB for `docs/DEMO_RUN.md`; recompute the PITCH scenario numbers; fix stale lines (`docs/DATA.md` "do not copy the candidate seed", `docs/PITCH.md` "not yet checked in a browser", `docs/DEMO_FLOW.md` narration at 35 mm/h, the TODO in `rain-ready/README.md`)
+- [x] B33 Refresh demo docs at the reference rain: run `make demo` against a local server on a scratch DB for `docs/DEMO_RUN.md`; recompute the PITCH scenario numbers; fix stale lines (`docs/DATA.md` "do not copy the candidate seed", `docs/PITCH.md` "not yet checked in a browser", `docs/DEMO_FLOW.md` narration at 35 mm/h, the TODO in `rain-ready/README.md`)
 
 Known and accepted for the demo: persona header auth (anyone with the URL can act as admin; cover is the hourly backup and a fresh AMI), one shared SQLite connection with no rollback.
 
@@ -236,14 +236,14 @@ Rule for this plan: do what no one else blocks first; gate the rest on named che
 | 14 | S6: public-repo review, signed-out clone test | Ujjwal | 45 min | checklist below passes | all code merged |
 | 15 | Freeze | both | 11 Oct 14:00 IST | no merges after | |
 
-### Decisions needed from Ujjwal
+### Decisions (Ujjwal took every recommendation on 10 Oct 2026; S2 still needs the event page check)
 
-| ID | Question | Recommendation |
+| ID | Question | Decision |
 |---|---|---|
 | B27 | What may the public dashboard show? | Keep task detail and lists public (accountability is the product). Hide `user_id` and free-text notes of other residents in `GET /api/incidents`. Roles, never names |
 | Seed | Clean or `--demo` on live for the recording? | `--demo` only for the recording, then reset clean before submission |
 | Host | Which URL for the APK and the video? | The custom domain (`rainready.rumblejack56.dev`), with the sslip host as a fallback. Both are in Caddy |
-| Squash message | Set the repo squash message to the PR body? | Yes: `gh api -X PATCH repos/RumbleJack56/bharatbuilds -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY` |
+| Squash message | Set the repo squash message to the PR body? | Yes, done 10 Oct: `gh api -X PATCH repos/RumbleJack56/bharatbuilds -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY` |
 | Old trailers | About 40 commits on `main` carry AI trailers | Leave them; credit the tools in the README (rule 8 applies from now on) |
 | S2 | Deadline hour | Confirm 11 Oct 8:00 PM IST on the event page; freeze 2:00 PM IST |
 

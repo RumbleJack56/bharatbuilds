@@ -66,33 +66,30 @@ This is the core: low-point analysis decides the order of work.
 
 **Rank:** `gain_h` = fill time after cleaning minus fill time now, at the reference rain (25 mm/h), capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`.
 
-### Scenario numbers from the seed (35 mm/h stress scenario, computed 10 Oct 2026; the reference rain is now 25 mm/h, recompute before quoting)
+### Scenario numbers from the real seed (25 mm/h reference rain, taken from the live API on 10 Oct 2026; illustrative parameters, a scenario and not a forecast)
 
-Time for each pocket to fill, about:
+Time for each pocket to fill with the drains as they are now:
 
-| Pocket | Drains as they are now | All drains cleaned |
+| Pocket | Level | Fills in about |
 |---|---|---|
-| Library lane low point | 23 min | 1 h 35 min |
-| Lane 2 low point | 34 min | 3 h 20 min |
-| Karol Bagh low lane | 44 min | 2 h 38 min |
-| Rajinder Nagar saucer | 45 min | 4 h 15 min |
-| Underpass sump (demo) | 45 min | does not fill |
+| East Patel Nagar bus stand, Dr K S Krishnan Marg | high | 32 min |
+| Rani Jhansi Road at Filmistan | high | 34 min |
+| Bagga Link / Jhandewalan roundabout (Dayal Chowk) | high | 34 min |
+| Pusa Road at Karol Bagh Metro Station | high | 34 min |
+| Old Rajinder Nagar low point (Bazaar Marg) | elevated | 1.2 h |
+| New Rohtak Road at Anand Parbat (foot of Zakhira Flyover) | elevated | 2.2 h |
 
-Ranked plan, hours of fill time gained by cleaning one drain:
+Ranked plan, hours of fill time gained by cleaning one drain (range from catchment, storage and drain size each changed by 25 %):
 
 | Rank | Drain | Owner | Gain, about |
 |---|---|---|---|
-| 1 | Underpass sump (demo) | PWD | 5.2 h |
-| 2 | Covered drain, lane 2 | MCD | 2.8 h |
-| 3 | Karol Bagh service drain | MCD | 1.9 h |
-| 4 | Main road storm drain | MCD | 1.2 h |
-| 5 | Inlet outside library block | **No owner found** | 1.2 h |
+| 1 | Daryai Nallah barrel, Bazaar Marg (inferred) | MCD | 4.8 h (0.7 to 5.2) |
+| 2 | Rani Jhansi Road roadside drain (assumed), Filmistan | PWD | 1.6 h (0.3 to 5.6) |
+| 3 | Link Road roadside drain (assumed), Jhandewalan | PWD | 1.6 h (0.3 to 5.6) |
+| 4 | Pusa Road roadside drain (assumed), Karol Bagh Metro | PWD | 1.6 h (0.3 to 5.6) |
+| 5 | Patel Road barrel (1976 plan), East Patel Nagar | PWD | 0.8 h (0.2 to 4.6) |
 
-Three more drains gain 0 h (recently cleaned or not linked to a pocket). Three reports on one drain raise its rank by 50%.
-
-Slide line: "Five of eight drains matter in this scenario. One of the five has no owner."
-
-**Label on every such slide:** "Scenario, not a forecast. Pocket size, catchment and drain capacity are illustrative parameters."
+Three pockets have identical parameters and tie. Say so if asked. Drains with a gain of 0 h are not shown: the pocket's worst linked drain limits it, or no pocket is linked.
 
 ## 6. Accountability chart (slide 7)
 
@@ -182,12 +179,12 @@ How the indirect effect works, for the closing slide:
 | Part | State on 10 Oct |
 |---|---|
 | Backend loop, ranking, simulator, capture rules, photo checks | Built, tested |
-| Screens (resident, official, admin, dashboard) | Written, not yet checked in a browser or on a phone |
-| Stamping camera and flags display | Not built |
-| AWS (EC2, S3, Bedrock) | Code and scripts ready. Nothing has run on AWS |
-| APK | Wrapper builds with a placeholder host |
-| Real Delhi data | Not started. All seed data is placeholder |
-| Report generation and actionable insights | Not started |
+| Screens (resident, official, admin, dashboard, public board, held queue, actions, insights) | Built and checked in a browser (screenshots in `docs/screenshots/`). Phone test pending |
+| Stamping camera and flags display | Built. Phone test pending; live capture is not yet required |
+| AWS (EC2, S3) | Running: the app, photo storage and auto-deploy on every merge to `main`. Bedrock is off (`TRIAGE_MODE=manual`) until the console form is filed |
+| APK | Wrapper builds. Release build waits for the phone test |
+| Real Delhi data | Seeded: 9 drains and 6 pockets in Old Rajinder Nagar and Karol Bagh from public records. Field coordinates, ward number and the 2026 FCO list are still to confirm (`TASKS.md` B7b) |
+| Report generation and actionable insights | Built: actions tab and ward report with Markdown download |
 
 Only features that run may appear in the video (SCOPE 7.9).
 
