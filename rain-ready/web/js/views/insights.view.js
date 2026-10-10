@@ -1,14 +1,14 @@
 // web/js/views/insights.view.js — rule-based insights and the ward report sections. Pure.
 import { esc, hrRange } from "../ui/format.js";
 import { banner } from "../ui/components.js";
-import { LEVEL } from "../ui/copy.js";
+import { LEVEL, EMPTY } from "../ui/copy.js";
 
 const evid = (e) => Object.entries(e || {}).map(([k, v]) => `${esc(k.replace(/_/g, " "))}: ${esc(v)}`).join("; ");
 const card = (i) => `<div class="card"><p>${esc(i.text)}${/placeholder data/i.test(i.text) ? ' <span class="chip">Placeholder data</span>' : ""}</p>
   <p class="small">Why: ${esc(i.why)}<br>Evidence: ${evid(i.evidence)}</p></div>`;
 
 export const insightsView = (d) => `${banner(d.banner)}<h2>Insights</h2>
-  ${d.insights.length ? d.insights.map(card).join("") : '<p class="muted">No insights from the current rules.</p>'}`;
+  ${d.insights.length ? d.insights.map(card).join("") : `<p class="muted">${EMPTY.insights}</p>`}`;
 
 export const reportView = (r) => `<h2>Ward report</h2>${banner(r.banner)}<p class="small muted">Generated ${esc(r.generated_at)}. ${esc(r.range_note)}</p>
   <div class="card"><h3>Open tasks by agency</h3>${r.tasks_by_agency.length

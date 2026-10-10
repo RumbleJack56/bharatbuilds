@@ -1,7 +1,7 @@
 // web/js/views/resident.view.js — resident screens. Pure. Photo URLs arrive absolute from services.
 import { esc, when } from "../ui/format.js";
 import { photos, flagList } from "../ui/components.js";
-import { KINDS, FIELD_RULE } from "../ui/copy.js";
+import { KINDS, FIELD_RULE, EMPTY } from "../ui/copy.js";
 
 // The list endpoint returns flags but no held_for_review; a warn flag is what holds a report.
 const held = (i) => i.held_for_review ?? (i.flags || []).some(f => f.level === "warn");
@@ -12,7 +12,7 @@ export const mineView = (incidents) => `<h1>My reports</h1>` + (incidents.length
     ${i.note ? `<p>${esc(i.note)}</p>` : ""}${photos([i.photo_url], "Your photo")}${flagList(i.flags)}
     <p class="small">${i.asset_id ? `Drain ${esc(i.asset_id)}` : "No drain linked"}
     ${i.task_id ? ` - <a href="#/task/${esc(i.task_id)}">Task ${esc(i.task_id)}</a>` : ""}</p></div>`).join("")
-  : `<p class="muted">You have not sent any reports yet.</p><a class="btn primary" href="#/report">Report a problem</a>`);
+  : `<p class="muted">${EMPTY.mine}</p><a class="btn primary" href="#/report">Report a problem</a>`);
 
 export const confirmIntro = () => `<h1>Check finished work</h1>
   <p class="muted">Officials say these jobs are done. Look from the footpath, then tell us what you see.</p>
@@ -30,3 +30,5 @@ export function confirmCard(t) {
     <div class="row"><button class="primary" data-ok="1">Looks fixed</button><button data-ok="0">Still a problem</button></div>
     <div class="msg"></div></div>`;
 }
+
+export const confirmList = (tasks) => tasks.length ? tasks.map(confirmCard).join("") : `<p class="muted">${EMPTY.confirm}</p>`;

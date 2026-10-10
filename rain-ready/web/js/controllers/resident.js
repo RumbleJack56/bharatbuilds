@@ -1,5 +1,5 @@
 // web/js/controllers/resident.js — My reports and Confirm (check finished work).
-import { mineView, confirmIntro, confirmCard } from "../views/resident.view.js";
+import { mineView, confirmIntro, confirmList } from "../views/resident.view.js";
 import { errBox, guard } from "../ui/components.js";
 
 export const mine = {
@@ -14,7 +14,7 @@ export const confirm = {
     const full = await Promise.all(tasks.map(t => ctx.services.tasks.get(t.id)));
     root.innerHTML = confirmIntro();
     const list = root.querySelector("#list");
-    list.innerHTML = full.length ? full.map(confirmCard).join("") : `<p class="muted">Nothing to check right now.</p>`;
+    list.innerHTML = confirmList(full);
     list.querySelectorAll("[data-task]").forEach(card => card.querySelectorAll("button").forEach(b => b.onclick = () => guard(b, async () => {
       try {
         await ctx.services.tasks.confirm(card.dataset.task, { ok: b.dataset.ok === "1", note: card.querySelector("textarea").value });

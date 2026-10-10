@@ -1,7 +1,7 @@
 // web/js/views/actions.view.js — the ranked action list, one row per drain. Pure.
 import { esc, hrRange } from "../ui/format.js";
 import { banner } from "../ui/components.js";
-import { ACTION } from "../ui/copy.js";
+import { ACTION, EMPTY } from "../ui/copy.js";
 
 export const TOPS = [10, 25, 50];
 
@@ -15,7 +15,7 @@ const row = (a) => {
   <ul class="small">${a.evidence.map(e => `<li>${esc(e)}</li>`).join("")}</ul></div>`;
 };
 
-export const actionRows = (d) => d.actions.length ? d.actions.map(row).join("") : `<p class="muted">No actions to show.</p>`;
+export const actionRows = (d) => d.actions.length ? d.actions.map(row).join("") : `<p class="muted">${EMPTY.actions}</p>`;
 
 export const actionsView = (d, top = 10) => `${banner(d.banner)}<p class="small muted">${esc(d.range_note)} ${esc(d.how_routed)}</p>
   <label for="top">Show</label> <select id="top">${TOPS.map(n => `<option value="${n}" ${n === top ? "selected" : ""}>${n} drains</option>`).join("")}</select>
