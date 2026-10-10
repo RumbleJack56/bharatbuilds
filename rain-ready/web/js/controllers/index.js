@@ -5,6 +5,7 @@ import { mine, confirm } from "./resident.js";
 import { inbox, task } from "./official.js";
 import { admin } from "./admin.js";
 import { dash } from "./dash.js";
+import { held } from "./held.js";
 
 export const CONTROLLERS = [
   login,
@@ -15,10 +16,11 @@ export const CONTROLLERS = [
   inbox,
   task,
   admin,
+  held,
 ];
 export const TABS = {
   resident: [["#/report", "Report"], ["#/mine", "My reports"], ["#/confirm", "Confirm"], ["#/dash", "Dashboard"]],
-  official: [["#/inbox", "Inbox"], ["#/dash", "Dashboard"]],
-  admin: [["#/admin", "Admin"], ["#/dash", "Dashboard"]],
+  official: [["#/inbox", "Inbox"], ["#/held", "Held"], ["#/dash", "Dashboard"]],
+  admin: [["#/admin", "Admin"], ["#/held", "Held"], ["#/dash", "Dashboard"]],
 };
 export const HOME = { resident: "#/report", official: "#/inbox", admin: "#/admin" };
