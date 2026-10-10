@@ -11,7 +11,7 @@ test("every stylesheet stays within ~250 lines", () => {
 test("tokens carry the spec values", () => {
   const t = css("tokens.css");
   for (const s of ["--glass-bg-strong:rgba(16,26,40,.72)", "--glass-border:rgba(255,255,255,.14)", "--glass-blur:16px", "--glass-sat:140%", "--radius:18px",
-    "--radius-sm:12px", "--fg:#eef4f8", "--fg-muted:#a9bccb", "--accent:#5ad1e6", "--high:#ff7a6b", "--elev:#ffb547", "--low:#5ad1a0", "--info:#7fb6ff",
+    "--radius-sm:12px", "--fg:#eef4f8", "--fg-muted:#a9bccb", "--accent:#5ad1e6", "--high:#ffa093", "--high-dot:#ff7a6b", "--elev:#ffb547", "--low:#5ad1a0", "--info:#8cbfff",
     "--ease:cubic-bezier(.2,.8,.2,1)", "--dur-fast:120ms", "--dur:220ms"]) assert.ok(t.includes(s), s);
 });
 test("glass has the solid fallback when backdrop-filter is unsupported", () => {

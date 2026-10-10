@@ -15,7 +15,7 @@ html:not(.glass-css) .lg{background:var(--lg-tint);-webkit-backdrop-filter:none;
   background:var(--glass-bg-strong);border:1px solid var(--glass-border);border-left:3px solid var(--chip,var(--fg-muted))}
 .chip::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--chip,var(--fg-muted))}
 .chip.open{--chip:var(--info)}.chip.accepted,.chip.done{--chip:var(--elev)}.chip.confirmed{--chip:var(--low)}
-.chip.disputed,.chip.rejected,.chip.overdue{--chip:var(--high)}
+.chip.disputed,.chip.rejected,.chip.overdue{--chip:var(--high-dot)}
 button,.btn,select,input,textarea{font:inherit;min-height:44px;border-radius:var(--radius-sm);border:1px solid var(--field-border);
   background:rgba(255,255,255,.06);color:var(--fg);padding:8px 12px;transition:transform var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease)}
 button:active,.btn:active{transform:scale(.97)}

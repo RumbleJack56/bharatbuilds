@@ -6,7 +6,7 @@ a{color:var(--accent)}
 main{width:100%;max-width:720px;margin:0 auto;padding:12px;flex:1}
 h1{font-size:1.3rem;margin:.2em 0 .5em}h2{font-size:1.1rem;margin:1em 0 .4em}h3{font-size:1rem;margin:.2em 0}
 .card{border-radius:var(--radius);padding:12px;margin:0 0 10px}
-.card.hl{border:2px solid var(--high)}
+.card.hl{border:2px solid var(--high-dot)}
 .muted{color:var(--fg-muted)}.small{font-size:.8rem}
 .banner,.err{padding:10px 12px;border-radius:var(--radius-sm);margin:0 0 10px;font-size:.9rem}
 .banner{color:var(--warn-ink)}.err{color:var(--err-ink);margin:8px 0}
@@ -25,7 +25,7 @@ label{display:block;font-weight:600;margin:10px 0 4px}
 .map{height:340px;border-radius:var(--radius);border:1px solid var(--glass-border);isolation:isolate}.map.mini{height:160px}.map.tall{height:420px}
 .photos{display:flex;gap:6px;flex-wrap:wrap}.photos img{max-width:48%;max-height:180px;border-radius:var(--radius-sm);object-fit:cover}
 .bar{height:12px;background:var(--glass-border);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
-.bar.bad i{background:var(--high)}
+.bar.bad i{background:var(--high-dot)}
 .big-num{font-size:2rem;font-weight:700;line-height:1.1}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
 .tl{list-style:none;padding:0;margin:0}.tl li{border-left:3px solid var(--glass-border);padding:2px 0 8px 10px}
@@ -39,7 +39,7 @@ fieldset.plain{border:0;padding:0;margin:8px 0}
 .drain{width:14px;height:14px;background:#0b5cad;border:2px solid #fff}.drain.noowner{background:#b3261e}
 .rank{width:28px;height:28px;border-radius:50%;background:#fff;color:#16202a;border:3px solid #b3261e;text-align:center;line-height:22px;font-weight:700}
 .flags{list-style:none;padding:0;margin:8px 0}.flags li{padding:6px 10px;margin:4px 0;border-left:4px solid var(--fg-muted);border-radius:var(--radius-sm)}
-.flags li.warn{border-left-color:var(--high);color:var(--warn-ink)}
+.flags li.warn{border-left-color:var(--high-dot);color:var(--warn-ink)}
 .cam-overlay{position:fixed;inset:0;z-index:3000;background:#05080d;display:flex;flex-direction:column}
 .cam-video{flex:1;min-height:0;width:100%;object-fit:contain;background:#05080d}
 .cam-bar{display:flex;gap:8px;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));border-width:1px 0 0}.cam-bar button{flex:1}
