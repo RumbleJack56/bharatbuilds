@@ -133,7 +133,7 @@ Build from what is already found (task B7):
 - [x] Script: pull all PWD roads to a road-level JSON (no contact fields): `scripts/fetch_sources.py`.
 - [x] FCO 2025 pilot-area rows with PDF page numbers and dates: `data/sources/hotspots.csv` (checked against the PDF, 2026-10-10).
 - [x] Join OSM road lines to PWD roads; `owner_source` per drain from the section 3 rule: `scripts/prepare_sources.py`.
-- [ ] Replace placeholder assets in `data/seed.json`. Candidate is `data/seed.candidate.json`; blocked on tests and `web/` fixtures that use the placeholder ids (section 9).
+- [x] Replace placeholder assets in `data/seed.json`: done in PR #6 (9 drains, 6 pockets, citations). The placeholder seed stays in `data/seed.placeholder.json` for tests.
 - [x] Copernicus tile windowed and sampled (section 9). Result: not usable as a risk layer; no raster stored.
 
 Needs a person:
