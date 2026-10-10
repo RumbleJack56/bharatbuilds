@@ -126,6 +126,24 @@ try {
   const r = await u.page.evaluate(async () => (await fetch("/api/plan/generate", { method: "POST", headers: { "X-User-Id": localStorage.getItem("rr_user") } })).status);
   ok("resident is forbidden from an admin API call (expected 403)", r === 403, `status ${r}`);
   await u.ctx.close();
+  // 7. Held queue: the same picture from two people holds the second report; the coordinator releases it. Then the public board.
+  const post = (page) => page.evaluate(async ([lat, lon]) => {
+    const c = document.createElement("canvas"); c.width = 240; c.height = 180; const g = c.getContext("2d");
+    for (let i = 0; i < 12; i++) for (let j = 0; j < 9; j++) { const v = (i * 97 + j * 53 + i * j * 31) % 256; g.fillStyle = `rgb(${v},${v},${v})`; g.fillRect(i * 20, j * 20, 20, 20); }
+    const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.9)), fd = new FormData();
+    fd.append("lat", lat); fd.append("lon", lon); fd.append("kind", "blocked_drain"); fd.append("note", "held walk"); fd.append("photo", blob, "p.jpg");
+    return (await (await fetch("/api/incidents", { method: "POST", body: fd, headers: { "X-User-Id": localStorage.getItem("rr_user") } })).json()).held_for_review;
+  }, DRAIN);
+  u = await persona("admin-1"); await u.go("#/admin"); const first = await post(u.page); await u.ctx.close();
+  u = await persona("res-2"); await u.go("#/mine"); const second = await post(u.page); await u.ctx.close();
+  ok("a picture sent twice by different people is held", first === false && second === true, `first=${first} second=${second}`);
+  u = await persona("admin-1"); await u.go("#/held"); await u.page.waitForSelector("[data-act=release]"); await u.shot("14-held");
+  await u.page.fill("textarea", "checked (walk)"); await u.page.click("[data-act=release]");
+  await u.page.waitForSelector("#view .banner a[href^='#/task/']"); await u.shot("15-held-released");
+  ok("release empties the queue and links the task", /No reports are waiting/.test(await u.page.innerText("#view")));
+  await u.go("#/board"); await u.page.waitForSelector("#log details"); await u.shot("16-board");
+  ok("public board shows the method and the action log", /How the score works/.test(await u.page.innerText("#view")) && (await u.page.locator("#log details").count()) > 0);
+  await u.ctx.close();
 } catch (e) { ok("walk ran to the end", false, e.message); }
 await browser.close();
 
