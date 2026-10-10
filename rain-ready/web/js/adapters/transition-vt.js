@@ -5,11 +5,11 @@ export function createViewTransition(doc = globalThis.document, win = globalThis
     run(fn) {
       const reduced = !!win?.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
       if (reduced || typeof doc.startViewTransition !== "function") return Promise.resolve().then(fn);
-      let out, called = false;
-      let vt;
+      let out, called = false, vt;
       try { vt = doc.startViewTransition(async () => { called = true; out = await fn(); }); }
-      catch { return called ? Promise.resolve(out) : Promise.resolve().then(fn); }
-      return vt.updateCallbackDone.then(() => out);
+      catch { return Promise.resolve().then(fn); }       // threw before scheduling: the callback never ran
+      // a skipped/failed transition must not lose the render: if the callback never ran, run it now
+      return vt.updateCallbackDone.then(() => out, () => called ? out : fn());
     },
   };
 }
