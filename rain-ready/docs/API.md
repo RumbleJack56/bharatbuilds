@@ -6,19 +6,19 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 
 | Endpoint | Who | What |
 |---|---|---|
-| `GET /api/health` | public | version, loaded routers, storage and triage mode |
+| `GET /api/health` | public | `ok` (false when a router failed to load), version, loaded routers and `router_errors`, storage and triage mode, `config_warnings`. `?deep=1` also probes S3 and Bedrock: admin persona only (403 otherwise), cached for 30 s |
 | `GET /api/users` | public | personas for the login picker |
 | `GET /api/me` | any persona | the current persona |
 | `GET /api/agencies` | public | agency list (for reassign selects) |
-| `GET /api/map` | public | pockets (level at 35 mm/h), drains with owner and last cleaned, open tasks, capture sites, banner |
+| `GET /api/map` | public | pockets (level at 35 mm/h), drains with owner and last cleaned, open tasks (each with `asset_name` and `last_confirmed_clean`), capture sites, banner |
 | `POST /api/simulate` | public | `{rain_mm_h, drain_state: clean\|silted\|current, at_h}` -> pockets in fill order. Each pocket also has `time_to_fill_h_low` and `time_to_fill_h_high` (null: does not fill in that case); show "about X to Y h" with the banner and `range_note` |
 | `POST /api/incidents` | resident, admin | multipart: `lat, lon, kind, note, photo`, optional `accuracy_m` (phone GPS accuracy). Links to the nearest drain within 150 m; creates or bumps a task. Photo checks add `flags` (`code`, `level` warn or info, `detail`). A warn flag (photo geotag far from the spot, photo older than 2 days, picture already submitted) sets `held_for_review: true` (a repeat report of the same spot by the same person within 50 m and 24 h gets the warn flag `duplicate_nearby`; more than `REPORTS_PER_DAY` reports in 24 h returns 429): the report is saved and linked to the drain but does not create or bump a task. A photo that cannot be read as an image returns 422 and nothing is stored; nothing is stored for any refused report |
-| `GET /api/capture-token` | resident, admin | `{token, ref, issued_at, valid_for_s, server_time}`. Call just before opening the camera; send `token` as `capture_token` with the report |
+| `GET /api/capture-token` | resident, admin | `{token, ref, issued_at, valid_for_s, server_time}`. Call just before opening the camera; send `token` as `capture_token` with the report. A token covers one saved report: fetch a new one for each photo. A report refused with 422 does not use it up |
 | `GET /api/incidents?mine=true` | any persona | reports. Each has `flags` and the review fields `reviewed_by`, `reviewed_at`, `review_decision`, `review_note` |
 | `GET /api/incidents?held=true` | official, admin | reports held for review and not yet decided. An official sees only reports linked to a drain of their agency |
 | `POST /api/incidents/{id}/review` | admin | JSON `{decision: "release"\|"reject", note}`. Release creates or bumps the task for the linked drain. Reject keeps the report visible and uncounted. 404 unknown id; 409 not held, already reviewed, or no linked drain on release |
 | `GET /api/tasks?agency_id=&status=` | public | ranked tasks. `agency_id=none` lists tasks with no owner |
-| `GET /api/tasks/{id}` | public | task with `events` (timeline) and `incidents` |
+| `GET /api/tasks/{id}` | public | task with `events` (timeline), `incidents` and `banner` |
 | `POST /api/tasks/{id}/accept` | official of the agency, admin | open -> accepted |
 | `POST /api/tasks/{id}/reject` | official of the agency, admin | `{reason, reassign_to?}`; with a target it bounces to that agency and stays open |
 | `POST /api/tasks/{id}/assign` | admin | `{agency_id}` for tasks with no owner |

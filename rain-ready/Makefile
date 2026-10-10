@@ -1,11 +1,13 @@
 PY := .venv/bin/python
-.PHONY: setup run test seedcheck reset deploy apk
+.PHONY: setup run test test-web seedcheck reset deploy apk
 setup:            ## one-time: venv + deps
 	uv venv --python 3.12 .venv && uv pip install --python $(PY) -r requirements.txt
 run:              ## local server on :8010 with reload (UI + API)
 	$(PY) -m uvicorn app.main:app --reload --port 8010
 test:
 	$(PY) -m pytest -q tests
+test-web:         ## web unit tests (node 20+, no install); the glob avoids node treating the folder as a module
+	node --test 'web/tests/*.test.js'
 seedcheck:        ## validate data/seed.json (sources, citations, ids, coordinates)
 	$(PY) -m core.seedcheck data/seed.json
 reset:            ## wipe local DB + photos; RESTART the server afterwards (seed.json only applies to a fresh DB)

@@ -51,7 +51,7 @@ def _deep_probe() -> dict:
 
 @app.get("/api/health")
 def health(deep: bool = False, x_user_id: str | None = Header(default=None)):
-    out = {"ok": True, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED,
+    out = {"ok": not FAILED, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED,
            "storage": config.STORAGE, "triage": config.TRIAGE_MODE, "config_warnings": checks.config_warnings()}
     if deep:       # real AWS calls and error text that can name the account: admin persona only
         who = get_db().execute("SELECT role FROM users WHERE id=?", (x_user_id or "",)).fetchone()

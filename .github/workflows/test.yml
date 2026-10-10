@@ -15,6 +15,10 @@ jobs:
           cache-dependency-path: rain-ready/requirements.txt
       - run: pip install -r requirements.txt
       - run: python -m pytest -q tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test 'web/tests/*.test.js'
 
   # Deploys main to the live host after tests pass. Off until the repo variables exist
   # (rain-ready/docs/AWS_TODO.md section 3). Manual run: Actions tab, "Run workflow".

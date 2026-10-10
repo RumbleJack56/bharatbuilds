@@ -9,7 +9,7 @@ from starlette.concurrency import run_in_threadpool
 from ai import triage
 from core import copy, geo, photocheck
 
-from .. import config, service, storage
+from .. import capture, config, service, storage
 from ..auth import need
 from ..db import get_db, now_iso
 
@@ -67,6 +67,8 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
         pocket_id = db.execute("SELECT pocket_id FROM tasks WHERE id=?", (task_id,)).fetchone()["pocket_id"]
         db.execute("UPDATE incidents SET task_id=?, pocket_id=? WHERE id=?", (task_id, pocket_id, iid))
     db.commit()
+    if data is not None and capture.verify(capture_token, user["id"]):
+        capture.mark_used(capture_token)
     return {"incident": _incident(db.execute("SELECT * FROM incidents WHERE id=?", (iid,)).fetchone()),
             "linked_asset": asset["id"] if asset else None, "distance_m": round(dist, 1) if dist is not None else None,
             "task_id": task_id, "task_created": created,

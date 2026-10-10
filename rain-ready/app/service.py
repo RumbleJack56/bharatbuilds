@@ -26,6 +26,10 @@ def asset_silt(db) -> dict[str, float]:
             for r in db.execute("SELECT id, last_confirmed_clean FROM assets")}
 
 
+def new_due_at() -> str:
+    return (datetime.now(timezone.utc) + timedelta(days=config.TASK_DUE_DAYS)).isoformat(timespec="seconds")
+
+
 def nearest_asset(db, lat: float, lon: float):
     pts = [dict(r) for r in db.execute("SELECT * FROM assets")]
     best, dist = geo.nearest(lat, lon, pts, config.LINK_RADIUS_M)
@@ -83,6 +87,8 @@ def ensure_task(db, asset_id: str, actor: str | None, *, from_report: bool) -> t
 def check_stamp(data: bytes, content_type: str, lat: float, lon: float, user_id: str, token: str | None) -> list[dict]:
     """Flags for the on-photo stamp and the capture token (see app/capture.py)."""
     ref = capture.verify(token, user_id)
+    if ref is not None and capture.is_used(token):      # a token already spent on an earlier report
+        ref = None
     strict = config.REQUIRE_LIVE_CAPTURE
     flags = []
     if ref is None:

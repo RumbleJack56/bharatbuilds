@@ -71,7 +71,7 @@ def list_tasks(agency_id: str | None = None, status: str | None = None, db=Depen
 
 @router.get("/tasks/{tid}")
 def get_task(tid: int, db=Depends(get_db)):
-    return _out(db, _task(db, tid), detail=True)
+    return {**_out(db, _task(db, tid), detail=True), "banner": copy.SCENARIO_BANNER}
 
 
 def _set(db, tid: int, **cols) -> None:
@@ -100,7 +100,7 @@ def reject(tid: int, body: RejectIn, user=Depends(need("official", "admin")), db
         if not db.execute("SELECT 1 FROM agencies WHERE id=?", (body.reassign_to,)).fetchone():
             raise HTTPException(422, "unknown agency")
         service.log_event(db, tid, user["id"], "bounced", f"wrong owner: {body.reason}"[:300], agency_id=t["agency_id"])
-        _set(db, tid, status="open", agency_id=body.reassign_to)
+        _set(db, tid, status="open", agency_id=body.reassign_to, due_at=service.new_due_at())   # new owner, new clock
         service.log_event(db, tid, user["id"], "reassigned", agency_id=body.reassign_to)
     else:
         service.log_event(db, tid, user["id"], "rejected", body.reason[:300], agency_id=t["agency_id"])
@@ -118,7 +118,7 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
     t = _task(db, tid); _need_status(t, "open", "rejected")
     if not db.execute("SELECT 1 FROM agencies WHERE id=?", (body.agency_id,)).fetchone():
         raise HTTPException(422, "unknown agency")
-    _set(db, tid, status="open", agency_id=body.agency_id)
+    _set(db, tid, status="open", agency_id=body.agency_id, due_at=service.new_due_at())
     service.log_event(db, tid, user["id"], "assigned", "by ward coordinator", agency_id=body.agency_id); db.commit()
     return _out(db, _task(db, tid), True)
 

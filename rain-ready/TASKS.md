@@ -90,7 +90,7 @@ Everything below is the full backlog after these.
 - [x] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**. Live: https://15-207-177-122.sslip.io (details in `PLAN.md` section 7)
 - [ ] B3 Server is on `STORAGE=s3` (done by Aarush); photos do not open yet. Fix is B13, phone check is A4
 - [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`. Aarush runs it (A3); B18 and B19 are done, so it can go ahead
-- [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green. The list is `PLAN.md` section 7; item 8 (S3 photo URLs) blocks the video
+- [ ] B5 Backend gaps found by Aarush (`PLAN.md` section 7). Done in branch `ujjwal/backend-fixes`: items 1 (task banner), 2 (map task fields), 3 (reporter confirm, B15), 5 (`make test-web`, web tests in CI), 6 (JDK 17 and Android SDK in `DEPLOY.md`), 8 (S3 URLs, B13), 9 (buildx pinned in the bootstrap script), 10 (`deploy-ssm.sh` archives from the repo root). Left: 4 (seed tuning, with B7 data), 7 (Protocol refactor, not before the freeze)
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
 - [ ] B7 (tooling done: `make seedcheck`, `scripts/build_seed.py`, see `docs/DATA.md`) Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
 - [x] B8 Rate limit (`REPORTS_PER_DAY`, 429), repeat-report hold (`duplicate_nearby`), fill-time low and high range (branch `ujjwal/backend-hardening`)
@@ -119,10 +119,10 @@ Do next:
 
 If time allows:
 
-- [ ] B23 Capture tokens can be replayed for 15 minutes. Store used nonces and refuse a second use
-- [ ] B24 Flat or dark photos share one hash (`0000000000000000`) and get held as reused. Skip the reuse check when the image has almost no contrast
-- [ ] B25 A bounced task carries the first agency's delay. Reset `due_at` on reassign and measure hours from the `reassigned` or `assigned` event
-- [ ] B26 `/api/health` says `ok: true` when a router failed to load. Set `ok` false when `router_errors` is not empty. Pin versions in `requirements.txt`
+- [x] B23 Capture tokens can be replayed for 15 minutes. Done: a saved report uses up its token (in memory, one process); a refused report does not
+- [x] B24 Flat or dark photos share one hash (`0000000000000000`) and get held as reused. Done: `photocheck.informative()` skips the reuse check for hashes with fewer than 8 or more than 56 set bits
+- [x] B25 A bounced task carries the first agency's delay. Done: `due_at` resets on reassign and assign; accountability hours count from that agency's latest created, reassigned or assigned event
+- [x] B26 `/api/health` says `ok: true` when a router failed to load. Done: `ok` is false when a router failed; `requirements.txt` is pinned to the tested versions
 - [ ] B27 Reads are wide: task detail needs no login, and any resident can list every resident's reports. Decide what the public dashboard may show; hide `user_id` and notes from other residents
 
 Known and accepted for the demo: persona header auth (anyone with the URL can act as admin; cover is the hourly backup and a fresh AMI), one shared SQLite connection with no rollback.
