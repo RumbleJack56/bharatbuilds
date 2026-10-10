@@ -46,7 +46,7 @@ def action_plan(top: int = Query(10, ge=1, le=50), db=Depends(get_db)):
 
 
 @router.get("/projection")
-def scenario_projection(rain: str = "20,35,50", horizon: str = "0,30,60,90", db=Depends(get_db)):
+def scenario_projection(rain: str = ",".join(f"{r:g}" for r in projection.RAINS), horizon: str = "0,30,60,90", db=Depends(get_db)):
     """Per pocket and rain: runoff, how much of the drain is used, fill time as a range. Per horizon: silt if no cleaning happens."""
     rains = _floats(rain, projection.RAINS)
     horizons = tuple(int(h) for h in _floats(horizon, projection.HORIZONS))

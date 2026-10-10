@@ -61,3 +61,36 @@ def test_generated_text_has_no_banned_words():
     seed = json.loads((ROOT / "data" / "seed.json").read_text())
     texts += [p["note"] for p in seed["pockets"]] + [a.get("note") or "" for a in seed["assets"]]
     assert [h for t in texts for h in copy.banned_hits(t)] == []
+
+
+def test_reference_rain_story_on_the_real_seed(real):
+    """The demo headline at the reference rain: the pilot ward's drain leads, and cleaning gives a clear gain."""
+    from core import planning
+    assert real.get("/api/map").json()["reference_rain_mm_h"] == planning.REF_RAIN_MM_H == 25.0
+    top = real.get("/api/actions", params={"top": 1}).json()["actions"][0]
+    assert top["asset_id"] == "DR-DN-BAZ" and top["pocket_id"] == "LP-ORN"
+    lo, hi = top["gain_h_low"], top["gain_h_high"]
+    assert 0 <= lo <= top["gain_h"] <= hi
+    assert top["gain_h"] >= 3
+    rains = [s["rain_mm_h"] for s in real.get("/api/projection").json()["scenarios"]]
+    assert 25.0 in rains and 35.0 in rains
+
+
+def test_scenario_notes_follow_the_reference_rain(real):
+    from core import planning
+    stamp = f"{planning.REF_RAIN_MM_H:g} mm/h"
+    assert stamp in real.get("/api/impact").json()["fill_time_gained_note"]
+    assert stamp in real.get("/api/transparency").json()["gain_note"]
+
+
+def test_gain_range_contains_the_point_estimate_at_every_rain(real):
+    """A point value outside its own range would put a contradiction on screen."""
+    from app import service
+    from core import planning
+    con = db.get_db()
+    pockets, silt = service.pocket_rows(con), service.asset_silt(con)
+    for rain in (15, 20, 22.5, 25, 30, 35, 50):
+        for a in (r["id"] for r in con.execute("SELECT id FROM assets")):
+            g = planning.gain_if_cleaned(pockets, silt, a, rain=rain)["gain_h"]
+            lo, hi = planning.gain_range(pockets, silt, a, rain=rain)
+            assert lo <= g <= hi, (rain, a, lo, g, hi)

@@ -10,7 +10,7 @@ from . import lowpoints as lp
 D_EQ = 0.50              # silt fill fraction approaches this
 TAU_DAYS = 75
 NEVER_DAYS = 365
-REF_RAIN_MM_H = 35.0
+REF_RAIN_MM_H = 25.0     # about what Delhi's drains are said to be designed for (CAG audit, PWD statements; docs/research/research_rain_apis.md 3b). A scenario, not a forecast and not a return period
 GAIN_CAP_H = 6.0
 RANGE_FRAC = 0.25        # pocket size, catchment and drain capacity are each uncertain by this much
 
@@ -70,9 +70,13 @@ def fill_time_range(pockets: list[lp.Pocket], rain: float, frac: float = RANGE_F
 
 def gain_range(pockets: list[dict], asset_silt: dict[str, float], asset_id: str, rain: float = REF_RAIN_MM_H,
                frac: float = RANGE_FRAC) -> tuple[float, float]:
-    """(low_h, high_h) of fill time gained by cleaning `asset_id`, with pocket parameters 25% worse and 25% better."""
-    def shifted(sign: int) -> list[dict]:
-        return [{**p, "catchment_ha": p["catchment_ha"] * (1 + sign * frac), "storage_m3": p["storage_m3"] * (1 - sign * frac),
-                 "drain_mm_h": p["drain_mm_h"] * (1 - sign * frac)} for p in pockets]
-    a, b = (gain_if_cleaned(shifted(s), asset_silt, asset_id, rain)["gain_h"] for s in (1, -1))
-    return min(a, b), max(a, b)
+    """(low_h, high_h) of fill time gained by cleaning `asset_id` when catchment, storage and drain capacity are each
+    off by `frac`. Gain is a difference of two fill times and is not monotone in the parameters, so the two 'all worse' and
+    'all better' cases are not enough: take the nominal and all eight corners. The point estimate lies inside by construction."""
+    def with_(a: int, b: int, c: int) -> list[dict]:
+        return [{**p, "catchment_ha": p["catchment_ha"] * (1 + a * frac), "storage_m3": p["storage_m3"] * (1 - b * frac),
+                 "drain_mm_h": p["drain_mm_h"] * (1 - c * frac)} for p in pockets]
+    vals = [gain_if_cleaned(pockets, asset_silt, asset_id, rain)["gain_h"]]
+    vals += [gain_if_cleaned(with_(a, b, c), asset_silt, asset_id, rain)["gain_h"]
+             for a in (1, -1) for b in (1, -1) for c in (1, -1)]
+    return min(vals), max(vals)

@@ -64,9 +64,9 @@ This is the core: low-point analysis decides the order of work.
 - a full pocket spills its inflow to the next pocket downstream
 - levels by time to fill: high (1 h or less), elevated (up to 3 h), watch (more)
 
-**Rank:** `gain_h` = fill time after cleaning minus fill time now, at 35 mm/h, capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`.
+**Rank:** `gain_h` = fill time after cleaning minus fill time now, at the reference rain (25 mm/h), capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`.
 
-### Scenario numbers from the seed (35 mm/h, computed 10 Oct 2026)
+### Scenario numbers from the seed (35 mm/h stress scenario, computed 10 Oct 2026; the reference rain is now 25 mm/h, recompute before quoting)
 
 Time for each pocket to fill, about:
 

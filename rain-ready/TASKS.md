@@ -129,7 +129,7 @@ If time allows:
 - [x] B25 A bounced task carries the first agency's delay. Done: `due_at` resets on reassign and assign; accountability hours count from that agency's latest created, reassigned or assigned event
 - [x] B26 `/api/health` says `ok: true` when a router failed to load. Done: `ok` is false when a router failed; `requirements.txt` is pinned to the tested versions
 - [ ] B7b Needs a person (`docs/DATA_SOURCES.md` section 8): field capture of pocket and drain coordinates in Old Rajinder Nagar; Flood Control Order 2026 PDF from a browser; ward number 141 or 149; Copernicus attribution wording
-- [ ] D1 Decide the reference rain for the demo. On the real seed at 35 mm/h every pocket is High, even clean; at 20 mm/h the difference between current and clean shows (High to Watch or None). Choose the rain for the video; do not tune parameters to look better (honesty rules)
+- [x] D1 Reference rain is **25 mm/h** (was 35). Swept 15 to 35: at 35 every pocket is High even clean and cleaning gains under 1 h; at 22.5 the pilot pocket shows a knife-edge 37 h; 25 mm/h is about the design capacity cited for Delhi drains (research doc 3b, search-summary source: re-check before saying it in the video, S3), puts the pilot-ward drain `DR-DN-BAZ` first (4.8 h gained, range 0.7 to 5.2) and keeps 20, 35 and 50 as scenarios. Also fixed: the gain range now contains the point estimate at every rain
 - [ ] B27 Reads are wide: task detail needs no login, and any resident can list every resident's reports. Decide what the public dashboard may show; hide `user_id` and notes from other residents
 
 Known and accepted for the demo: persona header auth (anyone with the URL can act as admin; cover is the hourly backup and a fresh AMI), one shared SQLite connection with no rollback.
@@ -156,6 +156,7 @@ Order: AWS A1 to A8 and the live seed, then V13, V9, V10 to V12 (demo critical),
 - [ ] V15 Held queue and review buttons for admin: `GET /api/incidents?held=true`, `POST /api/incidents/{id}/review` (`release` or `reject`, note). Show the warn flags in plain words
 - [ ] V16 Actions list: `GET /api/actions?top=` one action per drain (clean, inspect, clarify owner, monitor) with route, reason, evidence and the fill-time range; link to the task when one exists
 - [ ] V17 Insights and ward report: `GET /api/insights`, `GET /api/reports/ward` (`format=md` for a download); city evidence views `GET /api/city/*` and `GET /api/projection` if time allows. Cut first if late
+- [ ] V18 Simulator default rain and any caption read `reference_rain_mm_h` from `GET /api/map` (now 25) instead of a fixed 35 (`web/js/views/sim.view.js` default). The slider stays free so a viewer can drag to 20 or 35
 
 AWS work (Aarush owns the account). The full AWS CLI playbook, written so an agent can run it, is `docs/AWS_TODO.md`. Fill in its section 10 and send it to Ujjwal.
 

@@ -5,7 +5,7 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import FileResponse
 
-from core import copy, leaderboard
+from core import copy, leaderboard, planning
 
 from .. import clock, config, storage
 from ..db import get_db
@@ -71,7 +71,7 @@ def transparency(agency_id: str | None = None, status: str | None = None, limit:
                     "fill_time_gain_h": t["gain_h"], "why_routed": (t["owner_source"] or "none").split(". ")[0],
                     "asset_data_source": t["data_source"], "timeline": ev})
     return {"actions": out, "count": len(out), **_demo(db), "banner": copy.SCENARIO_BANNER,
-            "gain_note": "Fill time gain is a scenario at 35 mm/h with illustrative parameters. It is not a measured result."}
+            "gain_note": f"Fill time gain is a scenario at {planning.REF_RAIN_MM_H:g} mm/h with illustrative parameters. It is not a measured result."}
 
 
 @router.get("/board", include_in_schema=False)
