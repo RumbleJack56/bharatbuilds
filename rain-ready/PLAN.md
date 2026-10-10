@@ -1695,6 +1695,8 @@ Each is one new adapter or service function plus a view, so none touches existin
 
 ## 7. Backend items for Ujjwal (his files; send as the B5 list)
 
+**Status 10 Oct:** items 1, 2, 3, 5, 6, 8, 9 and 10 are done on `main` (PRs #4 to #6). Item 4 became decision D1 in `TASKS.md`. Item 7 is not planned before the freeze.
+
 1. Add `banner` to `GET /api/tasks/{id}` (Task 9 uses a workaround until then).
 2. Add `asset_name` and `last_confirmed_clean` to `/api/map` tasks.
 3. Enforce "a **different** resident confirms" (block the reporter of the task, not only `done_by`); today the `done_by` check can never trigger.
