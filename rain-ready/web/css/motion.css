@@ -1,0 +1,21 @@
+/* web/css/motion.css — all movement lives here so one reduced-motion block can switch it off. */
+@keyframes drift1{to{transform:translate3d(18vw,12vh,0) scale(1.15)}}
+@keyframes drift2{to{transform:translate3d(-22vw,-10vh,0) scale(1.1)}}
+@keyframes drift3{to{transform:translate3d(14vw,-16vh,0) scale(1.2)}}
+.blob.b1{animation:drift1 75s ease-in-out infinite alternate}
+.blob.b2{animation:drift2 90s ease-in-out infinite alternate}
+.blob.b3{animation:drift3 60s ease-in-out infinite alternate}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.rise{animation:rise var(--dur) var(--ease) both;animation-delay:calc(var(--i,0)*30ms)}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0;transform:translateY(8px)}}
+::view-transition-old(root){animation:vt-out 180ms var(--ease) both}
+::view-transition-new(root){animation:vt-in 180ms var(--ease) both}
+.top{view-transition-name:top}.tabs{view-transition-name:tabs}       /* chrome stays put while the view changes */
+.chip,.tabs a,.sub a{transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none}
+  button:active,.btn:active{transform:none}
+  .rise{opacity:1}
+}

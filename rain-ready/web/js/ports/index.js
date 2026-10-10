@@ -11,3 +11,4 @@ export const CameraPort = definePort("CameraPort", ["available", "capture"]);
 export const ImagePort = definePort("ImagePort", ["shrink"]);
 export const DownloadPort = definePort("DownloadPort", ["save"]);
 export const GlassPort = definePort("GlassPort", ["mount", "refresh", "destroy", "mode"]);
+export const TransitionPort = definePort("TransitionPort", ["run"]);

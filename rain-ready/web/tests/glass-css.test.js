@@ -28,3 +28,19 @@ test("focus ring and 44 px controls exist", () => {
   assert.match(g, /min-height:44px/);
 });
 test("the legacy light/dark media query is gone", () => assert.doesNotMatch(css("app.css") + css("tokens.css"), /prefers-color-scheme/));
+test("motion.css: route fade 180 ms + 8 px rise, 30 ms stagger, drift uses transform only", () => {
+  const m = css("motion.css");
+  assert.match(m, /::view-transition-old\(root\)\{[^}]*animation:vt-out 180ms/);
+  assert.match(m, /::view-transition-new\(root\)\{[^}]*animation:vt-in 180ms/);
+  assert.match(m, /translateY\(8px\)/);
+  assert.match(m, /animation-delay:calc\(var\(--i,0\)\*30ms\)/);
+  for (const [, body] of m.matchAll(/@keyframes drift\d\{([\s\S]*?)\}\s*\}/g)) assert.doesNotMatch(body, /left|top|width|height|opacity/);
+  for (const d of ["60s", "75s", "90s"]) assert.ok(m.includes(d), d);
+});
+test("motion.css: reduced motion switches off drift, stagger, view transitions, press scale and transitions", () => {
+  const m = css("motion.css"), r = m.slice(m.indexOf("@media (prefers-reduced-motion: reduce)"));
+  assert.ok(m.includes("@media (prefers-reduced-motion: reduce)"));
+  assert.match(r, /\*,\*::before,\*::after\{[^}]*animation:none!important[^}]*transition:none!important/);
+  assert.match(r, /::view-transition-group\(\*\),::view-transition-old\(\*\),::view-transition-new\(\*\)\{[^}]*animation:none/);
+  assert.match(r, /button:active,\.btn:active\{transform:none/);
+});

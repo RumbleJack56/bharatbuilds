@@ -1,7 +1,7 @@
 // web/js/main.js — composition root: the only file that picks implementations. Swap an adapter here.
 import { implement } from "./core/port.js";
 import { createRouter } from "./core/router.js";
-import { HttpPort, StoragePort, GeoPort, MapPort, ToastPort, CameraPort, ImagePort, DownloadPort, GlassPort } from "./ports/index.js";
+import { HttpPort, StoragePort, GeoPort, MapPort, ToastPort, CameraPort, ImagePort, DownloadPort, GlassPort, TransitionPort } from "./ports/index.js";
 import { createFetchHttp } from "./adapters/http-fetch.js";
 import { createLocalStorage } from "./adapters/storage-local.js";
 import { createBrowserGeo } from "./adapters/geo-browser.js";
@@ -13,6 +13,7 @@ import { createDomToast } from "./adapters/toast-dom.js";
 import { createLiquidGlass, hasLiquidGL } from "./adapters/glass-liquidgl.js";
 import { createCssGlass } from "./adapters/glass-css.js";
 import { chooseGlass, waitFor } from "./core/glass.js";
+import { createViewTransition } from "./adapters/transition-vt.js";
 import { createSessionService } from "./services/session.service.js";
 import { createIncidentsService } from "./services/incidents.service.js";
 import { createTasksService } from "./services/tasks.service.js";
@@ -61,7 +62,8 @@ function drawChrome(me, hash) {
     `<a href="${h}" class="${hash.startsWith(h) ? "on" : ""}">${esc(t)}</a>`).join("") : "";
 }
 
-const router = createRouter({ controllers: CONTROLLERS, root: $("#view"), ctx, home: HOME, onChrome: drawChrome, errorHtml: errBox });
+const transition = implement(TransitionPort, createViewTransition(document, window));
+const router = createRouter({ controllers: CONTROLLERS, root: $("#view"), ctx, home: HOME, onChrome: drawChrome, errorHtml: errBox, transition });
 $("#logout").addEventListener("click", () => { session.logout(); nav.go("#/login"); });
 glass.mount(".lg:not([data-lg-css])");
 router.start();
