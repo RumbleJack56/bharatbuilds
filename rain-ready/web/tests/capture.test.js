@@ -47,7 +47,7 @@ const canvas = () => ({ width: 640, height: 480, drawn: [],
   getContext() { return { measureText: () => ({ width: 50 }), fillRect() {}, fillText: (t) => this.drawn.push(t) }; },
   toBlob(cb, type, q) { this.args = [type, q]; cb(new Blob(["jpeg"], { type })); } });
 const svc = ({ geo, cv = canvas(), http = createFakeHttp({ "GET /api/capture-token": { token: "tok1", ref: "7QK2" } }) } = {}) =>
-  ({ http, cv, s: createCaptureService({ http, camera: { capture: async () => cv }, stamp: { lines: stampLines, draw: drawStamp }, clock: () => at(-330),
+  ({ http, cv, s: createCaptureService({ http, camera: { capture: async () => cv }, stamp: { lines: stampLines, draw: drawStamp }, image: { shrink: async (c) => new Promise(r => c.toBlob(r, "image/jpeg", 0.85)) }, clock: () => at(-330),
     geo: { current: geo || (async () => ({ lat: 28.6, lon: 77.1, accuracy_m: 12 })) } }) });
 
 test("takePhoto: token first, JPEG blob 0.85, result carries lat/lon/accuracy/token", async () => {
