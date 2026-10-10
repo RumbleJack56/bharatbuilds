@@ -71,7 +71,7 @@ def list_tasks(agency_id: str | None = None, status: str | None = None, db=Depen
 
 @router.get("/tasks/{tid}")
 def get_task(tid: int, db=Depends(get_db)):
-    return _out(db, _task(db, tid), detail=True)
+    return {**_out(db, _task(db, tid), detail=True), "banner": copy.SCENARIO_BANNER}
 
 
 def _set(db, tid: int, **cols) -> None:
@@ -81,10 +81,13 @@ def _set(db, tid: int, **cols) -> None:
 
 @router.post("/tasks/{tid}/accept")
 def accept(tid: int, user=Depends(need("official", "admin")), db=Depends(get_db)):
-    t = _task(db, tid); _own(user, t); _need_status(t, "open")
+    t = _task(db, tid); _own(user, t); _need_status(t, "open", "disputed")      # a disputed job is redone: accept it again
     if not t["agency_id"]:
         raise HTTPException(409, "no owner found: an admin must assign an agency first")
-    _set(db, tid, status="accepted"); service.log_event(db, tid, user["id"], "accepted", agency_id=t["agency_id"]); db.commit()
+    rework = t["status"] == "disputed"
+    _set(db, tid, status="accepted", done_by=None if rework else t["done_by"])
+    service.log_event(db, tid, user["id"], "accepted", "to be redone after a resident disputed the job" if rework else None,
+                      agency_id=t["agency_id"]); db.commit()
     return _out(db, _task(db, tid), True)
 
 
@@ -100,7 +103,7 @@ def reject(tid: int, body: RejectIn, user=Depends(need("official", "admin")), db
         if not db.execute("SELECT 1 FROM agencies WHERE id=?", (body.reassign_to,)).fetchone():
             raise HTTPException(422, "unknown agency")
         service.log_event(db, tid, user["id"], "bounced", f"wrong owner: {body.reason}"[:300], agency_id=t["agency_id"])
-        _set(db, tid, status="open", agency_id=body.reassign_to)
+        _set(db, tid, status="open", agency_id=body.reassign_to, due_at=service.new_due_at())   # new owner, new clock
         service.log_event(db, tid, user["id"], "reassigned", agency_id=body.reassign_to)
     else:
         service.log_event(db, tid, user["id"], "rejected", body.reason[:300], agency_id=t["agency_id"])
@@ -118,7 +121,7 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
     t = _task(db, tid); _need_status(t, "open", "rejected")
     if not db.execute("SELECT 1 FROM agencies WHERE id=?", (body.agency_id,)).fetchone():
         raise HTTPException(422, "unknown agency")
-    _set(db, tid, status="open", agency_id=body.agency_id)
+    _set(db, tid, status="open", agency_id=body.agency_id, due_at=service.new_due_at())
     service.log_event(db, tid, user["id"], "assigned", "by ward coordinator", agency_id=body.agency_id); db.commit()
     return _out(db, _task(db, tid), True)
 
@@ -127,12 +130,15 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
 async def complete(tid: int, note: str = Form(""), photo: UploadFile = File(...),
                    user=Depends(need("official", "admin")), db=Depends(get_db)):
     t = _task(db, tid); _own(user, t); _need_status(t, "accepted")
-    data = await photo.read()
+    data, ctype = await photo.read(storage.MAX_BYTES + 1), photo.content_type or ""
     try:
-        key = storage.save_photo(data, photo.content_type or "")
+        storage.validate_photo(data, ctype)
     except ValueError as e:
         raise HTTPException(422, str(e))
     phash, flags = service.check_photo(db, data, t["lat"], t["lon"], user["id"])   # flags are shown to the confirming resident
+    if phash is None:
+        raise HTTPException(422, "the photo could not be read as an image; please take it again")
+    key = storage.save_photo(data, ctype)
     _set(db, tid, status="done", done_by=user["id"])
     service.log_event(db, tid, user["id"], "completed", note[:300], key, t["agency_id"], phash, flags); db.commit()
     return _out(db, _task(db, tid), True)
@@ -148,6 +154,9 @@ def confirm(tid: int, body: ConfirmIn, user=Depends(need("resident")), db=Depend
     t = _task(db, tid); _need_status(t, "done")
     if user["id"] == t["done_by"]:
         raise HTTPException(403, "the person who did the work cannot confirm it")
+    first = db.execute("SELECT user_id FROM incidents WHERE task_id=? ORDER BY id LIMIT 1", (tid,)).fetchone()
+    if first and first["user_id"] == user["id"]:     # the person who raised it; later reporters are independent
+        raise HTTPException(403, "you reported this problem, so someone else has to check the fix")
     if body.ok:
         service.refresh_rank(db, tid)                       # gain is recorded as it stands before the reset
         db.execute("UPDATE assets SET last_confirmed_clean=? WHERE id=?", (date.today().isoformat(), t["asset_id"]))

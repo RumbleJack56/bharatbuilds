@@ -2,7 +2,11 @@
 import pytest
 
 from ai import triage
-from app import config, storage
+from app import config, main, storage
+
+from .conftest import as_, fresh_png
+
+IMG = fresh_png()      # a readable image: the model copy is prepared before the call
 
 
 class FakeS3:
@@ -20,8 +24,13 @@ class FakeS3:
 @pytest.fixture()
 def s3(monkeypatch):
     fake = FakeS3()
+    fake.client_kwargs = []
     import boto3
-    monkeypatch.setattr(boto3, "client", lambda name, **kw: fake)
+
+    def make(name, **kw):
+        fake.client_kwargs.append((name, kw))
+        return fake
+    monkeypatch.setattr(boto3, "client", make)
     monkeypatch.setattr(config, "STORAGE", "s3")
     monkeypatch.setattr(config, "S3_BUCKET", "bkt")
     return fake
@@ -31,6 +40,18 @@ def test_save_photo_puts_to_bucket(s3):
     key = storage.save_photo(b"img", "image/png")
     assert key.endswith(".png")
     assert s3.puts == [{"Bucket": "bkt", "Key": key, "Body": b"img", "ContentType": "image/png"}]
+
+
+def test_s3_client_is_regional_and_signs_v4(s3, client):
+    """A new bucket answers the global host with a redirect that breaks the signature (403 on photos)."""
+    storage.save_photo(b"img", "image/png")
+    client.get("/media/abc.jpg", follow_redirects=False)
+    assert len(s3.client_kwargs) == 2
+    for name, kw in s3.client_kwargs:
+        assert name == "s3" and kw["region_name"] == config.AWS_REGION
+        assert kw["endpoint_url"] == f"https://s3.{config.AWS_REGION}.amazonaws.com"
+        assert kw["config"].signature_version == "s3v4"
+        assert kw["config"].s3["addressing_style"] == "virtual"
 
 
 def test_media_redirects_to_presigned_url(s3, client):
@@ -69,7 +90,7 @@ def test_summary_is_trimmed():
 
 def test_triage_off_by_default(monkeypatch):
     monkeypatch.setattr(config, "TRIAGE_MODE", "manual")
-    assert triage.triage_photo(b"x", "image/jpeg") is None
+    assert triage.triage_photo(IMG, "image/png") is None
 
 
 def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
@@ -84,7 +105,7 @@ def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
 
     import boto3
     monkeypatch.setattr(boto3, "client", lambda name, **kw: Br())
-    out = triage.triage_photo(b"x", "image/jpeg", "note")
+    out = triage.triage_photo(IMG, "image/png", "note")
     assert out == {"kind": "standing_water", "summary": "Puddle.", "model": "m-1"}
     assert calls[0]["modelId"] == "m-1"
 
@@ -93,7 +114,7 @@ def test_triage_calls_bedrock_and_fails_soft(monkeypatch):
             raise RuntimeError("AccessDenied")
 
     monkeypatch.setattr(boto3, "client", lambda name, **kw: Boom())
-    assert triage.triage_photo(b"x", "image/jpeg") is None
+    assert triage.triage_photo(IMG, "image/png") is None
 
 
 def test_health_flags_bad_config(client, monkeypatch):
@@ -102,8 +123,14 @@ def test_health_flags_bad_config(client, monkeypatch):
     assert any("S3_BUCKET" in w for w in client.get("/api/health").json()["config_warnings"])
 
 
+@pytest.fixture(autouse=True)
+def fresh_deep_cache():
+    main._deep.update(at=0.0, value=None)      # the deep result is cached for a few seconds
+    yield
+
+
 def test_health_deep_probes_aws(s3, client):
-    r = client.get("/api/health?deep=1").json()
+    r = client.get("/api/health?deep=1", headers=as_("admin-1")).json()
     assert r["aws"] == {"s3": "ok"}
     assert s3.puts[-1]["Key"] == "healthcheck.txt"
 
@@ -116,4 +143,4 @@ def test_health_deep_reports_aws_errors(client, monkeypatch):
     def boom(*a, **k):
         raise RuntimeError("no credentials")
     monkeypatch.setattr(boto3, "client", boom)
-    assert "no credentials" in client.get("/api/health?deep=1").json()["aws"]["s3"]
+    assert "no credentials" in client.get("/api/health?deep=1", headers=as_("admin-1")).json()["aws"]["s3"]

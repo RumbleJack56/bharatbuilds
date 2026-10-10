@@ -15,6 +15,22 @@ def _sig(user_id: str, ts: int, nonce: str) -> str:
     return hmac.new(key, f"{user_id}|{ts}|{nonce}".encode(), hashlib.sha256).hexdigest()
 
 
+_used: dict[str, float] = {}      # token -> when to forget it; one process, so a restart forgets (tokens age out in 15 min anyway)
+
+
+def is_used(token: str | None, now: float | None = None) -> bool:
+    now = now if now is not None else time.time()
+    for t in [t for t, until in _used.items() if until < now]:
+        del _used[t]
+    return bool(token) and token in _used
+
+
+def mark_used(token: str | None, now: float | None = None) -> None:
+    """Call when a report is saved: one token covers one report photo."""
+    if token:
+        _used[token] = (now if now is not None else time.time()) + config.CAPTURE_MAX_AGE_S + 60
+
+
 def issue(user_id: str, now: float | None = None) -> dict:
     ts, nonce = int(now if now is not None else time.time()), secrets.token_hex(4)
     sig = _sig(user_id, ts, nonce)

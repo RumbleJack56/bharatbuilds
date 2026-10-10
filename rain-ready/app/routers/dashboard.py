@@ -29,6 +29,12 @@ def generate(top: int = 5, user=Depends(need("admin")), db=Depends(get_db)):
     return {"created_task_ids": created, "banner": copy.SCENARIO_BANNER}
 
 
+def _clock_start(t: dict, ev: list, aid, until: str) -> str:
+    """When this agency received the task: its latest created, reassigned or assigned event before `until`."""
+    starts = [e["at"] for e in ev if e["event"] in ("created", "reassigned", "assigned") and e["agency_id"] == aid and e["at"] <= until]
+    return max(starts) if starts else t["created_at"]
+
+
 def _hours(a: str, b: str) -> float:
     from datetime import datetime
     return (datetime.fromisoformat(b) - datetime.fromisoformat(a)).total_seconds() / 3600
@@ -54,9 +60,9 @@ def accountability(db=Depends(get_db)):
             acc = next((e for e in ev if e["event"] == "accepted" and e["agency_id"] == aid), None)
             dn = next((e for e in ev if e["event"] == "completed" and e["agency_id"] == aid), None)
             if acc:
-                accept_h.append(_hours(t["created_at"], acc["at"]))
+                accept_h.append(_hours(_clock_start(t, ev, aid, acc["at"]), acc["at"]))
             if dn:
-                done_h.append(_hours(t["created_at"], dn["at"]))
+                done_h.append(_hours(_clock_start(t, ev, aid, dn["at"]), dn["at"]))
         owned = db.execute("SELECT COUNT(*) FROM assets WHERE agency_id IS ?", (aid,)).fetchone()[0]
         rows.append({"agency_id": aid, "agency_name": name, "assets_owned": owned, "tasks": counts,
                      "overdue": sum(1 for t in mine if _overdue(t)), "bounced_away": bounced,

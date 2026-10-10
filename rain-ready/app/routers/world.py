@@ -49,7 +49,8 @@ def map_(db=Depends(get_db)):
         d["silt_estimate"] = round(silt[d["id"]], 3)
         assets.append(d)
     tasks = [dict(r) for r in db.execute(
-        "SELECT t.id,t.asset_id,t.status,t.rank_score,t.gain_h,t.agency_id,a.lat,a.lon FROM tasks t JOIN assets a ON a.id=t.asset_id "
+        "SELECT t.id,t.asset_id,t.status,t.rank_score,t.gain_h,t.agency_id,a.lat,a.lon,a.name AS asset_name,a.last_confirmed_clean "
+        "FROM tasks t JOIN assets a ON a.id=t.asset_id "
         "WHERE t.status NOT IN ('confirmed','rejected')")]
     sites = [dict(r) for r in db.execute("SELECT id,name,lat,lon FROM sites")]
     return {"pockets": run_scenario(db, planning.REF_RAIN_MM_H, "current"), "assets": assets, "tasks": tasks,

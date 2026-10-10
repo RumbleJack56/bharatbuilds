@@ -89,8 +89,8 @@ Everything below is the full backlog after these.
 - [x] B1 LICENSE (MIT) done; reset is in PR #1, merge to `main` and confirm both can push
 - [x] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**. Live: https://15-207-177-122.sslip.io (details in `PLAN.md` section 7)
 - [ ] B3 Server is on `STORAGE=s3` (done by Aarush); photos do not open yet. Fix is B13, phone check is A4
-- [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`. Aarush runs it (A3); do B18 and B19 first
-- [ ] B5 Backend gaps found by Aarush: add or fix endpoints, keep `tests/test_flow.py` green. The list is `PLAN.md` section 7; item 8 (S3 photo URLs) blocks the video
+- [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`. Aarush runs it (A3); B18 and B19 are done, so it can go ahead
+- [ ] B5 Backend gaps found by Aarush (`PLAN.md` section 7). Done in branch `ujjwal/backend-fixes`: items 1 (task banner), 2 (map task fields), 3 (reporter confirm, B15), 5 (`make test-web`, web tests in CI), 6 (JDK 17 and Android SDK in `DEPLOY.md`), 8 (S3 URLs, B13), 9 (buildx pinned in the bootstrap script), 10 (`deploy-ssm.sh` archives from the repo root). Left: 4 (seed tuning, with B7 data), 7 (Protocol refactor, not before the freeze)
 - [ ] B6 `make apk API=https://<host>`; install on a phone; camera and GPS work
 - [ ] B7 (tooling done: `make seedcheck`, `scripts/build_seed.py`, see `docs/DATA.md`) Real drain and pocket data for the ward in `seed.json`; owner source per drain. Decide sourcing first (OpenStreetMap drains, published hotspot lists, cited ownership rules)
 - [x] B8 Rate limit (`REPORTS_PER_DAY`, 429), repeat-report hold (`duplicate_nearby`), fill-time low and high range (branch `ujjwal/backend-hardening`)
@@ -103,26 +103,26 @@ From the backend review of 10 Oct. Each fix needs a test. Keep changes additive.
 
 Do first (demo blocker and loop bugs):
 
-- [ ] B13 **Photos 403 on the live site (blocks the video).** `app/storage.py` signs for the global S3 host. Use one regional client (`endpoint_url=https://s3.<region>.amazonaws.com`, `signature_version="s3v4"`, virtual addressing; exact line in `PLAN.md` section 7 item 8) in `presigned()`, `save_photo()` and `app/checks.py`
-- [ ] B14 **A disputed task is a dead end.** Every action returns 409 and new reports attach to the dead task. Add a way out: the owning official (or admin) accepts it again, `disputed` to `accepted`, event `reopened`. `API:` commit; tell Aarush (V11)
-- [ ] B15 **The reporter can confirm their own report.** The check in `confirm` compares with `done_by`, which is never a resident. Block any resident who has an incident on the task; 403 with a plain message
-- [ ] B16 **A file that is not an image passes as a report photo.** Make `photo_unreadable` a `warn` so the report is held (or reject with 422)
-- [ ] B17 **The photo is stored before the report is checked.** Validate `kind` and read the image first; save to storage last. Stops orphan objects and the upload path that skips the rate limit
+- [x] B13 **Photos 403 on the live site (blocks the video).** `app/storage.py` signs for the global S3 host. Use one regional client (`endpoint_url=https://s3.<region>.amazonaws.com`, `signature_version="s3v4"`, virtual addressing; exact line in `PLAN.md` section 7 item 8) in `presigned()`, `save_photo()` and `app/checks.py`
+- [x] B14 **A disputed task is a dead end.** Every action returns 409 and new reports attach to the dead task. Done: `accept` also takes a `disputed` task (rework: `disputed` to `accepted`, `done_by` cleared, note "to be redone ..."). No new endpoint. Aarush: V11
+- [x] B15 **The reporter can confirm their own report.** The check in `confirm` compares with `done_by`, which is never a resident. Block the resident who made the first report on the task; 403 with a plain message. A later reporter may confirm (the demo loop needs a second resident). Done in branch `ujjwal/backend-fixes`
+- [x] B16 **A file that is not an image passes as a report photo.** Done as 422 "the photo could not be read as an image" on both report and after-photo; nothing is stored
+- [x] B17 **The photo is stored before the report is checked.** Validate `kind` and read the image first; save to storage last. Stops orphan objects and the upload path that skips the rate limit
 
 Do next:
 
-- [ ] B18 **Bedrock calls block the whole server.** Move `create_incident` and `complete` off the event loop (plain `def`, or `run_in_threadpool` for the AWS calls). Give the Bedrock client short timeouts (`connect_timeout=3, read_timeout=15, retries 1`)
-- [ ] B19 **Large photos fail triage without a message.** Bedrock's image limit is below our 8 MB limit (check the current figure). Downscale a copy server-side before the two model calls; Aarush shrinks on the phone too (V10)
-- [ ] B20 **`/api/health?deep=1` is public and does paid AWS work.** Limit it (admin persona, or cache the result for 60 s)
-- [ ] B21 **No upload size cap before memory.** Add `request_body { max_size 10MB }` to the `Caddyfile` and stop reading at the limit in the API
-- [ ] B22 **Missing `CAPTURE_SECRET` is silent.** Add a `config_warnings` line when it is empty; tokens then die on every deploy. Aarush sets it on the server (A8)
+- [x] B18 **Bedrock calls block the whole server.** Move `create_incident` and `complete` off the event loop (plain `def`, or `run_in_threadpool` for the AWS calls). Give the Bedrock client short timeouts (`connect_timeout=3, read_timeout=15, retries 1`)
+- [x] B19 **Large photos fail triage without a message.** Bedrock's image limit is below our 8 MB limit (check the current figure). Downscale a copy server-side before the two model calls; Aarush shrinks on the phone too (V10)
+- [x] B20 **`/api/health?deep=1` is public and does paid AWS work.** Done: admin persona only (`X-User-Id: admin-1`) and cached for 30 s; the AWS playbook curls send the header
+- [x] B21 **No upload size cap before memory.** Add `request_body { max_size 10MB }` to the `Caddyfile` and stop reading at the limit in the API
+- [x] B22 **Missing `CAPTURE_SECRET` is silent.** Add a `config_warnings` line when it is empty; tokens then die on every deploy. Done: it shows in `config_warnings` until Aarush sets it on the server (A8)
 
 If time allows:
 
-- [ ] B23 Capture tokens can be replayed for 15 minutes. Store used nonces and refuse a second use
-- [ ] B24 Flat or dark photos share one hash (`0000000000000000`) and get held as reused. Skip the reuse check when the image has almost no contrast
-- [ ] B25 A bounced task carries the first agency's delay. Reset `due_at` on reassign and measure hours from the `reassigned` or `assigned` event
-- [ ] B26 `/api/health` says `ok: true` when a router failed to load. Set `ok` false when `router_errors` is not empty. Pin versions in `requirements.txt`
+- [x] B23 Capture tokens can be replayed for 15 minutes. Done: a saved report uses up its token (in memory, one process); a refused report does not
+- [x] B24 Flat or dark photos share one hash (`0000000000000000`) and get held as reused. Done: `photocheck.informative()` skips the reuse check for hashes with fewer than 8 or more than 56 set bits
+- [x] B25 A bounced task carries the first agency's delay. Done: `due_at` resets on reassign and assign; accountability hours count from that agency's latest created, reassigned or assigned event
+- [x] B26 `/api/health` says `ok: true` when a router failed to load. Done: `ok` is false when a router failed; `requirements.txt` is pinned to the tested versions
 - [ ] B27 Reads are wide: task detail needs no login, and any resident can list every resident's reports. Decide what the public dashboard may show; hide `user_id` and notes from other residents
 
 Known and accepted for the demo: persona header auth (anyone with the URL can act as admin; cover is the hourly backup and a fresh AMI), one shared SQLite connection with no rollback.
@@ -140,8 +140,8 @@ Known and accepted for the demo: persona header auth (anyone with the URL can ac
 - [ ] V8 Screenshots and clean empty states for the video
 - [ ] V9 Photo capture camera, stamp, token, flags display (section 4, "what the backend now needs")
 - [ ] V10 Shrink the photo on the phone before upload (longest side about 1600 px, JPEG, under 2 MB), after the stamp is drawn. Bedrock cannot read large images (B19). `PLAN.md` section 6 has the adapter slot
-- [ ] V11 Disputed tasks: when B14 lands, show a disputed task in the official inbox with its reason and a "Take it up again" button
-- [ ] V12 Confirm screen: show the plain 403 message when the reporter tries to confirm their own report (B15), and "Saved for review" when a photo cannot be read (B16)
+- [ ] V11 Disputed tasks: when B14 lands, show a disputed task in the official inbox with its reason and the existing Accept button (the task is `disputed`; accept sends it back to `accepted`)
+- [ ] V12 Confirm screen: show the plain 403 message when the reporter tries to confirm their own report (B15), and the 422 "could not be read as an image; please take it again" message when a photo cannot be read (B16)
 
 AWS work (Aarush owns the account). The full AWS CLI playbook, written so an agent can run it, is `docs/AWS_TODO.md`. Fill in its section 10 and send it to Ujjwal.
 

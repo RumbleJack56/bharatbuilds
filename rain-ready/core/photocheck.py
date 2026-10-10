@@ -50,6 +50,11 @@ def analyze(data: bytes) -> dict:
     return {"hash": f"{bits:016x}", "gps": gps, "taken": taken}
 
 
+def informative(h: str | None) -> bool:
+    """A flat, very dark or smooth-gradient picture hashes to almost all 0 or all 1; two different ones then 'match'."""
+    return h is not None and 8 <= bin(int(h, 16)).count("1") <= 56
+
+
 def hamming(a: str, b: str) -> int:
     return bin(int(a, 16) ^ int(b, 16)).count("1")
 
@@ -74,8 +79,8 @@ def assess(info: dict, lat: float, lon: float, now: datetime, prior: list[tuple[
         flags.append(_flag("photo_no_geotag", "info", "photo has no location tag"))
     if info["taken"] and now.replace(tzinfo=None) - info["taken"] > STALE_AFTER:
         flags.append(_flag("photo_stale", "warn", f"photo was taken {info['taken']:%Y-%m-%d}, not in the last 2 days"))
-    for h, uid in prior:
-        if h and hamming(h, info["hash"]) <= HASH_NEAR:
+    for h, uid in prior if informative(info["hash"]) else []:
+        if informative(h) and hamming(h, info["hash"]) <= HASH_NEAR:
             same = uid is not None and uid == user_id
             flags.append(_flag("photo_reused_self" if same else "photo_reused_other", "warn",
                                "this picture was already submitted" + ("" if same else " by someone else")))
