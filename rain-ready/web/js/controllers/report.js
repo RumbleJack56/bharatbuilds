@@ -4,7 +4,7 @@ import { KINDS, FIELD_RULE, PIN, CAMERA } from "../ui/copy.js";
 import { esc } from "../ui/format.js";
 import { errBox, guard } from "../ui/components.js";
 
-const DEFAULT = [28.6433, 77.1846];       // Old Rajinder Nagar, the pilot ward
+export const DEFAULT = [28.643592, 77.186944];   // drain DR-DN-PUSA: Daryai Nallah barrel, Pusa Road crossing (MCD)
 
 export const report = {
   path: "report", roles: ["resident", "admin"],
