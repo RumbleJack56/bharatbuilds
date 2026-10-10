@@ -11,8 +11,10 @@ export const dashShell = (tab) => `<h1>Dashboard</h1><nav class="sub" aria-label
   <div id="pane">Loading...</div><p class="small muted"><a class="back" href="#/login">Switch persona</a></p>`;
 
 export const mapLegend = (d) => `${banner(d.banner)}<div id="m" class="map tall" data-liquid-ignore></div>
-  <p class="small">Pockets at ${esc(d.reference_rain_mm_h)} mm/h: ${Object.values(LEVEL).map(([, l]) => `<strong>${esc(l)}</strong>`).join(" &middot; ")}
+  <p class="small">Levels at ${esc(d.reference_rain_mm_h)} mm/h (reference rain): ${Object.values(LEVEL).map(([, l]) => `<strong>${esc(l)}</strong>`).join(" &middot; ")}
   (each pocket is labelled on the map).<br>Squares: drains (red = No owner found). Numbered markers: open tasks by rank.</p>`;
+// Same circle on the Map tab and the Simulator map: level colour, text label, fixed pixel radius.
+export const pocketCircle = (p) => { const [color, label] = LEVEL[p.level] || LEVEL.none; return [[p.lat, p.lon], { color, radiusPx: 14, label: `${p.name}: ${label}` }]; };
 export const pocketPopup = (p) => `<strong>${esc(p.name)}</strong><br>Level: <strong>${esc(LEVEL[p.level][1])}</strong>
   <br>Time to fill: ${esc(hrs(p.time_to_fill_h))}<br>Assets exposed: ${esc(p.exposed_assets)}
   <br><span class="small">${esc(p.data_source)}, confidence ${esc(p.confidence)}</span>`;
