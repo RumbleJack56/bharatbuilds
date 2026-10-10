@@ -1,5 +1,6 @@
 """Scenario projections for a pocket: runoff, how much of its drain is used, silt, and time to fill.
 Pure. THIS IS A SCENARIO TOOL, NOT A FORECAST: pocket size, catchment and drain capacity are parameters, shown with ranges."""
+import random
 from datetime import date, timedelta
 
 from . import lowpoints as lp
@@ -44,3 +45,20 @@ def project(pockets: list[dict], last_clean: dict[str, date | None], today: date
                              "storage_m3": p["storage_m3"], "spills_to": p["spills_to"]})
             out.append({"rain_mm_h": rain, "horizon_days": h, "pockets": rows})
     return out
+
+
+SERIES_AMP = 0.12     # each point sits within this share of the model value
+SERIES_NOTE = ("Illustrative: silt does not build in a straight line. The model curve with a repeatable wobble, drawn for the "
+               "demo chart. An estimate, not a measurement; it is never used in ranking or fill times.")
+
+
+def silt_series_illustrative(seed: str, max_days: int = 180, step: int = 5) -> dict:
+    """Days since a confirmed clean -> silt fraction, the model curve with a seeded wobble (same seed, same series)."""
+    rnd = random.Random(f"silt|{seed}")
+    t = date(2000, 1, 1)
+    pts = [{"days": 0, "silt_fraction": 0.0}]
+    for d in range(step, max_days + 1, step):
+        base = planning.silt_fraction(t, t + timedelta(days=d))
+        v = min(planning.D_EQ, max(0.0, base * (1 + rnd.uniform(-SERIES_AMP, SERIES_AMP))))
+        pts.append({"days": d, "silt_fraction": round(v, 3)})
+    return {"points": pts, "illustrative": True, "note": SERIES_NOTE}
