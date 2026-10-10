@@ -32,7 +32,7 @@ export function reportResult(r) {
     : r.task_id == null ? "<p>No task was created.</p>" : r.task_created
       ? "<p><strong>A new task was created</strong> for this drain.</p>"
       : "<p><strong>This drain already had a task.</strong> Your report was added to it.</p>";
-  return `<div class="card"><h2>Report received</h2><p>${esc(r.message)}</p>
+  return `<div class="card glass"><h2>Report received</h2><p>${esc(r.message)}</p>
     ${ai ? `<p><strong>Suggested from your photo:</strong> ${esc(ai.summary)} <span class="small muted">(automatic; check it)</span></p>` : ""}
     ${r.linked_asset ? `<p>Linked drain: <strong>${esc(r.linked_asset)}</strong> (${esc(r.distance_m)} m away)</p>` : ""}
     ${task}${flagList(r.flags)}${r.task_id ? `<p><a href="#/task/${esc(r.task_id)}">See the task</a></p>` : ""}

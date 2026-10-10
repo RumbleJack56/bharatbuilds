@@ -23,7 +23,7 @@ export const assetPopup = (a) => `<strong>${esc(a.name)}</strong><br>Owner: ${es
 
 export const accountabilityView = (d) => `<p class="muted small">${esc(d.note)}</p>` + (d.agencies.length ? d.agencies.map(a => {
   const max = Math.max(1, ...d.agencies.map(x => x.assets_owned));
-  return `<div class="card ${a.agency_id ? "" : "hl"}"><h3>${esc(a.agency_name)}</h3>
+  return `<div class="card glass ${a.agency_id ? "" : "hl"}"><h3>${esc(a.agency_name)}</h3>
   <p>Assets owned: <strong>${esc(a.assets_owned)}</strong></p>
   <div class="bar ${a.agency_id ? "" : "bad"}" aria-hidden="true"><i style="width:${Math.round(100 * a.assets_owned / max)}%"></i></div>
   <p class="small">${STATUS.map(s => `${s}: <strong>${esc(a.tasks[s] || 0)}</strong>`).join(" &middot; ")}</p>
@@ -31,7 +31,7 @@ export const accountabilityView = (d) => `<p class="muted small">${esc(d.note)}<
   Median time to accept: ${esc(hrs(a.median_hours_to_accept))} &middot; to complete: ${esc(hrs(a.median_hours_to_complete))}</p></div>`;
 }).join("") : `<p class="muted">${EMPTY.accountability}</p>`);
 
-const big = (n, l) => `<div class="card"><div class="big-num">${esc(n)}</div><div class="small">${esc(l)}</div></div>`;
+const big = (n, l) => `<div class="card glass"><div class="big-num">${esc(n)}</div><div class="small">${esc(l)}</div></div>`;
 export const impactView = (d) => `${banner(d.banner)}<div class="grid">
   ${big(d.ownership.with_owner + " of " + d.ownership.assets, "drains with a named owner")}
   ${big(d.ownership.no_owner_found, "drains with No owner found")}
@@ -43,7 +43,7 @@ export const impactView = (d) => `${banner(d.banner)}<div class="grid">
   <h2>Rain capture, cubic metres per year</h2><div class="grid">${Object.entries(d.capture_m3_per_year_by_use).map(([k, v]) => big(v, USE[k] || k)).join("")}</div>
   <p class="small muted">Not claimed: ${esc(d.not_claimed)}</p>`;
 
-export const captureView = (d) => banner(d.banner) + (d.sites.length ? d.sites.map(s => `<div class="card"><h3>${esc(s.name)}</h3>
+export const captureView = (d) => banner(d.banner) + (d.sites.length ? d.sites.map(s => `<div class="card glass"><h3>${esc(s.name)}</h3>
   <p><strong>${esc(USE[s.use] || s.use)}</strong> <span class="chip">${esc(s.rule_id)}</span></p>
   <p>${esc(s.reason)}</p><p>About <strong>${esc(s.annual_m3)}</strong> m&sup3; per year from the roof</p>
   ${s.structure ? `<p class="small">Structure: ${Object.entries(s.structure).map(([k, v]) => `${esc(k.replace(/_/g, " "))} ${esc(v)}`).join(", ")}</p>` : ""}

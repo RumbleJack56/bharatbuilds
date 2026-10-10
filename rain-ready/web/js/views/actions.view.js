@@ -1,14 +1,14 @@
 // web/js/views/actions.view.js — the ranked action list, one row per drain. Pure.
 import { esc, hrRange } from "../ui/format.js";
-import { banner } from "../ui/components.js";
+import { banner, stagger } from "../ui/components.js";
 import { ACTION, EMPTY } from "../ui/copy.js";
 
 export const TOPS = [10, 25, 50];
 
-const row = (a) => {
+const row = (a, n = 0) => {
   const owner = a.route.needs_coordinator ? "No owner found" : a.route.agency_name;
   const gain = a.gain_h_high > 0 ? `Fill time gained if cleaned: ${esc(hrRange(a.gain_h_low, a.gain_h_high))} (scenario)` : "No change in fill time at the reference rain (scenario)";
-  return `<div class="card"><h3>${esc(a.asset_name)} <span class="chip">${esc(ACTION[a.type] || a.type)}</span></h3>
+  return `<div class="card glass rise" ${stagger(n)}><h3>${esc(a.asset_name)} <span class="chip">${esc(ACTION[a.type] || a.type)}</span></h3>
   <p>${esc(a.text)}</p>
   <p class="small">Owner: ${esc(owner)}<br>Route: ${esc(a.route.agency_name)}. ${esc(a.route.why)}<br>${gain}<br>
   ${a.task_id ? `Task: <a href="#/task/${esc(a.task_id)}">#${esc(a.task_id)}</a> (${esc(a.task_status)})` : "No task yet (proposed)"}</p>
