@@ -2,6 +2,12 @@
 import { esc } from "./format.js";
 
 export const chip = (status) => `<span class="chip ${esc(status)}">${esc(status)}</span>`;
+export const empty = (text) => `<div class="empty"><svg class="ic" aria-hidden="true"><use href="img/icons.svg?v=3#i-inbox"/></svg><p>${esc(text)}</p></div>`;
+// Nav innerHTML: [hash, label, icon] tabs, the one whose hash prefixes the current hash is marked.
+export const tabsHtml = (tabs, hash) => tabs.map(([h, t, i]) => {
+  const on = hash.startsWith(h);
+  return `<a href="${esc(h)}"${on ? ' class="on" aria-current="page"' : ""}><svg class="ic" aria-hidden="true"><use href="img/icons.svg?v=3#i-${esc(i)}"/></svg><span>${esc(t)}</span></a>`;
+}).join("");
 export const banner = (t) => t ? `<p class="banner">${esc(t)}</p>` : "";
 export const errBox = (e) => `<p class="err" role="alert">${esc(e && e.message || e)}</p>`;
 export function photos(urls, alt) {

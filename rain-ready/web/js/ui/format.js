@@ -1,5 +1,7 @@
 // web/js/ui/format.js — pure text helpers.
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Up to two initials for the avatar; "?" when there is no name.
+export const initials = (name) => String(name ?? "").trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("") || "?";
 export const hrs = (h) => h == null ? "not available" : "about " + (h < 10 ? Math.round(h * 10) / 10 : Math.round(h)) + " h";
 export function when(iso) {
   try { return new Date(iso).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }); } catch { return iso || ""; }

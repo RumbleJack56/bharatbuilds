@@ -21,8 +21,8 @@ export const CONTROLLERS = [
   board,
 ];
 export const TABS = {
-  resident: [["#/report", "Report"], ["#/mine", "My reports"], ["#/confirm", "Confirm"], ["#/dash", "Dashboard"], ["#/board", "Board"]],
-  official: [["#/inbox", "Inbox"], ["#/held", "Held"], ["#/dash", "Dashboard"], ["#/board", "Board"]],
-  admin: [["#/admin", "Admin"], ["#/held", "Held"], ["#/dash", "Dashboard"], ["#/board", "Board"]],
+  resident: [["#/report", "Report", "camera"], ["#/mine", "My reports", "list"], ["#/confirm", "Confirm", "circle-check"], ["#/dash", "Dashboard", "layout-dashboard"], ["#/board", "Board", "trophy"]],
+  official: [["#/inbox", "Inbox", "inbox"], ["#/held", "Held", "shield-alert"], ["#/dash", "Dashboard", "layout-dashboard"], ["#/board", "Board", "trophy"]],
+  admin: [["#/admin", "Admin", "user-cog"], ["#/held", "Held", "shield-alert"], ["#/dash", "Dashboard", "layout-dashboard"], ["#/board", "Board", "trophy"]],
 };
 export const HOME = { resident: "#/report", official: "#/inbox", admin: "#/admin" };

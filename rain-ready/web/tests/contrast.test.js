@@ -1,4 +1,4 @@
-// web/tests/contrast.test.js — every text token on every glass surface over the darkest and the brightest backdrop >= 4.5:1.
+// web/tests/contrast.test.js — Firefly surfaces: every text token on bg, s1 and s2 >= 4.5:1, plus tonal pills, fills, dots and borders.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -6,40 +6,33 @@ import { parseColor, over, ratio, tokens } from "./contrast-lib.js";
 
 const t = tokens(readFileSync(new URL("../css/tokens.css", import.meta.url), "utf8"));
 const rgb = (k) => parseColor(t[k]).slice(0, 3);
-const BACKDROPS = { darkest: rgb("bd-darkest"), brightest: rgb("bd-brightest") };
-const SURFACES = { glass: "glass-bg", "glass-strong": "glass-bg-strong", "lg-tint": "lg-tint" };
-const TEXT = ["fg", "fg-muted", "accent", "high", "elev", "low", "info", "watch"];
+const SURFACES = ["bg", "s1", "s2"];
+const TEXT = ["fg", "body", "fg-muted", "accent", "high", "elev", "low", "info", "watch"];
 
-for (const [sn, sk] of Object.entries(SURFACES)) for (const [bn, bd] of Object.entries(BACKDROPS)) for (const tx of TEXT) {
-  test(`${tx} on ${sn} over the ${bn} backdrop is >= 4.5:1`, () => {
-    const r = ratio(rgb(tx), over(parseColor(t[sk]), bd));
-    assert.ok(r >= 4.5, `${tx} on ${sn}/${bn} = ${r.toFixed(2)}`);
+for (const sn of SURFACES) for (const tx of TEXT) {
+  test(`${tx} on ${sn} is >= 4.5:1`, () => {
+    const r = ratio(rgb(tx), rgb(sn));
+    assert.ok(r >= 4.5, `${tx} on ${sn} = ${r.toFixed(2)}`);
   });
 }
-test("the brightest backdrop token equals the teal end under two overlapping blobs", () => {
-  const blob = parseColor(t.blob).slice(0, 3), a = Number(t["blob-a"]);
-  const two = over([...blob, a], over([...blob, a], rgb("bd-3")));
-  two.forEach((v, i) => assert.ok(Math.abs(v - BACKDROPS.brightest[i]) <= 4, `channel ${i}: ${v} vs ${BACKDROPS.brightest[i]}`));
+for (const h of ["high", "elev", "low", "info", "accent"]) {
+  test(`${h} on its 16% tonal pill over s1 is >= 4.5:1`, () => {
+    const pill = over([...rgb(h), 0.16], rgb("s1"));
+    const r = ratio(rgb(h), pill);
+    assert.ok(r >= 4.5, `${h} pill = ${r.toFixed(2)}`);
+  });
+}
+test("white on accent-fill and its hover is >= 4.5:1", () => {
+  assert.ok(ratio([255, 255, 255], rgb("accent-fill")) >= 4.5);
+  assert.ok(ratio([255, 255, 255], parseColor(t["accent-fill-hover"]).slice(0, 3)) >= 4.5, "accent-fill-hover");
 });
-test("blobs stay at or below 0.35 opacity", () => assert.ok(Number(t["blob-a"]) <= 0.35));
-test("banner and error ink are readable on their tinted strong glass", () => {
-  for (const [ink, tint] of [["warn-ink", "warn-bg"], ["err-ink", "err-bg"]]) for (const bd of Object.values(BACKDROPS)) {
-    const bg = over(parseColor(t[tint]), over(parseColor(t["glass-bg-strong"]), bd));
-    assert.ok(ratio(rgb(ink), bg) >= 4.5, `${ink} = ${ratio(rgb(ink), bg).toFixed(2)}`);
-  }
+test("high-dot and field-border on s1 are >= 3:1", () => {
+  for (const k of ["high-dot", "field-border"]) assert.ok(ratio(rgb(k), rgb("s1")) >= 3, k);
 });
-test("primary button ink is readable on both accent stops", () => {
-  for (const k of ["accent", "accent-2"]) assert.ok(ratio(rgb("accent-ink"), rgb(k)) >= 4.5, k);
+test("banner and error ink are readable on their fills", () => {
+  for (const [ink, bg] of [["warn-ink", "warn-bg"], ["err-ink", "err-bg"]]) assert.ok(ratio(rgb(ink), rgb(bg)) >= 4.5, ink);
 });
-test("the High status dot is >= 3:1 non-text contrast on every glass surface over both backdrops", () => {
-  for (const sk of Object.values(SURFACES)) for (const bd of Object.values(BACKDROPS)) {
-    const r = ratio(rgb("high-dot"), over(parseColor(t[sk]), bd));
-    assert.ok(r >= 3, `high-dot on ${sk} = ${r.toFixed(2)}`);
-  }
-});
-test("field borders are >= 3:1 against the glass behind them", () => {
-  for (const bd of Object.values(BACKDROPS)) {
-    const glass = over(parseColor(t["glass-bg"]), bd);
-    assert.ok(ratio(over(parseColor(t["field-border"]), glass), glass) >= 3);
-  }
+test("bar-bg over bg keeps fg and fg-muted >= 4.5:1", () => {
+  const bar = over(parseColor(t["bar-bg"]), rgb("bg"));
+  for (const k of ["fg", "fg-muted"]) assert.ok(ratio(rgb(k), bar) >= 4.5, k);
 });

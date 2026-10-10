@@ -21,8 +21,8 @@ import { createCaptureService } from "./services/capture.service.js";
 import { createDashboardService } from "./services/dashboard.service.js";
 import { CONTROLLERS, TABS, HOME } from "./controllers/index.js";
 import { stampLines, drawStamp } from "./ui/stamp.js";
-import { esc } from "./ui/format.js";
-import { errBox } from "./ui/components.js";
+import { initials } from "./ui/format.js";
+import { errBox, tabsHtml } from "./ui/components.js";
 
 const $ = (s) => document.querySelector(s);
 // Glass: wait briefly for the async CDN script, then pick lens or css (core/glass.js holds the rules).
@@ -56,10 +56,17 @@ const ctx = Object.freeze({
 });
 
 function drawChrome(me, hash) {
-  $("#who").textContent = me ? me.name : "";
-  $("#logout").hidden = !me;
-  $("#tabs").innerHTML = me ? TABS[me.role].map(([h, t]) =>
-    `<a href="${h}" class="${hash.startsWith(h) ? "on" : ""}">${esc(t)}</a>`).join("") : "";
+  $("#acct-wrap").hidden = !me;
+  $("#acct").textContent = me ? initials(me.name) : "";
+  $("#acct").setAttribute("aria-label", me ? `Account: ${me.name}` : "Account");
+  $("#acct-name").textContent = me ? me.name : "";
+  $("#acct-role").textContent = me ? me.role.charAt(0).toUpperCase() + me.role.slice(1) : "";
+  $("#tabs").innerHTML = me ? tabsHtml(TABS[me.role], hash) : "";
+  try { if ($("#acct-menu").matches(":popover-open")) $("#acct-menu").hidePopover(); } catch {}   // navigating closes the menu
+}
+// No Popover API: show the name and Log out inline in the header instead.
+if (!("popover" in HTMLElement.prototype)) {
+  $("#acct-menu").removeAttribute("popover"); $("#acct").removeAttribute("popovertarget"); $("#acct-wrap").classList.add("menu-inline");
 }
 
 const transition = implement(TransitionPort, createViewTransition(document, window));

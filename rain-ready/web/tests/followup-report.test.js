@@ -107,3 +107,14 @@ test("2d: a refused photo keeps its message next to the button until the next at
   assert.equal(s.els["#camnote"].textContent, "");     // cleared when the next attempt starts
   await p;
 });
+test("a /api/map that never answers cannot hold the result card past the cap", async () => {
+  const s = setup({ create: async () => ({ message: "Saved", field_rule: "r", linked_asset: null, flags: [], task_id: null, incident: {} }) });
+  s.ctx.services.dashboard.map = () => new Promise(() => {});
+  await report.mount(s.root, s.ctx);
+  s.root.querySelector("#kind").value = "overflow";
+  const t0 = Date.now();
+  await s.els["#f"].onsubmit({ preventDefault() {} });
+  while (!s.root.querySelector("#out").innerHTML && Date.now() - t0 < 3000) await new Promise(r => setTimeout(r, 20));
+  assert.match(s.root.querySelector("#out").innerHTML, /Saved/);
+  assert.ok(Date.now() - t0 < 2500, `took ${Date.now() - t0} ms`);
+});
