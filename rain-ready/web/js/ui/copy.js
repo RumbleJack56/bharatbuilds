@@ -15,6 +15,7 @@ export const PIN = {
   gps: (m) => `Your GPS (\u00b1 ${Math.round(m)} m)`,
 };
 export const NO_OWNER = "No agency owns this drain yet. A coordinator will assign it.";
+// "150 m" mirrors the server's LINK_RADIUS_M default (demo constant); update both together.
 export const NEAREST = (name, m) => `Nearest drain: ${name}, about ${m} m away. A report links to a drain within 150 m - tap the map closer to a drain.`;
 export const APPROX = (m) => `Your location is approximate (\u00b1 ${Math.round(m)} m). Tap the map to set the exact spot.`;
 export const ANDROID_PRECISE = "On Android, turn on Precise location for your browser.";

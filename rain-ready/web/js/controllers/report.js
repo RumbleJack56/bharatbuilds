@@ -16,7 +16,7 @@ export const report = {
     const mapView = ctx.map.available() ? ctx.map.create($("#mini"), { center: pos, zoom: 16 }) : null;
     if (!mapView) $("#mini").hidden = true;
     let drains = [];                                  // from GET /api/map: shown on the mini-map and used for the nearest-drain line
-    ctx.services.dashboard?.map().then(d => {
+    const mapReady = ctx.services.dashboard?.map().then(d => {
       drains = d.assets || [];
       drains.forEach(a => mapView?.badge([a.lat, a.lon], { size: 16, html: `<div class="drain-pin"><i class="drain ${a.agency_id ? "" : "noowner"}"></i><span class="drain-label">${esc(a.name)}</span></div>` }));
     }).catch(() => {});                               // the form works without the drain layer
@@ -68,6 +68,7 @@ export const report = {
       guard($("#send"), async () => {
         try {
           const r = await ctx.services.incidents.create({ lat: pos[0], lon: pos[1], kind, note: $("#note").value, photo: photo?.blob, accuracy_m: accuracy, capture_token: photo?.capture_token });
+          await mapReady;                           // so the no-owner and nearest-drain lines are never dropped
           const own = drains.find(a => a.id === r.linked_asset);
           $("#out").innerHTML = reportResult(r, { nearest: r.linked_asset ? null : nearestDrain(pos, drains), ownerless: !!own && !own.agency_id });
           $("#f").reset(); clearPhoto();

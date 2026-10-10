@@ -24,7 +24,8 @@ export function createLeafletMap(L = globalThis.L) {
           if (popup) m.bindPopup(popup);
         },
         badge: ([lat, lon], { html, size = 28, popup }) => {
-          const m = L.marker([lat, lon], { icon: L.divIcon({ className: "", html, iconSize: [size, size] }) }).addTo(layer);
+          const m = L.marker([lat, lon], { icon: L.divIcon({ className: "", html, iconSize: [size, size] }), interactive: !!popup, keyboard: !!popup })   // no popup: taps reach the map, no tab stop
+            .addTo(layer);
           if (popup) m.bindPopup(popup);
         },
         pin: ([lat, lon]) => { pin ? pin.setLatLng([lat, lon]) : (pin = L.marker([lat, lon]).addTo(map)); },
