@@ -68,7 +68,7 @@ export const report = {
       guard($("#send"), async () => {
         try {
           const r = await ctx.services.incidents.create({ lat: pos[0], lon: pos[1], kind, note: $("#note").value, photo: photo?.blob, accuracy_m: accuracy, capture_token: photo?.capture_token });
-          await Promise.race([mapReady, new Promise(r => setTimeout(r, 1500))]);   // wait for the drain layer, but never hold the result card past 1.5 s
+          await Promise.race([mapReady, new Promise(done => setTimeout(done, 1500))]);   // wait for the drain layer, but never hold the result card past 1.5 s
           const own = drains.find(a => a.id === r.linked_asset);
           $("#out").innerHTML = reportResult(r, { nearest: r.linked_asset ? null : nearestDrain(pos, drains), ownerless: !!own && !own.agency_id });
           $("#f").reset(); clearPhoto();

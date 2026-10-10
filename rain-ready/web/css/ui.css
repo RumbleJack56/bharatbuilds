@@ -2,6 +2,7 @@
 .glass,.card{background:var(--s1);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
 .glass-strong,.toast{background:var(--s2);border:1px solid var(--line)}
 .toast{box-shadow:var(--shadow-menu)}
+.toast.lg{background:var(--s2);-webkit-backdrop-filter:none;backdrop-filter:none}
 .top,.tabs,.lg{background:var(--bar-bg);border:1px solid var(--line);
   -webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%)}
 /* edge bars keep one border (the screen-facing edges stay open); .x.lg outranks the shorthand above */
@@ -38,6 +39,8 @@ input::placeholder,textarea::placeholder{color:var(--fg-muted)}
 .list{background:var(--s1);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:0 0 16px}
 .list>.card{border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;margin:0;padding:16px}
 .list>.card:last-child{border-bottom:0}
+.list>.card:focus-visible{outline-offset:-2px}   /* .list clips overflow: keep the ring inside the row */
+.empty+.btn{display:flex;width:max-content;margin:0 auto}
 .list>a.card:hover{background:var(--s2)}
 .list>.card.hl{box-shadow:inset 3px 0 0 var(--high-dot)}
 .list>.tasklink{display:block;position:relative;padding-right:48px}

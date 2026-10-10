@@ -46,3 +46,9 @@ test("ui.css: backdrop-filter only on .top, .tabs and .lg; solid fallback", () =
 test("app.css: 760px content column; sub-nav still wraps", () => {
   assert.match(app, /main\{[^}]*max-width:760px/); assert.match(app, /\.sub\{[^}]*flex-wrap:wrap/);
 });
+test("final review: list rows keep the focus ring inside, header height equals --top-h, toast is solid", () => {
+  const ui = readFileSync(new URL("../css/ui.css", import.meta.url), "utf8"), app = readFileSync(new URL("../css/app.css", import.meta.url), "utf8");
+  assert.match(ui, /\.list>\.card:focus-visible\{outline-offset:-2px\}/);
+  assert.match(app, /\.top\{[^}]*height:var\(--top-h\)/); assert.doesNotMatch(app, /\.top\{[^}]*padding:8px/);
+  assert.match(ui, /\.toast\.lg\{background:var\(--s2\)/);
+});

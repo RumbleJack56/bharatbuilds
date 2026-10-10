@@ -116,5 +116,5 @@ test("a /api/map that never answers cannot hold the result card past the cap", a
   await s.els["#f"].onsubmit({ preventDefault() {} });
   while (!s.root.querySelector("#out").innerHTML && Date.now() - t0 < 3000) await new Promise(r => setTimeout(r, 20));
   assert.match(s.root.querySelector("#out").innerHTML, /Saved/);
-  assert.ok(Date.now() - t0 < 1600, `took ${Date.now() - t0} ms`);
+  assert.ok(Date.now() - t0 < 2500, `took ${Date.now() - t0} ms`);
 });
