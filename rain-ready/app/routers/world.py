@@ -1,5 +1,4 @@
 """Read-only world: personas, map data, scenario simulator."""
-from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -7,7 +6,7 @@ from pydantic import BaseModel, Field
 from core import copy, planning
 from core import lowpoints as lp
 
-from .. import service
+from .. import clock, service
 from ..auth import current_user
 from ..db import get_db
 
@@ -69,7 +68,7 @@ def simulate(body: SimIn, db=Depends(get_db)):
         res = run_scenario(db, body.rain_mm_h, body.drain_state, body.at_h)
     except ValueError as e:
         raise HTTPException(422, str(e))
-    return {"scenario": body.model_dump(), "results": res, "banner": copy.SCENARIO_BANNER, "range_note": copy.RANGE_NOTE, "date": date.today().isoformat()}
+    return {"scenario": body.model_dump(), "results": res, "banner": copy.SCENARIO_BANNER, "range_note": copy.RANGE_NOTE, "date": clock.today().isoformat()}
 
 
 @router.get("/agencies")

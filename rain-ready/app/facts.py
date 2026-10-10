@@ -1,14 +1,14 @@
 """Structured facts about the ward, read from the database. Feeds core/insights.py and core/report.py."""
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 from core import planning
 from core import lowpoints as lp
 
-from . import service
+from . import clock, service
 
 
 def ward_facts(db, now: datetime | None = None) -> dict:
-    now = now or datetime.now(timezone.utc)
+    now = now or clock.now()
     silt = service.asset_silt(db)
     reports = {r["asset_id"]: r["n"] for r in db.execute(
         "SELECT asset_id, COUNT(*) n FROM incidents WHERE asset_id IS NOT NULL GROUP BY asset_id")}

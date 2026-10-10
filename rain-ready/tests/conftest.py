@@ -6,13 +6,18 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
+from pathlib import Path
+
 from app import config, db
+
+PLACEHOLDER_SEED = str(Path(__file__).resolve().parent.parent / "data" / "seed.placeholder.json")
 
 
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "DB_PATH", str(tmp_path / "t.db"))
     monkeypatch.setattr(config, "PHOTO_DIR", str(tmp_path / "photos"))
+    monkeypatch.setattr(config, "SEED_PATH", PLACEHOLDER_SEED)     # tests walk the loop on the placeholder ids
     db.reset_connection()
     from app.main import app
     with TestClient(app) as c:

@@ -1,11 +1,11 @@
 """Task logic shared by routers: pocket/silt loading, ranking, task creation, event log."""
 import json
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta
 
 from ai import stampread
 from core import cluster, geo, photocheck, planning, stamp
 
-from . import capture, config
+from . import capture, clock, config
 from .db import now_iso
 
 ACTIVE = ("open", "accepted", "done", "disputed")
@@ -21,7 +21,7 @@ def pocket_rows(db) -> list[dict]:
 
 
 def asset_silt(db) -> dict[str, float]:
-    today = date.today()
+    today = clock.today()
     return {r["id"]: planning.silt_fraction(date.fromisoformat(r["last_confirmed_clean"]) if r["last_confirmed_clean"] else None, today)
             for r in db.execute("SELECT id, last_confirmed_clean FROM assets")}
 
@@ -53,7 +53,7 @@ def prior_photos(db) -> list[tuple[str, str | None]]:
 def check_photo(db, data: bytes, lat: float, lon: float, user_id: str, accuracy_m: float | None = None):
     """-> (hash, flags). Compares the picture with earlier ones and its geotag with the claimed spot."""
     info = photocheck.analyze(data)
-    return info["hash"], photocheck.assess(info, lat, lon, datetime.now(timezone.utc), prior_photos(db), user_id, accuracy_m)
+    return info["hash"], photocheck.assess(info, lat, lon, clock.now(), prior_photos(db), user_id, accuracy_m)
 
 
 def refresh_rank(db, task_id: int) -> None:
@@ -74,7 +74,7 @@ def ensure_task(db, asset_id: str, actor: str | None, *, from_report: bool) -> t
         refresh_rank(db, t["id"])
         return t["id"], False
     asset = db.execute("SELECT agency_id FROM assets WHERE id=?", (asset_id,)).fetchone()
-    now = datetime.now(timezone.utc)
+    now = clock.now()
     cur = db.execute("INSERT INTO tasks(asset_id,agency_id,report_count,due_at,created_at,updated_at) VALUES(?,?,?,?,?,?)",
                      (asset_id, asset["agency_id"], 1 if from_report else 0,
                       (now + timedelta(days=config.TASK_DUE_DAYS)).isoformat(timespec="seconds"), now_iso(), now_iso()))
@@ -94,13 +94,13 @@ def check_stamp(data: bytes, content_type: str, lat: float, lon: float, user_id:
     if ref is None:
         flags.append({"code": "photo_not_live", "level": "warn" if strict else "info",
                       "detail": "the photo was not taken with the in-app camera just now"})
-    return flags + stamp.assess(stampread.read_stamp(data, content_type), lat, lon, datetime.now(timezone.utc), ref,
+    return flags + stamp.assess(stampread.read_stamp(data, content_type), lat, lon, clock.now(), ref,
                                 "warn" if strict else "info")
 
 
 def check_duplicate(db, user_id: str, lat: float, lon: float) -> list[dict]:
     """Flag a report that repeats this user's own earlier report of the same spot."""
-    now = datetime.now(timezone.utc)
+    now = clock.now()
     since = (now - cluster.DUPLICATE_WINDOW).isoformat(timespec="seconds")
     recent = [(r["lat"], r["lon"], datetime.fromisoformat(r["created_at"]))
               for r in db.execute("SELECT lat, lon, created_at FROM incidents WHERE user_id=? AND created_at>=?", (user_id, since))]

@@ -1,0 +1,296 @@
+{
+ "_readme": "DEMO SEED. All coordinates, parameters and counts are PLACEHOLDERS near Old Rajinder Nagar / Karol Bagh. Replace with field data and set data_source='field'. Ownership rows cite a source or say none.",
+ "agencies": [
+  {
+   "id": "mcd",
+   "name": "MCD (Municipal Corporation of Delhi)",
+   "kind": "drain_owner"
+  },
+  {
+   "id": "pwd",
+   "name": "PWD (Public Works Department)",
+   "kind": "drain_owner"
+  },
+  {
+   "id": "ifc",
+   "name": "I&FC (Irrigation & Flood Control)",
+   "kind": "drain_owner"
+  },
+  {
+   "id": "djb",
+   "name": "DJB (Delhi Jal Board)",
+   "kind": "water"
+  }
+ ],
+ "users": [
+  {
+   "id": "res-1",
+   "name": "Resident A (demo)",
+   "role": "resident",
+   "agency_id": null
+  },
+  {
+   "id": "res-2",
+   "name": "Resident B (demo)",
+   "role": "resident",
+   "agency_id": null
+  },
+  {
+   "id": "off-mcd",
+   "name": "MCD officer (demo)",
+   "role": "official",
+   "agency_id": "mcd"
+  },
+  {
+   "id": "off-pwd",
+   "name": "PWD officer (demo)",
+   "role": "official",
+   "agency_id": "pwd"
+  },
+  {
+   "id": "admin-1",
+   "name": "Ward coordinator (demo)",
+   "role": "admin",
+   "agency_id": null
+  }
+ ],
+ "assets": [
+  {
+   "id": "DR-RN-001",
+   "type": "drain_segment",
+   "name": "Main road storm drain, Old Rajinder Nagar",
+   "lat": 28.6433,
+   "lon": 77.1846,
+   "agency_id": "mcd",
+   "owner_source": "placeholder: drain type to agency rule not yet cited",
+   "last_confirmed_clean": null,
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "DR-RN-002",
+   "type": "inlet",
+   "name": "Inlet outside library block",
+   "lat": 28.64345,
+   "lon": 77.1848,
+   "agency_id": null,
+   "owner_source": "disputed in demo seed",
+   "last_confirmed_clean": null,
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "DR-RN-003",
+   "type": "drain_segment",
+   "name": "Covered drain, lane 2",
+   "lat": 28.6429,
+   "lon": 77.184,
+   "agency_id": "mcd",
+   "owner_source": "placeholder",
+   "last_confirmed_clean": null,
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "DR-RN-004",
+   "type": "inlet",
+   "name": "Inlet, lane 3",
+   "lat": 28.6426,
+   "lon": 77.1852,
+   "agency_id": "mcd",
+   "owner_source": "placeholder",
+   "last_confirmed_clean": "2026-09-20",
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "DR-RN-005",
+   "type": "drain_segment",
+   "name": "Drain near market",
+   "lat": 28.6437,
+   "lon": 77.1851,
+   "agency_id": "mcd",
+   "owner_source": "placeholder",
+   "last_confirmed_clean": null,
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "DR-KB-006",
+   "type": "drain_segment",
+   "name": "Karol Bagh service drain",
+   "lat": 28.6505,
+   "lon": 77.1905,
+   "agency_id": "mcd",
+   "owner_source": "placeholder",
+   "last_confirmed_clean": "2026-06-01",
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "DR-KB-007",
+   "type": "inlet",
+   "name": "Karol Bagh inlet",
+   "lat": 28.6512,
+   "lon": 77.1912,
+   "agency_id": "pwd",
+   "owner_source": "placeholder",
+   "last_confirmed_clean": "2026-08-10",
+   "data_source": "placeholder",
+   "confidence": "low"
+  },
+  {
+   "id": "UP-DEMO-1",
+   "type": "underpass",
+   "name": "Underpass sump (demo, near Minto Bridge)",
+   "lat": 28.6355,
+   "lon": 77.2245,
+   "agency_id": "pwd",
+   "owner_source": "placeholder",
+   "last_confirmed_clean": null,
+   "data_source": "placeholder",
+   "confidence": "low"
+  }
+ ],
+ "pockets": [
+  {
+   "id": "LP-RN-1",
+   "name": "Rajinder Nagar saucer",
+   "kind": "saucer",
+   "lat": 28.6432,
+   "lon": 77.1845,
+   "catchment_ha": 6.0,
+   "runoff_c": 0.8,
+   "storage_m3": 900,
+   "drain_mm_h": 25,
+   "spills_to": null,
+   "linked_asset_ids": [
+    "DR-RN-001"
+   ],
+   "exposed_assets": 14,
+   "data_source": "placeholder",
+   "confidence": "low",
+   "note": "Illustrative parameters."
+  },
+  {
+   "id": "LP-RN-2",
+   "name": "Library lane low point",
+   "kind": "low_lane",
+   "lat": 28.64345,
+   "lon": 77.18485,
+   "catchment_ha": 0.8,
+   "runoff_c": 0.85,
+   "storage_m3": 60,
+   "drain_mm_h": 25,
+   "spills_to": "LP-RN-1",
+   "linked_asset_ids": [
+    "DR-RN-002"
+   ],
+   "exposed_assets": 3,
+   "data_source": "placeholder",
+   "confidence": "low",
+   "note": "Illustrative parameters."
+  },
+  {
+   "id": "LP-RN-3",
+   "name": "Lane 2 low point",
+   "kind": "low_lane",
+   "lat": 28.64285,
+   "lon": 77.184,
+   "catchment_ha": 1.2,
+   "runoff_c": 0.8,
+   "storage_m3": 120,
+   "drain_mm_h": 25,
+   "spills_to": "LP-RN-1",
+   "linked_asset_ids": [
+    "DR-RN-003"
+   ],
+   "exposed_assets": 4,
+   "data_source": "placeholder",
+   "confidence": "low",
+   "note": "Illustrative parameters."
+  },
+  {
+   "id": "LP-UP-1",
+   "name": "Underpass sump (demo)",
+   "kind": "underpass",
+   "lat": 28.6355,
+   "lon": 77.2245,
+   "catchment_ha": 3.0,
+   "runoff_c": 0.85,
+   "storage_m3": 400,
+   "drain_mm_h": 30,
+   "spills_to": null,
+   "linked_asset_ids": [
+    "UP-DEMO-1"
+   ],
+   "exposed_assets": 1,
+   "data_source": "placeholder",
+   "confidence": "low",
+   "note": "Illustrative parameters."
+  },
+  {
+   "id": "LP-KB-1",
+   "name": "Karol Bagh low lane",
+   "kind": "low_lane",
+   "lat": 28.6505,
+   "lon": 77.1904,
+   "catchment_ha": 2.0,
+   "runoff_c": 0.85,
+   "storage_m3": 250,
+   "drain_mm_h": 25,
+   "spills_to": null,
+   "linked_asset_ids": [
+    "DR-KB-006"
+   ],
+   "exposed_assets": 6,
+   "data_source": "placeholder",
+   "confidence": "low",
+   "note": "Illustrative parameters."
+  }
+ ],
+ "sites": [
+  {
+   "id": "S-SHALLOW",
+   "name": "Hypothetical society, shallow-table zone",
+   "lat": 28.644,
+   "lon": 77.188,
+   "roof_m2": 600,
+   "water_table_m": 3.5,
+   "soil": "loam",
+   "in_floodplain": 0,
+   "wash_runoff": 1,
+   "nearest_septic_m": 15,
+   "water_table_verified": 0,
+   "data_source": "hypothetical"
+  },
+  {
+   "id": "S-DEEP",
+   "name": "Hypothetical society, deep-table zone",
+   "lat": 28.58,
+   "lon": 77.21,
+   "roof_m2": 600,
+   "water_table_m": 12,
+   "soil": "sandy_loam",
+   "in_floodplain": 0,
+   "wash_runoff": 1,
+   "nearest_septic_m": 20,
+   "water_table_verified": 0,
+   "data_source": "hypothetical"
+  },
+  {
+   "id": "S-CLAY",
+   "name": "Hypothetical plot, clay soil",
+   "lat": 28.66,
+   "lon": 77.2,
+   "roof_m2": 300,
+   "water_table_m": 12,
+   "soil": "clay_loam",
+   "in_floodplain": 0,
+   "wash_runoff": 0,
+   "nearest_septic_m": 20,
+   "water_table_verified": 0,
+   "data_source": "hypothetical"
+  }
+ ]
+}

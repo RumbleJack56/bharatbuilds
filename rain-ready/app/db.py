@@ -1,19 +1,18 @@
 """SQLite access, schema and seed bootstrap. Routers use `db=Depends(get_db)`; rows behave like dicts."""
 import json
 import sqlite3
-from datetime import datetime, timezone
 from pathlib import Path
 
 from core import seedcheck
 
-from . import config
+from . import clock, config
 
 ROOT = Path(__file__).resolve().parent.parent
 _con: sqlite3.Connection | None = None
 
 
 def now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return clock.now().isoformat(timespec="seconds")
 
 
 def connect(path: str | None = None) -> sqlite3.Connection:
@@ -52,12 +51,14 @@ def init_db() -> None:
     _add_missing_columns(con)
     if con.execute("SELECT COUNT(*) FROM agencies").fetchone()[0] == 0:
         seed(con)
+    from . import reference
+    reference.load(con)
     con.commit()
 
 
 ADDED = {"incidents": {"photo_hash": "TEXT", "flags": "TEXT", "accuracy_m": "REAL", "reviewed_by": "TEXT",
                        "reviewed_at": "TEXT", "review_decision": "TEXT", "review_note": "TEXT"},
-         "task_events": {"photo_hash": "TEXT", "flags": "TEXT"},
+         "task_events": {"photo_hash": "TEXT", "flags": "TEXT", "data": "TEXT"},
          "assets": {"citation": "TEXT"}, "pockets": {"citation": "TEXT"}, "sites": {"citation": "TEXT"}}
 
 
@@ -73,10 +74,10 @@ def _add_missing_columns(con: sqlite3.Connection) -> None:
 
 
 def seed(con: sqlite3.Connection) -> None:
-    data = json.loads((ROOT / "data" / "seed.json").read_text())
+    data = json.loads(Path(config.SEED_PATH).read_text())
     problems = seedcheck.validate(data)
     if problems:
-        raise ValueError("seed.json is not valid:\n" + "\n".join(problems))
+        raise ValueError(f"{config.SEED_PATH} is not valid:\n" + "\n".join(problems))
     for table in ("agencies", "users", "assets", "pockets", "sites"):
         for row in data[table]:
             _insert(con, table, row)

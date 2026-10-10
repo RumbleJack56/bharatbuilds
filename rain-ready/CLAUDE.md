@@ -7,7 +7,7 @@ Read `SCOPE.md` (what, MVP vs good-to-haves) and `TASKS.md` (who owns which file
 FastAPI + SQLite (`app/`), pure logic in `core/` (tested), plain HTML/JS in `web/` (no build step), Capacitor wrapper in `mobile/` for the APK. AWS: EC2, S3, Bedrock. The API contract is `/docs` on the running server.
 
 ## Commands
-`make setup` once; `make run` (http://localhost:8010, UI + API); `make test`; `make reset` (then restart the server: seed edits apply only to a fresh DB); `make apk API=https://<host>`.
+`make setup` once; `make run` (http://localhost:8010, UI + API); `make test`; `make reset` (then restart the server: seed edits apply only to a fresh DB); `make apk API=https://<host>`. Data: `make eda`, `make seed` (or `make demo-db` for rehearsal history), `make verify-db` (check a seeded database), `make demo` (live lifecycle against a running server), `/board` (public leaderboard). Docs: `docs/EDA.md`, `docs/SEEDING.md`.
 Demo personas (header `X-User-Id`): `res-1`, `res-2` (residents), `off-mcd`, `off-pwd` (officials), `admin-1`.
 
 ## Rules
