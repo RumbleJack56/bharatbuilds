@@ -3,7 +3,7 @@ import { esc, hrs } from "../ui/format.js";
 import { banner } from "../ui/components.js";
 import { LEVEL, USE } from "../ui/copy.js";
 
-export const TAB_TITLES = { map: "Map", accountability: "Who is responsible", impact: "Impact", simulator: "Simulator", capture: "Rain capture", actions: "Actions" };
+export const TAB_TITLES = { map: "Map", accountability: "Who is responsible", impact: "Impact", simulator: "Simulator", capture: "Rain capture", actions: "Actions", insights: "Insights" };
 const STATUS = ["open", "accepted", "done", "confirmed", "disputed", "rejected"];
 
 export const dashShell = (tab) => `<h1>Dashboard</h1><nav class="sub" aria-label="Dashboard sections">${Object.entries(TAB_TITLES)

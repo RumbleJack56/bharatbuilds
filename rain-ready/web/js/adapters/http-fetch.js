@@ -11,7 +11,7 @@ function detailText(d) {
 export function createFetchHttp({ base = "", getUserId = () => "", fetchImpl = (...a) => globalThis.fetch(...a) } = {}) {
   const root = base.replace(/\/$/, "");
   return {
-    async request(method, path, { json, form } = {}) {
+    async request(method, path, { json, form, text } = {}) {
       const headers = {};
       const uid = getUserId();
       if (uid) headers["X-User-Id"] = uid;
@@ -21,6 +21,7 @@ export function createFetchHttp({ base = "", getUserId = () => "", fetchImpl = (
       let res;
       try { res = await fetchImpl(root + path, { method, headers, body }); }
       catch { throw new ApiError("Cannot reach the server. Check your connection.", 0); }
+      if (text && res.ok) return res.text();
       let data = null;
       try { data = await res.json(); } catch { /* empty body */ }
       if (!res.ok) throw new ApiError(detailText(data && data.detail), res.status);

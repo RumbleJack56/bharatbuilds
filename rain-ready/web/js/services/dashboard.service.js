@@ -17,6 +17,9 @@ export function createDashboardService(http) {
     },
     agencies: async () => (await http.request("GET", "/api/agencies")).agencies,
     actions: (top = 10) => http.request("GET", `/api/actions?top=${encodeURIComponent(top)}`),
+    insights: () => http.request("GET", "/api/insights"),
+    wardReport: () => http.request("GET", "/api/reports/ward?format=json"),
+    wardReportMd: () => http.request("GET", "/api/reports/ward?format=md", { text: true }),
     generatePlan: (top = 5) => http.request("POST", `/api/plan/generate?top=${encodeURIComponent(top)}`),
   };
 }
