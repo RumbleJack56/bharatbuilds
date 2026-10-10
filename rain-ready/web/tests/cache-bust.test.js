@@ -22,3 +22,8 @@ test("every module under web/js is mapped to the same version", () => {
 test("the import map holds no entry for a missing module", () => {
   for (const k of Object.keys(map)) assert.ok(modules.includes(k), `stale entry ${k}`);
 });
+test("every stylesheet link carries the same version", () => {
+  const links = [...html.matchAll(/<link rel="stylesheet" href="(css\/[\w-]+\.css)\?v=([\w.-]+)"/g)];
+  assert.deepEqual(links.map(l => l[1]), ["css/tokens.css", "css/app.css", "css/glass.css"]);
+  for (const [, href, v] of links) assert.equal(v, V, href);
+});
