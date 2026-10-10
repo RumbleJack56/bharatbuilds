@@ -108,6 +108,10 @@ aws iam get-role --role-name $GH_ROLE --query Role.Arn --output text
 
 If the GitHub `deploy` job already failed with `Not authorized to perform sts:AssumeRoleWithWebIdentity`, re-running the block above repairs it (`update-assume-role-policy` replaces the trust policy). Then run `gh workflow run test --repo $GH_REPO --ref main` and check the `deploy` job.
 
+**This cannot be fixed from the GitHub side.** The repo's OIDC subject is immutable (it carries the owner and repo ids). Tested on 10 Oct: the customization API ignores `use_immutable_subject=false`, and a custom template built from the `repo` and `context` claim keys still produces the immutable prefix. Only the role's trust policy can change. The command replaces the whole trust policy, so it works whatever the role holds now.
+
+No AWS CLI on the machine? Open **AWS CloudShell** (the terminal icon in the console's top bar, region `ap-south-1`). It has the CLI and the console login. Paste the block from section 1 and the block above.
+
 ### 3.4 Test one deploy by hand
 
 A deploy replaces everything in the app directory on the server except `.env`, `var/`, `*.pem` and `.aws-state`. Look first:

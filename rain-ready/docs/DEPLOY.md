@@ -14,6 +14,22 @@
 
 **Automatic deploy:** after the one-time setup in `docs/AWS_TODO.md` section 3, every merge to `main` that passes the tests is deployed by the `deploy` job in `.github/workflows/test.yml` (`scripts/deploy-ssm.sh`: code to S3, then SSM runs `scripts/server-deploy.sh` on the host). The same file is the full AWS CLI playbook for the remaining AWS work.
 
+## Cloudflare (custom domain `rainready.rumblejack56.dev`)
+
+Checked on 10 Oct with `curl -I`:
+
+| Path | Result |
+|---|---|
+| `/` (HTML) | `cf-cache-status: DYNAMIC`: not cached, always fresh |
+| `/js/*`, `/css/*` | cached; `cache-control: max-age=14400` (4 h), added by Cloudflare's Browser Cache TTL. The origin sends no cache header |
+
+So a deploy can leave old JS and CSS for up to 4 h. Two ways to avoid it:
+
+1. **Cache Rule (recommended, no code, no chore).** Cloudflare dashboard, the zone, Caching, Cache Rules, create a rule: hostname equals `rainready.rumblejack56.dev`, action *Bypass cache*. The app is small, so the origin serves it fine.
+2. **Version bump per deploy.** `web/index.html` carries `?v=N` on the CSS link, on `main.js` and on every module in the import map. Bump it before each deploy: `sed -i 's/?v=1/?v=2/g' rain-ready/web/index.html` (a test guards it).
+
+A manual purge (Caching, Configuration, Purge Everything) also works but must be repeated after every deploy. None of this is related to the deploy job's AWS sign-in.
+
 | Symptom | Cause |
 |---|---|
 | Camera or GPS dead | page is not HTTPS |
