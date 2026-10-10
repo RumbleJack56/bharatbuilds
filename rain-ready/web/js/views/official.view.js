@@ -14,7 +14,8 @@ export const taskCard = (t, note = "", n = 0) => `<a class="card glass rise task
   <h3>${esc(t.asset_name)}</h3>
   <p class="small muted">${[t.agency_name || "No owner found", t.pocket_name || "no pocket", `${t.report_count} report(s)`].map(esc).join(" - ")}</p>
   ${t.status === "disputed" ? `<p class="small"><strong>Resident's note:</strong> ${esc(note || "(no note)")}</p>` : ""}
-  <p class="small">Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</p></a>`;
+  <p class="small">Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</p>
+  <svg class="ic chev" aria-hidden="true"><use href="img/icons.svg?v=2#i-chevron-right"/></svg></a>`;
 
 export const inboxView = ({ tasks, banner: b }, notes = {}) => `<h1>Inbox</h1>${banner(b)}` +
   (tasks.length ? `<div class="list">${tasks.map((t, n) => taskCard(t, notes[t.id], n)).join("")}</div>` : empty(EMPTY.inbox));

@@ -6,8 +6,8 @@ const web = (p) => readFileSync(new URL("../" + p, import.meta.url), "utf8");
 const html = web("index.html"), app = web("css/app.css"), glass = web("css/ui.css");
 
 test("top bar and tab bar are the only persistent lens targets; the toast keeps the look via CSS only", () => {
-  assert.match(html, /<header class="top glass lg">/);
-  assert.match(html, /<nav id="tabs" class="tabs glass lg" aria-label="Main">/);
+  assert.match(html, /<header class="top lg">/);
+  assert.match(html, /<nav id="tabs" class="tabs lg" aria-label="Main">/);
   assert.match(html, /<div id="toast" class="toast glass-strong lg" data-lg-css role="status"/);
 });
 test("tabs: fixed bottom bar at <= 640 px, sticky row under the top bar on wider screens", () => {

@@ -6,7 +6,7 @@
   -webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%)}
 /* edge bars keep one border (the screen-facing edges stay open); .x.lg outranks the shorthand above */
 .top.lg{border-width:0 0 1px}.tabs.lg,.cam-bar.lg{border-width:1px 0 0}
-@media (min-width:641px){.tabs.lg{border-width:1px}}
+@media (min-width:641px){.tabs.lg{border-width:0 0 1px}}
 .banner,.err{background:var(--warn-bg);border:1px solid var(--warn-line)}
 .err{background:var(--err-bg);border-color:var(--err-line)}
 .rule,.flags li{background:var(--s2)}
@@ -40,8 +40,20 @@ input::placeholder,textarea::placeholder{color:var(--fg-muted)}
 .list>.card:last-child{border-bottom:0}
 .list>a.card:hover{background:var(--s2)}
 .list>.card.hl{box-shadow:inset 3px 0 0 var(--high-dot)}
-.tasklink{display:flex;align-items:center;gap:8px}.tasklink>div,.tasklink>:first-child{flex:1}
-.tasklink::after{content:"";width:8px;height:8px;border:solid var(--fg-muted);border-width:2px 2px 0 0;transform:rotate(45deg);flex:none}
+.list>.tasklink{display:block;position:relative;padding-right:48px}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.chev{color:var(--fg-muted);position:absolute;right:16px;top:50%;transform:translateY(-50%)}
+.avatar{min-width:44px;min-height:44px;width:44px;padding:0;border:0;border-radius:50%;background:none;font-size:13px;font-weight:600;color:var(--fg);position:relative;isolation:isolate}
+.avatar::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--s2);border:1px solid var(--line);z-index:-1}
+.avatar:hover:not(:disabled){background:none}
+.acct{margin-left:auto}
+.menu{position:fixed;inset:auto 12px auto auto;top:calc(var(--top-h) + 4px);margin:0;min-width:220px;background:var(--s2);color:var(--fg);border:1px solid var(--line);
+  border-radius:12px;box-shadow:var(--shadow-menu);padding:8px}
+.menu p{margin:0;padding:2px 8px}.menu-name{font-weight:600}.menu-role{margin-bottom:6px!important}
+.menu-item{width:100%;justify-content:flex-start;gap:8px;border:0;text-align:left}
+.menu-inline .avatar{display:none}
+.menu-inline .menu{position:static;display:flex;align-items:center;gap:8px;min-width:0;background:none;border:0;box-shadow:none;padding:0}
+.menu-inline .menu-item{width:auto}
 .empty{text-align:center;padding:32px;color:var(--fg-muted)}
 .empty .ic{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}.empty p{margin:8px 0 0}
 table{border-collapse:separate;border-spacing:0;font-size:14px}
