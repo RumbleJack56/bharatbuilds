@@ -87,7 +87,7 @@ def test_reporter_cannot_confirm_or_dispute_own_report(client):
     r = client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd")).json()            # rework: the agency takes it again
     assert r["status"] == "accepted" and r["events"][-1]["note"].startswith("to be redone")
     assert client.post(f"/api/tasks/{tid}/accept", headers=as_("off-pwd")).status_code == 403
-    client.post(f"/api/tasks/{tid}/complete", data={"note": "redone"}, files={"photo": ("p.png", PNG + b"1" * 64, "image/png")}, headers=as_("off-mcd"))
+    client.post(f"/api/tasks/{tid}/complete", data={"note": "redone"}, files=photo(), headers=as_("off-mcd"))
     assert client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-2")).json()["status"] == "confirmed"
 
 

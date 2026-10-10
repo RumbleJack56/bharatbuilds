@@ -27,7 +27,7 @@ def asset_silt(db) -> dict[str, float]:
 
 
 def new_due_at() -> str:
-    return (datetime.now(timezone.utc) + timedelta(days=config.TASK_DUE_DAYS)).isoformat(timespec="seconds")
+    return (clock.now() + timedelta(days=config.TASK_DUE_DAYS)).isoformat(timespec="seconds")
 
 
 def nearest_asset(db, lat: float, lon: float):

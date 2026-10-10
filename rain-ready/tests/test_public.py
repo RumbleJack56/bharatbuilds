@@ -3,15 +3,12 @@ from pathlib import Path
 
 from core import copy
 
-from .conftest import as_
-import itertools
-
-_n = itertools.count(1)
+from .conftest import as_, fresh_photo
 
 
 def photo():
-    """A different picture each call: the duplicate-photo check holds a repeat, as it should."""
-    return {"photo": ("p.png", b"\x89PNG\r\n\x1a\n" + str(next(_n)).encode() * 24, "image/png")}
+    """A real, different picture each call: the duplicate-photo check holds a repeat, as it should."""
+    return fresh_photo()
 
 
 def _loop(client, user="res-1", lat=28.6433, lon=77.1846):
@@ -19,7 +16,8 @@ def _loop(client, user="res-1", lat=28.6433, lon=77.1846):
     tid = r["task_id"]
     client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
     client.post(f"/api/tasks/{tid}/complete", data={"note": "cleared"}, files=photo(), headers=as_("off-mcd"))
-    client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-2"))
+    other = "res-2" if user == "res-1" else "res-1"                  # the reporter cannot confirm their own report
+    client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_(other))
     return tid
 
 
