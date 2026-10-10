@@ -34,7 +34,7 @@ function hasGL() {
 }
 await waitFor(() => hasLiquidGL(window), 1200);
 const glass = implement(GlassPort, chooseGlass({ hasLiquid: hasLiquidGL(window), hasGL: hasGL(), reducedMotion: media("(prefers-reduced-motion: reduce)"),
-  deviceMemory: navigator.deviceMemory, search: location.search, phone: media("(max-width: 640px)") }) === "liquid" ? createLiquidGlass(window) : createCssGlass(document));
+  search: location.search }) === "liquid" ? createLiquidGlass(window) : createCssGlass(document));
 const storage = implement(StoragePort, createLocalStorage());
 const http = implement(HttpPort, createFetchHttp({ base: window.API_BASE || "", getUserId: () => storage.get("user") }));
 const session = createSessionService(http, storage);

@@ -1,14 +1,10 @@
 // web/js/core/glass.js — pure rules for picking the glass implementation. No window access: main.js builds env.
-export const PHONE_LIQUID = false;   // Task 6: lens looked wrong on phones in headless liquid mode (doubled text behind the bars, bright tab bar); ?glass=liquid still opts in
-
-// env: { hasLiquid, hasGL, reducedMotion, deviceMemory (number|undefined), search, phone }
-export function chooseGlass(env, phoneLiquid = PHONE_LIQUID) {
+// liquid-gl 2.2.4 doubles unblurred text under the bar and washes the tab bar on every width, so css is the default; ?glass=liquid opts in.
+// env: { hasLiquid, hasGL, reducedMotion, search }
+export function chooseGlass(env) {
   const q = new URLSearchParams(env.search || "").get("glass");
-  if (q === "css") return "css";
-  if (!env.hasLiquid || !env.hasGL || env.reducedMotion) return "css";
-  if (q === "liquid") return "liquid";                       // test override: skips memory and phone rules only
-  if (env.deviceMemory != null && env.deviceMemory < 4) return "css";
-  if (env.phone && !phoneLiquid) return "css";
+  if (q !== "liquid") return "css";
+  if (!env.hasLiquid || !env.hasGL || env.reducedMotion) return "css";   // liquid still needs WebGL, the CDN script and motion allowed
   return "liquid";
 }
 

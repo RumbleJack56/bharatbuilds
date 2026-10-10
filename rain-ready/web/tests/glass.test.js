@@ -18,25 +18,21 @@ test("css adapter satisfies the port and reports css", async () => {
   assert.equal(g.mode(), "css"); assert.equal(root.classList.c, "glass-css");
 });
 
-test("chooseGlass: liquid only when every condition holds", () => assert.equal(chooseGlass(OK), "liquid"));
-test("chooseGlass: ?glass=css always wins", () => assert.equal(chooseGlass({ ...OK, search: "?glass=css" }), "css"));
-test("chooseGlass: library missing (CDN failed) or no WebGL2/WebGPU -> css", () => {
-  assert.equal(chooseGlass({ ...OK, hasLiquid: false }), "css");
-  assert.equal(chooseGlass({ ...OK, hasGL: false }), "css");
+const LQ = { ...OK, search: "?glass=liquid" };
+test("chooseGlass: css by default on every width", () => {
+  assert.equal(chooseGlass(OK), "css");
+  assert.equal(chooseGlass({ ...OK, phone: true }), "css");
+  assert.equal(chooseGlass({ ...OK, phone: false, deviceMemory: 8 }), "css");
 });
-test("chooseGlass: reduced motion -> css, even when forced", () => {
-  assert.equal(chooseGlass({ ...OK, reducedMotion: true }), "css");
-  assert.equal(chooseGlass({ ...OK, reducedMotion: true, search: "?glass=liquid" }), "css");
+test("chooseGlass: ?glass=liquid opts in on any width and memory", () => {
+  assert.equal(chooseGlass(LQ), "liquid");
+  assert.equal(chooseGlass({ ...LQ, phone: true, deviceMemory: 2 }), "liquid");
 });
-test("chooseGlass: low memory -> css, unknown memory -> liquid, 4 GB -> liquid", () => {
-  assert.equal(chooseGlass({ ...OK, deviceMemory: 2 }), "css");
-  assert.equal(chooseGlass({ ...OK, deviceMemory: undefined }), "liquid");
-  assert.equal(chooseGlass({ ...OK, deviceMemory: 4 }), "liquid");
-});
-test("chooseGlass: phones follow the measured default; ?glass=liquid overrides memory and phone", () => {
-  assert.equal(chooseGlass({ ...OK, phone: true }, false), "css");
-  assert.equal(chooseGlass({ ...OK, phone: true }, true), "liquid");
-  assert.equal(chooseGlass({ ...OK, phone: true, deviceMemory: 2, search: "?glass=liquid" }, false), "liquid");
+test("chooseGlass: ?glass=css wins", () => assert.equal(chooseGlass({ ...LQ, search: "?glass=css" }), "css"));
+test("chooseGlass: liquid blocked by missing CDN, no WebGL or reduced motion", () => {
+  assert.equal(chooseGlass({ ...LQ, hasLiquid: false }), "css");
+  assert.equal(chooseGlass({ ...LQ, hasGL: false }), "css");
+  assert.equal(chooseGlass({ ...LQ, reducedMotion: true }), "css");
 });
 
 test("waitFor resolves true as soon as the predicate holds and false at the deadline (CDN hang)", async () => {
