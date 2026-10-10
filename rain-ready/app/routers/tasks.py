@@ -5,9 +5,11 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
 
+from starlette.concurrency import run_in_threadpool
+
 from core import copy
 
-from .. import clock, service, storage
+from .. import capture, clock, service, storage
 from ..auth import current_user, need
 from ..db import get_db, now_iso
 
@@ -22,9 +24,21 @@ def _overdue(t: dict) -> bool:
     return t["status"] in ("open", "accepted") and bool(t["due_at"]) and datetime.fromisoformat(t["due_at"]) < clock.now()
 
 
-def _out(db, r, detail=False) -> dict:
+def _dispute_notes(db, ids: list[int]) -> dict[int, str]:
+    """Latest dispute note per task, in one query (B30: the inbox does not need a detail call per task)."""
+    if not ids:
+        return {}
+    rows = db.execute(f"SELECT task_id, note FROM task_events WHERE event='disputed' AND task_id IN ({','.join('?' * len(ids))}) "
+                      "ORDER BY id", ids)
+    return {r["task_id"]: r["note"] or "" for r in rows}
+
+
+def _out(db, r, detail=False, notes: dict | None = None) -> dict:
     d = dict(r)
     d["overdue"] = _overdue(d)
+    d["dispute_note"] = None
+    if d["status"] == "disputed":
+        d["dispute_note"] = (notes if notes is not None else _dispute_notes(db, [d["id"]])).get(d["id"], "")
     if detail:
         d["events"] = [dict(e, photo_url=storage.photo_url(e["photo_key"]), photo_hash=None,
                             flags=json.loads(e["flags"]) if e["flags"] else []) for e in
@@ -66,7 +80,8 @@ def list_tasks(agency_id: str | None = None, status: str | None = None, db=Depen
     if where:
         q += " WHERE " + " AND ".join(where)
     rows = db.execute(q + " ORDER BY t.rank_score DESC, t.id", args).fetchall()
-    return {"tasks": [_out(db, r) for r in rows], "banner": copy.SCENARIO_BANNER}
+    notes = _dispute_notes(db, [r["id"] for r in rows if r["status"] == "disputed"])
+    return {"tasks": [_out(db, r, notes=notes) for r in rows], "banner": copy.SCENARIO_BANNER}
 
 
 @router.get("/tasks/{tid}")
@@ -128,17 +143,23 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
 
 @router.post("/tasks/{tid}/complete")
 async def complete(tid: int, note: str = Form(""), photo: UploadFile = File(...),
-                   user=Depends(need("official", "admin")), db=Depends(get_db)):
+                   lat: float | None = Form(None), lon: float | None = Form(None), accuracy_m: float | None = Form(None),
+                   capture_token: str = Form(""), user=Depends(need("official", "admin")), db=Depends(get_db)):
     t = _task(db, tid); _own(user, t); _need_status(t, "accepted")
     data, ctype = await photo.read(storage.MAX_BYTES + 1), photo.content_type or ""
     try:
         storage.validate_photo(data, ctype)
     except ValueError as e:
         raise HTTPException(422, str(e))
-    phash, flags = service.check_photo(db, data, t["lat"], t["lon"], user["id"])   # flags are shown to the confirming resident
+    here = (lat, lon) if lat is not None and lon is not None else (t["lat"], t["lon"])   # where the photo should have been taken
+    phash, flags = service.check_photo(db, data, *here, user["id"], accuracy_m)   # flags are shown to the confirming resident
     if phash is None:
         raise HTTPException(422, "the photo could not be read as an image; please take it again")
+    flags += await run_in_threadpool(service.check_stamp, data, ctype, *here, user["id"], capture_token)
+    flags += service.check_on_site(lat, lon, t)          # flags only: an official's work is never blocked by a rule
     key = storage.save_photo(data, ctype)
+    if capture.verify(capture_token, user["id"]):
+        capture.mark_used(capture_token)
     _set(db, tid, status="done", done_by=user["id"])
     service.log_event(db, tid, user["id"], "completed", note[:300], key, t["agency_id"], phash, flags); db.commit()
     return _out(db, _task(db, tid), True)

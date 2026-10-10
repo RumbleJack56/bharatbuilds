@@ -98,6 +98,17 @@ def check_stamp(data: bytes, content_type: str, lat: float, lon: float, user_id:
                                 "warn" if strict else "info")
 
 
+def check_on_site(lat: float | None, lon: float | None, asset: dict) -> list[dict]:
+    """After photo: the device position (if sent) should be at the drain, within the same radius a report links with."""
+    if lat is None or lon is None:
+        return []
+    d = geo.haversine_m(lat, lon, asset["lat"], asset["lon"])
+    if d <= config.LINK_RADIUS_M:
+        return []
+    return [{"code": "not_at_drain", "level": "warn",
+             "detail": f"the phone was {round(d)} m from the drain when the after photo was taken"}]
+
+
 def check_duplicate(db, user_id: str, lat: float, lon: float) -> list[dict]:
     """Flag a report that repeats this user's own earlier report of the same spot."""
     now = clock.now()

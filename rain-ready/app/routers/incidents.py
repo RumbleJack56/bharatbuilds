@@ -17,12 +17,25 @@ router = APIRouter(prefix="/api")
 KINDS = ("blocked_drain", "standing_water", "overflow", "other")
 
 
+def _is_held(row) -> bool:
+    flags = json.loads(row["flags"]) if row["flags"] else []
+    return photocheck.suspect(flags) and not row["review_decision"]
+
+
 def _incident(r) -> dict:
     d = dict(r)
     d["photo_url"] = storage.photo_url(d.pop("photo_key"))
     d["ai"] = json.loads(d.pop("ai_json")) if d["ai_json"] else None
     d["flags"] = json.loads(d["flags"]) if d["flags"] else []
     d.pop("photo_hash", None)
+    d["held_for_review"] = _is_held(r)
+    return d
+
+
+def _redact(d: dict, user) -> dict:
+    """B27: a resident sees other residents' reports (kind, photo, time, task) but not who sent them or what they wrote."""
+    if user["role"] == "resident" and d["user_id"] != user["id"]:
+        return {**d, "user_id": None, "note": ""}
     return d
 
 
@@ -79,11 +92,6 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
             "field_rule": copy.FIELD_RULE}
 
 
-def _is_held(row) -> bool:
-    flags = json.loads(row["flags"]) if row["flags"] else []
-    return photocheck.suspect(flags) and not row["review_decision"]
-
-
 @router.get("/incidents")
 def list_incidents(mine: bool = False, held: bool = False, user=Depends(need("resident", "official", "admin")),
                    db=Depends(get_db)):
@@ -96,7 +104,7 @@ def list_incidents(mine: bool = False, held: bool = False, user=Depends(need("re
         q += " JOIN assets a ON a.id=i.asset_id"
         where.append("a.agency_id=?"); args.append(user["agency_id"])
     rows = db.execute(q + (" WHERE " + " AND ".join(where) if where else "") + " ORDER BY i.id DESC LIMIT 100", args)
-    return {"incidents": [_incident(r) for r in rows if not held or _is_held(r)]}
+    return {"incidents": [_redact(_incident(r), user) for r in rows if not held or _is_held(r)]}
 
 
 class Review(BaseModel):
