@@ -12,6 +12,8 @@
 10. Build the APK: `make apk API=https://<DOMAIN>`.
 11. Stop the instance after judging.
 
+**Automatic deploy:** after the one-time setup in `docs/AWS_TODO.md` section 3, every merge to `main` that passes the tests is deployed by the `deploy` job in `.github/workflows/test.yml` (`scripts/deploy-ssm.sh`: code to S3, then SSM runs `scripts/server-deploy.sh` on the host). The same file is the full AWS CLI playbook for the remaining AWS work.
+
 | Symptom | Cause |
 |---|---|
 | Camera or GPS dead | page is not HTTPS |
