@@ -1,5 +1,5 @@
 // web/js/controllers/official.js — inbox and the task page with role-aware actions.
-import { inboxView, taskDetail, openActions, acceptedActions, assignActions, waitingActions } from "../views/official.view.js";
+import { inboxView, taskDetail, disputeNote, openActions, disputedActions, acceptedActions, assignActions, waitingActions } from "../views/official.view.js";
 import { guard } from "../ui/components.js";
 import { esc } from "../ui/format.js";
 import { CAMERA } from "../ui/copy.js";
@@ -10,7 +10,11 @@ export const inbox = {
   path: "inbox", roles: ["official"],
   async mount(root, ctx) {
     const me = await ctx.services.session.me();
-    root.innerHTML = inboxView(await ctx.services.tasks.list({ agencyId: me.agency_id }));
+    const data = await ctx.services.tasks.list({ agencyId: me.agency_id });
+    // The list has no events; a disputed task's note comes from its detail.
+    const notes = {};
+    await Promise.all(data.tasks.filter(t => t.status === "disputed").map(async t => { notes[t.id] = disputeNote(await ctx.services.tasks.get(t.id)); }));
+    root.innerHTML = inboxView(data, notes);
   },
 };
 
@@ -36,11 +40,12 @@ export const task = {
     }
     if (t.status === "open") box.innerHTML = openActions({ agencies, current: t.agency_id });
     else if (t.status === "accepted") box.innerHTML = acceptedActions({ agencies, current: t.agency_id });
+    else if (t.status === "disputed") box.innerHTML = disputedActions();
     else if (t.status === "done") { box.innerHTML = waitingActions(); return; }
     else return;
 
     box.querySelector("#acc")?.addEventListener("click", e => act(e.target, () => ctx.services.tasks.accept(t.id), "Accepted."));
-    box.querySelector("#rej").addEventListener("click", e => {
+    box.querySelector("#rej")?.addEventListener("click", e => {
       const reason = box.querySelector("#why").value.trim();
       if (!reason) return ctx.toast.show("Please give a short reason.");
       act(e.target, () => ctx.services.tasks.reject(t.id, { reason, reassignTo: box.querySelector("#to").value }), "Sent back.");
