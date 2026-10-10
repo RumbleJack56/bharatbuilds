@@ -8,12 +8,17 @@ const css = (f) => readFileSync(new URL(f, dir), "utf8");
 test("every stylesheet stays within ~250 lines", () => {
   for (const f of readdirSync(dir).filter(f => f.endsWith(".css"))) assert.ok(css(f).split("\n").length <= 250, f);
 });
-test("tokens carry the token values", () => {
-  const t = css("tokens.css");
-  for (const s of ["--glass-bg-strong:rgba(16,26,40,.72)", "--glass-border:rgba(255,255,255,.14)", "--glass-blur:16px", "--glass-sat:140%", "--radius:18px",
-    "--radius-sm:12px", "--fg:#eef4f8", "--fg-muted:#a9bccb", "--accent:#5ad1e6", "--high:#ffa093", "--high-dot:#ff7a6b", "--elev:#ffb547", "--low:#5ad1a0", "--info:#8cbfff",
+test("tokens carry the Firefly values", () => {
+  const t = css("tokens.css").replace(/\s+/g, "");
+  for (const s of ["--bg:#121214", "--s1:#1a1a1d", "--accent-fill:#6d5ce6", "--radius:12px", "--radius-sm:8px", "--top-h:56px",
     "--ease:cubic-bezier(.2,.8,.2,1)", "--dur-fast:120ms", "--dur:220ms"]) assert.ok(t.includes(s), s);
 });
+test("index.html has no backdrop and links Inter with display=swap", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  assert.doesNotMatch(html, /class="backdrop"/);
+  assert.match(html, /fonts\.googleapis\.com\/css2\?family=Inter[^"]*display=swap/);
+});
+test("motion.css has no drift keyframes", () => assert.doesNotMatch(css("motion.css"), /@keyframes drift/));
 test("glass has the solid fallback when backdrop-filter is unsupported", () => {
   const g = css("glass.css");
   assert.match(g, /@supports not \(\(backdrop-filter:blur\(1px\)\) or \(-webkit-backdrop-filter:blur\(1px\)\)\)/);
@@ -28,16 +33,14 @@ test("focus ring and 44 px controls exist", () => {
   assert.match(g, /min-height:44px/);
 });
 test("the legacy light/dark media query is gone", () => assert.doesNotMatch(css("app.css") + css("tokens.css"), /prefers-color-scheme/));
-test("motion.css: route fade 180 ms + 8 px rise, 30 ms stagger, drift uses transform only", () => {
+test("motion.css: route fade 180 ms + 8 px rise, 30 ms stagger", () => {
   const m = css("motion.css");
   assert.match(m, /::view-transition-old\(root\)\{[^}]*animation:vt-out 180ms/);
   assert.match(m, /::view-transition-new\(root\)\{[^}]*animation:vt-in 180ms/);
   assert.match(m, /translateY\(8px\)/);
   assert.match(m, /animation-delay:calc\(var\(--i,0\)\*30ms\)/);
-  for (const [, body] of m.matchAll(/@keyframes drift\d\{([\s\S]*?)\}\s*\}/g)) assert.doesNotMatch(body, /left|top|width|height|opacity/);
-  for (const d of ["60s", "75s", "90s"]) assert.ok(m.includes(d), d);
 });
-test("motion.css: reduced motion switches off drift, stagger, view transitions, press scale and transitions", () => {
+test("motion.css: reduced motion switches off stagger, view transitions, press scale and transitions", () => {
   const m = css("motion.css"), r = m.slice(m.indexOf("@media (prefers-reduced-motion: reduce)"));
   assert.ok(m.includes("@media (prefers-reduced-motion: reduce)"));
   assert.match(r, /\*,\*::before,\*::after\{[^}]*animation:none!important[^}]*transition:none!important/);
