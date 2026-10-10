@@ -2,7 +2,7 @@
 import { reportForm, reportResult } from "../views/report.view.js";
 import { KINDS, FIELD_RULE, PIN, CAMERA } from "../ui/copy.js";
 import { esc } from "../ui/format.js";
-import { errBox, guard } from "../ui/components.js";
+import { errBox, guard, photoError } from "../ui/components.js";
 
 export const DEFAULT = [28.643592, 77.186944];   // drain DR-DN-PUSA: Daryai Nallah barrel, Pusa Road crossing (MCD)
 
@@ -62,7 +62,7 @@ export const report = {
           $("#f").reset(); clearPhoto();
           $("#out").scrollIntoView();
         } catch (e) {
-          $("#out").innerHTML = e.status === 422 && !kind ? errBox("We could not tell from the photo. Please pick what you see.") : errBox(e);
+          $("#out").innerHTML = errBox(photoError(e, kind));
         }
       }, ctx.toast.show);
     };

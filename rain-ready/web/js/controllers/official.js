@@ -66,7 +66,10 @@ export const task = {
     box.querySelector("#done")?.addEventListener("submit", ev => {
       ev.preventDefault();
       if (!photo) return ctx.toast.show("An after-photo is required.");
-      act(ev.submitter || box.querySelector("#done button[type=submit]"), () => ctx.services.tasks.complete(t.id, { photo: photo.blob, note: box.querySelector("#nt").value }),
+      act(ev.submitter || box.querySelector("#done button[type=submit]"), async () => {
+        try { await ctx.services.tasks.complete(t.id, { photo: photo.blob, note: box.querySelector("#nt").value }); }
+        catch (e) { box.querySelector("#camnote").textContent = e.message; throw e; }          // 422: the server's "take it again" text stays on screen
+      },
         "Marked done. A resident will check it.");
     });
   },

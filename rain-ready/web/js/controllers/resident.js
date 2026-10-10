@@ -1,7 +1,6 @@
 // web/js/controllers/resident.js — My reports and Confirm (check finished work).
 import { mineView, confirmIntro, confirmCard } from "../views/resident.view.js";
 import { errBox, guard } from "../ui/components.js";
-import { esc } from "../ui/format.js";
 
 export const mine = {
   path: "mine", roles: ["resident"],
@@ -21,8 +20,7 @@ export const confirm = {
         await ctx.services.tasks.confirm(card.dataset.task, { ok: b.dataset.ok === "1", note: card.querySelector("textarea").value });
         ctx.toast.show("Thank you. Your answer is recorded."); card.remove();
       } catch (e) {
-        card.querySelector(".msg").innerHTML = e.status === 403
-          ? `<p class="err" role="alert">You cannot check this one: ${esc(e.message)}. Another resident will need to.</p>` : errBox(e);
+        card.querySelector(".msg").innerHTML = errBox(e);               // the server's text, e.g. 403 "you reported this problem, so someone else has to check the fix"
       }
     }, ctx.toast.show)));
   },
