@@ -8,7 +8,7 @@ const STATUS = ["open", "accepted", "done", "confirmed", "disputed", "rejected"]
 
 export const dashShell = (tab) => `<h1>Dashboard</h1><nav class="sub" aria-label="Dashboard sections">${Object.entries(TAB_TITLES)
   .map(([k, t]) => `<a href="#/dash/${k}" class="${k === tab ? "on" : ""}">${esc(t)}</a>`).join("")}</nav>
-  <div id="pane">Loading...</div><p class="small muted"><a href="#/login">Switch persona</a></p>`;
+  <div id="pane">Loading...</div><p class="small muted"><a class="back" href="#/login">Switch persona</a></p>`;
 
 export const mapLegend = (d) => `${banner(d.banner)}<div id="m" class="map tall"></div>
   <p class="small">Pockets at ${esc(d.reference_rain_mm_h)} mm/h: ${Object.values(LEVEL).map(([, l]) => `<strong>${esc(l)}</strong>`).join(" &middot; ")}

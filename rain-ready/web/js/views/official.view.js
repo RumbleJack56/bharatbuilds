@@ -30,7 +30,7 @@ function redoBanner(t) {
   return again && again.note ? `<p class="banner redo"><strong>To be redone:</strong> ${esc(again.note)}${disputeNote(t) ? ` (resident's note: ${esc(disputeNote(t))})` : ""}</p>` : "";
 }
 
-export const taskDetail = (t, { banner: b, back }) => `<p><a href="${esc(back)}">Back</a></p>
+export const taskDetail = (t, { banner: b, back }) => `<p><a class="back" href="${esc(back)}">Back</a></p>
   <h1>${esc(t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
   <p>Owner: <strong>${esc(t.agency_name || "No owner found")}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
   ${banner(b)}${redoBanner(t)}<p>${esc(t.pocket_name || "")} - cleaning this gains ${esc(hrs(t.gain_h))} of fill time.</p>
