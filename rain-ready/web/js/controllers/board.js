@@ -6,10 +6,11 @@ export const board = {
   path: "board", roles: null,
   async mount(root, ctx) {
     const { dashboard } = ctx.services;
-    const [lb, tr] = await Promise.all([dashboard.leaderboard(), dashboard.transparency()]);
+    const logP = dashboard.transparency().then(v => ({ v }), e => ({ e }));   // independent: a failed log never hides the leaderboard
+    const lb = await dashboard.leaderboard();
     root.innerHTML = boardShell(lb);
-    const log = root.querySelector("#log");
-    log.innerHTML = logView(tr);
+    const log = root.querySelector("#log"), first = await logP;
+    log.innerHTML = first.e ? errBox(first.e) : logView(first.v);
     let seq = 0;
     const refilter = async () => {
       const my = ++seq;

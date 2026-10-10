@@ -16,3 +16,8 @@ export const PIN = {
 };
 export const CAMERA = { none: "Camera not available on this device. You can still send a report without a photo: pick what you see." };
 export const ACTION = { clean: "Clean", inspect: "Inspect", clarify_owner: "Clarify owner", monitor: "Monitor" };
+// One plain line per empty list screen (V8).
+export const EMPTY = { mine: "You have not sent any reports yet.", confirm: "Nothing to check right now.", inbox: "No tasks for your agency right now.",
+  history: "No history yet.", reports: "No reports linked yet.", admin: "Every task has an owner.", held: "No reports are waiting for a check.",
+  actions: "No actions to show.", insights: "No insights from the current rules.", log: "No tasks match.", accountability: "No agencies to show yet.",
+  capture: "No rain-capture sites to show." };

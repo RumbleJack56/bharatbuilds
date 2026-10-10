@@ -13,5 +13,5 @@ export async function actionsPane(pane, ctx) {
       catch (e) { if (my === seq) pane.querySelector("#alist").innerHTML = errBox(e); }
     };
   };
-  await load(10);
+  try { await load(10); } catch (e) { pane.innerHTML = errBox(e); }
 }

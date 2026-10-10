@@ -31,7 +31,7 @@ const TR = { demo: true, demo_note: "Rehearsal data.", banner: "Scenario.", gain
 test("V14: board shows scores with inputs, unassigned as No owner found, method verbatim, rehearsal label, scenario banner", () => {
   const h = boardShell(LB);
   assert.match(h, /Rehearsal data/); assert.match(h, /Scenario, not a forecast\./);
-  assert.match(h, /MCD/); assert.match(h, /71\.5/); assert.match(h, /3 of 4/); assert.match(h, /Not ranked/);
+  assert.match(h, /MCD/); assert.match(h, /71\.5/); assert.match(h, /Not ranked/);
   assert.match(h, /No owner found[\s\S]*<strong>2<\/strong> task/); assert.match(h, /3\.5 days/);
   for (const s of ["0 to 100 = weighted share.", "Tasks accepted within 48 hours.", "Tasks with no owner found", "Fewer than 3 tasks: no rank."]) assert.ok(h.includes(s), s);
   assert.match(h, /<select[^>]+id="fa"[\s\S]*value="none"/); assert.match(h, /id="fs"/); assert.match(h, /id="fl"/);

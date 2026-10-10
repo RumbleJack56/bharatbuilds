@@ -1,6 +1,7 @@
 // web/js/views/board.view.js — public leaderboard and action log. Pure. Roles only, never names.
 import { esc, hrs, when } from "../ui/format.js";
 import { banner, photos, flagList } from "../ui/components.js";
+import { EMPTY } from "../ui/copy.js";
 
 const STATUS = ["open", "accepted", "done", "confirmed", "disputed", "rejected"];
 const LIMITS = [20, 50, 100, 200];
@@ -9,13 +10,13 @@ const demoNote = (n) => esc(String(n || "").replace(/^Rehearsal data\.?\s*/, "")
 const demoLabel = (d) => d.demo ? `<p class="banner demo"><span class="chip">Rehearsal data</span> ${demoNote(d.demo_note)}</p>` : "";
 
 function agencyCard(a) {
-  const c = a.components, i = a.inputs, eligible = i.received - i.handed_back - i.still_in_window;
+  const c = a.components, i = a.inputs;
   return `<div class="card"><h3>${esc(a.agency_name)} <span class="chip">${a.ranked ? "Rank " + esc(a.rank) : "Not ranked yet"}</span></h3>
   <p>Score: <strong>${a.score == null ? "no score yet" : esc(a.score) + " of 100"}</strong></p>
   ${a.score == null ? "" : `<div class="bar" aria-hidden="true"><i style="width:${Math.max(0, Math.min(100, a.score))}%"></i></div>`}
   <ul class="small plain">
-    <li>Accepted within 48 h: <strong>${pct(c.response)}</strong> (${esc(i.accepted_in_48h)} of ${esc(eligible)}${i.still_in_window ? `, ${esc(i.still_in_window)} still in their window` : ""})</li>
-    <li>Done on time: <strong>${pct(c.delivery)}</strong> (${esc(i.completed_in_window)} of ${esc(i.completed + i.late_open)})</li>
+    <li>Accepted within 48 h: <strong>${pct(c.response)}</strong> (${esc(i.accepted_in_48h)} accepted in 48 h; received ${esc(i.received)}, handed back ${esc(i.handed_back)}, still in their window ${esc(i.still_in_window)})</li>
+    <li>Done on time: <strong>${pct(c.delivery)}</strong> (${esc(i.completed_in_window)} on time; completed ${esc(i.completed)}, accepted and past due ${esc(i.late_open)})</li>
     <li>Confirmed by residents: <strong>${pct(c.verified)}</strong> (${esc(i.confirmed)} yes, ${esc(i.disputed)} no)</li>
     <li>Open tasks not overdue: <strong>${pct(c.timeliness)}</strong> (${esc(i.overdue_now)} overdue of ${esc(i.open_now)} open)</li></ul>
   <p class="small muted">Received ${esc(i.received)} - handed back ${esc(i.handed_back)} - median time to accept ${esc(hrs(a.median_hours_to_accept))}, to complete ${esc(hrs(a.median_hours_to_complete))}</p></div>`;
@@ -47,6 +48,5 @@ const item = (x) => `<details class="card"><summary><strong>#${esc(x.task_id)} $
   Cleaning gains ${esc(hrs(x.fill_time_gain_h))} of fill time (scenario).${x.due_at ? ` Due ${esc(when(x.due_at))}.` : ""}</p>
   <ol class="tl">${x.timeline.map(step).join("")}</ol></details>`;
 
-export const logView = (tr) => `${tr.demo ? `<p><span class="chip">Rehearsal data</span></p>` : ""}
-  ${tr.actions.length ? tr.actions.map(item).join("") : `<p class="muted">No tasks match.</p>`}
-  <p class="small muted">${esc(tr.gain_note)}</p>`;
+export const logView = (tr) => `${tr.demo ? `<p><span class="chip">Rehearsal data</span></p>` : ""}${banner(tr.banner)}<p class="small muted">${esc(tr.gain_note)}</p>
+  ${tr.actions.length ? tr.actions.map(item).join("") : `<p class="muted">${EMPTY.log}</p>`}`;

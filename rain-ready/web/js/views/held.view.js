@@ -1,7 +1,7 @@
 // web/js/views/held.view.js — reports held for a check. Pure. Reporters are never named.
 import { esc, when } from "../ui/format.js";
 import { photos, flagList } from "../ui/components.js";
-import { KINDS } from "../ui/copy.js";
+import { KINDS, EMPTY } from "../ui/copy.js";
 
 const resultLine = (r) => !r ? "" : r.error ? `<p class="err" role="alert">${esc(r.error)}</p>`
   : `<p class="banner" role="status">${esc(r.text)}${r.taskId ? ` <a href="#/task/${esc(r.taskId)}">Open task ${esc(r.taskId)}</a>` : ""}</p>`;
@@ -18,4 +18,4 @@ const card = (i, places, canReview) => `<div class="card" data-inc="${esc(i.id)}
 
 export const heldView = ({ items, places = {}, canReview, result = null }) => `<h1>Held reports (${items.length})</h1>
   <p class="small muted">Saved and linked to a drain, but not counted toward a task until a coordinator decides.${canReview ? "" : " You can read them; only the coordinator decides."}</p>
-  ${resultLine(result)}${items.length ? items.map(i => card(i, places, canReview)).join("") : `<p class="muted">No reports are waiting for a check.</p>`}`;
+  ${resultLine(result)}${items.length ? items.map(i => card(i, places, canReview)).join("") : `<p class="muted">${EMPTY.held}</p>`}`;
