@@ -29,8 +29,8 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `GET /api/insights` | public | rule-based facts: `[{id, text, why, evidence}]` with `banner`. Rules: reports near a drain with no owner; an agency that bounced 3 or more tasks; a silted, unassigned drain in a fast-filling pocket; a task more than 3 days overdue; a drain of the fastest pocket not confirmed clean for 60 days. Placeholder rows say "placeholder data" |
 | `GET /api/reports/ward?format=json\|md` | public | generated ward report from database facts: open and overdue tasks by agency, held report count, top 5 drains by fill time gained (with low and high), pockets by level, cleans confirmed in 7 days, insights. `md` returns Markdown with the banner. Fixed wording, no model text |
 | `GET /api/actions?top=` | public | One action per drain: `clean`, `inspect`, `clarify_owner` or `monitor`, each with its route (agency, or the ward coordinator when no owner), the reason, evidence, fill-time gain as a range, and whether a task is already dispatched |
-| `GET /api/projection?rain=20,25,35,50&horizon=0,30,60,90` | public | Scenario projection per pocket, rain and horizon: runoff m3/h, share of the drain used (`utilisation_pct`), silt fraction if not cleaned, fill time as a low-high range. Plus the silt curve. Scenario, not a forecast |
-| `GET /api/assets/{id}` | public | One drain: owner and its source, data source and confidence, citation, cleaning history from tasks, silt now and at 30, 60, 90 days, reports, pockets it serves |
+| `GET /api/projection?rain=20,25,35,50&horizon=0,30,60,90` | public | Scenario projection per pocket, rain and horizon: runoff m3/h, share of the drain used (`utilisation_pct`), silt fraction if not cleaned, fill time as a low-high range. Plus the silt curve. Scenario, not a forecast. Also `silt_curve_illustrative`: the model curve with a seeded wobble for the demo chart (`illustrative: true`, never used in ranking) |
+| `GET /api/assets/{id}` | public | One drain: owner and its source, data source and confidence, citation, cleaning history from tasks, silt now and at 30, 60, 90 days, reports, pockets it serves. `silt_series_illustrative`: the same wobble series seeded by the drain id, labelled illustrative |
 | `GET /api/leaderboard` | public | Agencies scored 0 to 100 from the task log (response, delivery, verified, timeliness), the inputs behind each score, unassigned tasks apart, and the printed method. `demo: true` when the database holds rehearsal history |
 | `GET /api/transparency?agency_id=&status=&limit=` | public | Every task with route, reason, evidence and timeline. Roles are shown, never names |
 | `GET /board` | public | A page that renders the two endpoints above: leaderboard, method, filterable action log |
@@ -46,3 +46,7 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 **Photos:** jpeg, png or webp, up to 8 MB. Response `photo_url` values are relative (`/media/...`); the UI prefixes `API_BASE`.
 
 **Files that matter to a screen developer:** `data/seed.json` (what you see locally), `app/routers/*.py` (exact shapes), `tests/test_flow.py` (a worked example of every call).
+
+## Persona keys
+
+When the server sets `PERSONA_KEYS`, a request as an `official` or `admin` persona must also send `X-Persona-Key: <key>` (401 otherwise; also for `/api/health?deep=1`). Residents and public reads need no key. Unset: header-only demo auth.

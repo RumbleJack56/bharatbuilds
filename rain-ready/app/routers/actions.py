@@ -55,7 +55,8 @@ def scenario_projection(rain: str = ",".join(f"{r:g}" for r in projection.RAINS)
     clean = {r["id"]: (clock.today().__class__.fromisoformat(r["last_confirmed_clean"]) if r["last_confirmed_clean"] else None)
              for r in db.execute("SELECT id, last_confirmed_clean FROM assets")}
     out = projection.project(service.pocket_rows(db), clean, clock.today(), rains, horizons)
-    return {"scenarios": out, "silt_curve": projection.silt_curve(), "reference_rain_mm_h": planning.REF_RAIN_MM_H,
+    return {"scenarios": out, "silt_curve": projection.silt_curve(),
+            "silt_curve_illustrative": projection.silt_series_illustrative("reference"), "reference_rain_mm_h": planning.REF_RAIN_MM_H,
             "meaning": {"utilisation_pct": "Runoff the catchment sends to the drain, as a share of what the drain can carry now. Above 100 means the pocket fills.",
                         "silt_fraction": "Estimated share of the drain's depth filled with silt, from days since the last confirmed clean."},
             "banner": copy.SCENARIO_BANNER, "range_note": copy.RANGE_NOTE}
@@ -82,6 +83,7 @@ def asset_detail(asset_id: str, db=Depends(get_db)):
                                         "confidence", "citation", "note", "last_confirmed_clean")} | {"agency_name": a["agency_name"] or copy.NO_OWNER},
             "silt_now": round(silt[asset_id], 3), "days_since_clean": (today - last_d).days if last_d else None,
             "silt_if_not_cleaned": {str(h): round(projection.silt_at(last_d, today, h), 3) for h in (0, 30, 60, 90)},
+            "silt_series_illustrative": projection.silt_series_illustrative(asset_id),
             "cleaning_history": history,
             "reports": db.execute("SELECT COUNT(*) FROM incidents WHERE asset_id=?", (asset_id,)).fetchone()[0],
             "pockets": [{"id": p["id"], "name": p["name"], "level": sim[p["id"]]["level"], "time_to_fill_h": sim[p["id"]]["time_to_fill_h"],
