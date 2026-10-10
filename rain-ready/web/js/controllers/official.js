@@ -13,7 +13,7 @@ export const inbox = {
     const data = await ctx.services.tasks.list({ agencyId: me.agency_id });
     // The list has no events; a disputed task's note comes from its detail.
     const notes = {};
-    await Promise.all(data.tasks.filter(t => t.status === "disputed").map(async t => { notes[t.id] = disputeNote(await ctx.services.tasks.get(t.id)); }));
+    await Promise.all(data.tasks.filter(t => t.status === "disputed").map(async t => { notes[t.id] = await ctx.services.tasks.get(t.id).then(disputeNote, () => ""); }));   // one failure leaves that note empty
     root.innerHTML = inboxView(data, notes);
   },
 };
