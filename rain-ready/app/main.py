@@ -10,7 +10,7 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from . import checks, config, routers
+from . import auth, checks, config, routers
 from .db import get_db, init_db
 
 log = logging.getLogger("rainready")
@@ -50,11 +50,13 @@ def _deep_probe() -> dict:
 
 
 @app.get("/api/health")
-def health(deep: bool = False, x_user_id: str | None = Header(default=None)):
+def health(deep: bool = False, x_user_id: str | None = Header(default=None), x_persona_key: str | None = Header(default=None)):
     out = {"ok": not FAILED, "version": config.VERSION, "routers": LOADED, "router_errors": FAILED,
            "storage": config.STORAGE, "triage": config.TRIAGE_MODE, "config_warnings": checks.config_warnings()}
     if deep:       # real AWS calls and error text that can name the account: admin persona only
-        who = get_db().execute("SELECT role FROM users WHERE id=?", (x_user_id or "",)).fetchone()
+        who = get_db().execute("SELECT id, role FROM users WHERE id=?", (x_user_id or "",)).fetchone()
+        if who and who["role"] == "admin":
+            auth.check_persona_key(who, x_persona_key)
         if not who or who["role"] != "admin":
             raise HTTPException(403, "the deep check needs the admin persona (header X-User-Id: admin-1)")
         out["aws"] = _deep_probe()
