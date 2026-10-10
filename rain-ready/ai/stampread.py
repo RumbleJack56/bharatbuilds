@@ -2,6 +2,9 @@
 import logging
 
 from app import config
+from core import imageprep
+
+from . import client
 
 log = logging.getLogger("rainready.stampread")
 PROMPT = ("Transcribe, exactly as printed, the text overlay burned into this photo (address, Lat, Long, date and time, Ref code). "
@@ -13,9 +16,9 @@ def read_stamp(data: bytes, content_type: str) -> str | None:
     if config.TRIAGE_MODE != "bedrock" or not config.BEDROCK_MODEL_ID:
         return None
     try:
-        import boto3
+        data, content_type = imageprep.for_model(data, content_type)
         fmt = {"image/jpeg": "jpeg", "image/png": "png", "image/webp": "webp"}[content_type]
-        resp = boto3.client("bedrock-runtime", region_name=config.AWS_REGION).converse(
+        resp = client.runtime().converse(
             modelId=config.BEDROCK_MODEL_ID, messages=[{"role": "user", "content": [
                 {"image": {"format": fmt, "source": {"bytes": data}}}, {"text": PROMPT}]}],
             inferenceConfig={"maxTokens": 300, "temperature": 0})

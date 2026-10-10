@@ -1,5 +1,4 @@
 """Read-only world: personas, map data, scenario simulator."""
-from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -7,7 +6,7 @@ from pydantic import BaseModel, Field
 from core import copy, planning
 from core import lowpoints as lp
 
-from .. import service
+from .. import clock, service
 from ..auth import current_user
 from ..db import get_db
 
@@ -49,7 +48,8 @@ def map_(db=Depends(get_db)):
         d["silt_estimate"] = round(silt[d["id"]], 3)
         assets.append(d)
     tasks = [dict(r) for r in db.execute(
-        "SELECT t.id,t.asset_id,t.status,t.rank_score,t.gain_h,t.agency_id,a.lat,a.lon FROM tasks t JOIN assets a ON a.id=t.asset_id "
+        "SELECT t.id,t.asset_id,t.status,t.rank_score,t.gain_h,t.agency_id,a.lat,a.lon,a.name AS asset_name,a.last_confirmed_clean "
+        "FROM tasks t JOIN assets a ON a.id=t.asset_id "
         "WHERE t.status NOT IN ('confirmed','rejected')")]
     sites = [dict(r) for r in db.execute("SELECT id,name,lat,lon FROM sites")]
     return {"pockets": run_scenario(db, planning.REF_RAIN_MM_H, "current"), "assets": assets, "tasks": tasks,
@@ -68,7 +68,7 @@ def simulate(body: SimIn, db=Depends(get_db)):
         res = run_scenario(db, body.rain_mm_h, body.drain_state, body.at_h)
     except ValueError as e:
         raise HTTPException(422, str(e))
-    return {"scenario": body.model_dump(), "results": res, "banner": copy.SCENARIO_BANNER, "range_note": copy.RANGE_NOTE, "date": date.today().isoformat()}
+    return {"scenario": body.model_dump(), "results": res, "banner": copy.SCENARIO_BANNER, "range_note": copy.RANGE_NOTE, "date": clock.today().isoformat()}
 
 
 @router.get("/agencies")

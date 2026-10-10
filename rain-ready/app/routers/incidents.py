@@ -1,14 +1,15 @@
 """Resident reports. A report links to the nearest asset and creates or bumps a task."""
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
+from starlette.concurrency import run_in_threadpool
 
 from ai import triage
 from core import copy, geo, photocheck
 
-from .. import config, service, storage
+from .. import capture, clock, config, service, storage
 from ..auth import need
 from ..db import get_db, now_iso
 
@@ -32,24 +33,27 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
                           db=Depends(get_db)):
     if not geo.in_ncr(lat, lon):
         raise HTTPException(422, "location is outside the Delhi-NCR area")
-    since = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat(timespec="seconds")
+    since = (clock.now() - timedelta(hours=24)).isoformat(timespec="seconds")
     sent = db.execute("SELECT COUNT(*) FROM incidents WHERE user_id=? AND created_at>=?", (user["id"], since)).fetchone()[0]
     if sent >= config.REPORTS_PER_DAY:
         raise HTTPException(429, f"You have sent {sent} reports in the last 24 hours. Please try again later.")
-    key, ai, phash, flags = None, None, None, []
+    data, ctype, ai, phash, flags = None, "", None, None, []
     if photo is not None:
-        data = await photo.read()
+        data, ctype = await photo.read(storage.MAX_BYTES + 1), photo.content_type or ""
         try:
-            key = storage.save_photo(data, photo.content_type or "")
+            storage.validate_photo(data, ctype)
         except ValueError as e:
             raise HTTPException(422, str(e))
-        ai = triage.triage_photo(data, photo.content_type, note)
         phash, flags = service.check_photo(db, data, lat, lon, user["id"], accuracy_m)
-        flags += service.check_stamp(data, photo.content_type, lat, lon, user["id"], capture_token)
+        if phash is None:
+            raise HTTPException(422, "the photo could not be read as an image; please take it again")
+        ai = await run_in_threadpool(triage.triage_photo, data, ctype, note)          # AWS calls: not on the event loop
+        flags += await run_in_threadpool(service.check_stamp, data, ctype, lat, lon, user["id"], capture_token)
     flags += service.check_duplicate(db, user["id"], lat, lon)
     kind = kind if kind in KINDS else (ai["kind"] if ai else "")
     if kind not in KINDS:
         raise HTTPException(422, f"kind is required (one of {', '.join(KINDS)}) when the photo could not be classified")
+    key = storage.save_photo(data, ctype) if data is not None else None     # last: nothing is stored for a refused report
     asset, dist = service.nearest_asset(db, lat, lon)
     task_id, pocket_id, created = None, None, False
     held = photocheck.suspect(flags)        # saved and visible, but not counted toward a task until reviewed
@@ -63,6 +67,8 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
         pocket_id = db.execute("SELECT pocket_id FROM tasks WHERE id=?", (task_id,)).fetchone()["pocket_id"]
         db.execute("UPDATE incidents SET task_id=?, pocket_id=? WHERE id=?", (task_id, pocket_id, iid))
     db.commit()
+    if data is not None and capture.verify(capture_token, user["id"]):
+        capture.mark_used(capture_token)
     return {"incident": _incident(db.execute("SELECT * FROM incidents WHERE id=?", (iid,)).fetchone()),
             "linked_asset": asset["id"] if asset else None, "distance_m": round(dist, 1) if dist is not None else None,
             "task_id": task_id, "task_created": created,

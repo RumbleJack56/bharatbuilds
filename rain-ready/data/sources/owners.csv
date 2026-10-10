@@ -1,0 +1,10 @@
+asset_id,agency_id,owner_source
+DR-PRB-EPN,pwd,"PWD road inventory RD-00798 'Patel Road' (West Road Division 2), Right of Way 36.57 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+DR-KBM-PUSA,pwd,"PWD road inventory RD-00219 'PUSA Road' (South West Road Division 1), Right of Way 27.44 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+DR-DN-PUSA,mcd,1976 master plan lists Daryai Nallah among the MCD drains of Karol Bagh Zone. MCD Commissioner told the High Court on 2 Aug 2024 the Old Rajinder Nagar storm drain is dysfunctional. That this section is Daryai Nallah is inferred from the route (see checks)
+DR-DN-BAZ,mcd,1976 master plan lists Daryai Nallah among the MCD drains of Karol Bagh Zone. MCD Commissioner told the High Court on 2 Aug 2024 the Old Rajinder Nagar storm drain is dysfunctional. That this section is Daryai Nallah is inferred from the route (see checks)
+DR-FIL-RANI,pwd,"PWD road inventory RD-00437 'Rani Jhansi Road' (SRD Project Division 2), Right of Way 34 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+DR-JHB-LINK,pwd,"PWD road inventory RD-01247 'Link Road' (SRD Project Division 2), Right of Way 44.4 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+DR-OSM-A,,"none: unnamed OSM culvert, no source assigns it"
+DR-OSM-B,,"none: unnamed OSM culvert, no source assigns it"
+DR-OSM-C,,"none: unnamed OSM culvert, no source assigns it"

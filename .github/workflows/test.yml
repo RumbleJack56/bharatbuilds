@@ -1,5 +1,5 @@
 name: test
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -15,3 +15,31 @@ jobs:
           cache-dependency-path: rain-ready/requirements.txt
       - run: pip install -r requirements.txt
       - run: python -m pytest -q tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test 'web/tests/*.test.js'
+
+  # Deploys main to the live host after tests pass. Off until the repo variables exist
+  # (rain-ready/docs/AWS_TODO.md section 3). Manual run: Actions tab, "Run workflow".
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.AWS_DEPLOY_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: deploy-live
+      cancel-in-progress: false
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      BUCKET: ${{ vars.DEPLOY_BUCKET }}
+      INSTANCE: ${{ vars.DEPLOY_INSTANCE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - run: bash rain-ready/scripts/deploy-ssm.sh

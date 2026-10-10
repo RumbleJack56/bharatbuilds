@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from core import copy, planning, report
-from .conftest import as_
+from .conftest import as_, fresh_photo
 
 FORM = {"lat": 28.6433, "lon": 77.1846, "kind": "blocked_drain"}
 
@@ -24,7 +24,7 @@ def test_counts_match_a_seeded_flow(client):
     assert mcd["open"] == 1 and mcd["overdue"] == 0
     tid = first["task_id"]
     client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
-    client.post(f"/api/tasks/{tid}/complete", data={"note": "cleared"}, files={"photo": ("a.jpg", b"x", "image/jpeg")},
+    client.post(f"/api/tasks/{tid}/complete", data={"note": "cleared"}, files=fresh_photo(),
                 headers=as_("off-mcd"))
     client.post(f"/api/tasks/{tid}/confirm", json={"ok": True, "note": "looks done"}, headers=as_("res-2"))
     assert client.get("/api/reports/ward").json()["confirmed_cleans_7d"] == 1

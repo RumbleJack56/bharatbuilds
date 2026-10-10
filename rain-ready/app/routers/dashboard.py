@@ -29,6 +29,12 @@ def generate(top: int = 5, user=Depends(need("admin")), db=Depends(get_db)):
     return {"created_task_ids": created, "banner": copy.SCENARIO_BANNER}
 
 
+def _clock_start(t: dict, ev: list, aid, until: str) -> str:
+    """When this agency received the task: its latest created, reassigned or assigned event before `until`."""
+    starts = [e["at"] for e in ev if e["event"] in ("created", "reassigned", "assigned") and e["agency_id"] == aid and e["at"] <= until]
+    return max(starts) if starts else t["created_at"]
+
+
 def _hours(a: str, b: str) -> float:
     from datetime import datetime
     return (datetime.fromisoformat(b) - datetime.fromisoformat(a)).total_seconds() / 3600
@@ -54,9 +60,9 @@ def accountability(db=Depends(get_db)):
             acc = next((e for e in ev if e["event"] == "accepted" and e["agency_id"] == aid), None)
             dn = next((e for e in ev if e["event"] == "completed" and e["agency_id"] == aid), None)
             if acc:
-                accept_h.append(_hours(t["created_at"], acc["at"]))
+                accept_h.append(_hours(_clock_start(t, ev, aid, acc["at"]), acc["at"]))
             if dn:
-                done_h.append(_hours(t["created_at"], dn["at"]))
+                done_h.append(_hours(_clock_start(t, ev, aid, dn["at"]), dn["at"]))
         owned = db.execute("SELECT COUNT(*) FROM assets WHERE agency_id IS ?", (aid,)).fetchone()[0]
         rows.append({"agency_id": aid, "agency_name": name, "assets_owned": owned, "tasks": counts,
                      "overdue": sum(1 for t in mine if _overdue(t)), "bounced_away": bounced,
@@ -99,7 +105,7 @@ def impact(db=Depends(get_db)):
         "tasks": {s: n(f"SELECT COUNT(*) FROM tasks WHERE status='{s}'") for s in ("open", "accepted", "rejected", "done", "confirmed", "disputed")},
         "reports": n("SELECT COUNT(*) FROM incidents"),
         "fill_time_gained_h": round(n("SELECT COALESCE(SUM(gain_h),0) FROM tasks WHERE status='confirmed'"), 2),
-        "fill_time_gained_note": "Scenario at 35 mm/h, illustrative parameters. Not a prediction.",
+        "fill_time_gained_note": f"Scenario at {planning.REF_RAIN_MM_H:g} mm/h, illustrative parameters. Not a prediction.",
         "pockets": n("SELECT COUNT(*) FROM pockets"), "exposed_assets_in_pockets": n("SELECT COALESCE(SUM(exposed_assets),0) FROM pockets"),
         "capture_m3_per_year_by_use": by_use, "banner": copy.SCENARIO_BANNER,
         "not_claimed": "Floods prevented, lives saved, water-table rise, damage avoided.",

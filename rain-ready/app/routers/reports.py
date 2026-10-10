@@ -1,12 +1,11 @@
 """Generated ward report: counts and rankings from the database, fixed wording. Public, read-only."""
-from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import PlainTextResponse
 
 from core import copy, insights, planning, report
 
-from .. import facts, service
+from .. import clock, facts, service
 from ..db import get_db
 
 router = APIRouter(prefix="/api")
@@ -29,7 +28,7 @@ def ranked_drains(db, f: dict, n: int) -> list[dict]:
 
 @router.get("/reports/ward")
 def ward_report(format: str = Query("json", pattern="^(json|md)$"), db=Depends(get_db)):
-    now = datetime.now(timezone.utc)
+    now = clock.now()
     f = facts.ward_facts(db, now)
     r = report.build(f, ranked_drains(db, f, report.TOP_N), insights.build(f, now), now)
     if format == "md":

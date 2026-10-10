@@ -13,3 +13,6 @@ BANNED = re.compile(r"\bsafe\b|guarantee|desilted|removed|cm deep", re.I)
 
 def banned_hits(text: str) -> list[str]:
     return [m.group(0) for m in BANNED.finditer(text)]
+
+DEMO_DATA = ("Rehearsal data. These reports and jobs were made by the team to show how the system works. "
+             "They are not real complaints and say nothing about how any agency performs.")

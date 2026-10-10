@@ -4,6 +4,9 @@ import json
 import logging
 
 from app import config
+from core import imageprep
+
+from . import client
 
 log = logging.getLogger("rainready.triage")
 KINDS = ("blocked_drain", "standing_water", "overflow", "other")
@@ -32,10 +35,9 @@ def triage_photo(data: bytes, content_type: str, note: str = "") -> dict | None:
     if config.TRIAGE_MODE != "bedrock" or not config.BEDROCK_MODEL_ID:
         return None
     try:
-        import boto3
+        data, content_type = imageprep.for_model(data, content_type)
         fmt = {"image/jpeg": "jpeg", "image/png": "png", "image/webp": "webp"}[content_type]
-        client = boto3.client("bedrock-runtime", region_name=config.AWS_REGION)
-        resp = client.converse(modelId=config.BEDROCK_MODEL_ID, messages=[{"role": "user", "content": [
+        resp = client.runtime().converse(modelId=config.BEDROCK_MODEL_ID, messages=[{"role": "user", "content": [
             {"image": {"format": fmt, "source": {"bytes": data}}},
             {"text": f"{PROMPT}\nResident note: {note[:300]}"}]}], inferenceConfig={"maxTokens": 200, "temperature": 0})
         out = parse_reply(resp)

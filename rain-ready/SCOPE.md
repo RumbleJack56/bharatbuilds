@@ -160,25 +160,21 @@ AI never changes rank, owner or status, and never writes safety text.
 | MVP | Stranger test on the live URL | todo |
 | Good | Blog on AWS Builder Center | todo |
 
-### 4.12 Status on 10 Oct 2026
+### 4.12 Status on 10 Oct 2026, late morning
 
-**Done and in the repo (PR #1):**
-- Backend loop: report, task, accept, complete, confirm, dashboard. 76 tests pass, CI green.
-- Deploy prep: S3 and Bedrock code paths with tests, deploy scripts, health checks, `docs/DEPLOY.md`.
-- Photo integrity: hash reuse, EXIF geotag and time, capture token, stamp check, held-for-review reports.
-- APK wrapper builds (placeholder API host).
+**Done and on `main`:**
+- Backend loop, photo integrity (hash reuse, EXIF, capture token, stamp check, held reports) and admin review.
+- Hardening: rate limit, repeat hold, fill-time range, insights, generated ward report, regional S3 client, image prep for the model, admin-only deep health.
+- Real Delhi seed with citations, evidence base, public leaderboard and transparency log, actions and projection, rehearsal history and seeding scripts.
+- Web: layered rewrite with the five personas, the full loop and the dashboard.
+- Deploy: scripts, AWS CLI playbook and an auto-deploy job (off until its repo variables are set).
 
-**Left, backend and AWS (Ujjwal):**
-1. Create the AWS resources and a public HTTPS URL (account owner: Aarush). Then run the S3 test and the Bedrock test. Nothing has run on real AWS.
-2. Real Delhi data: drains, pockets, owners with sources. Plan the sourcing first.
-3. Rate limit, report clustering, fill-time range, admin release of held reports.
-4. Backend report generation and actionable insights, after the data is real.
-5. Build the APK with the real host; test camera and GPS on a phone.
-6. Hourly backup cron and an AMI before recording.
-
-**Left, screens (Aarush):** see `TASKS.md` section 4 and V9. The new work is the stamping camera and the flags display.
-
-**Left, shared:** pin the deadline hour (first submission is not before 12:00 noon on the last day; the exact hour is unknown), credits and write-up, video, make the repo public.
+**Not done:**
+1. AWS: the live host runs the old build; Bedrock off; photos do not open yet. Aarush runs `docs/AWS_TODO.md`.
+2. Screens: stamping camera and flags, held queue, public leaderboard, actions, insights (`TASKS.md` V9 to V17).
+3. APK with the real host, tested on a phone (after V9).
+4. Field capture of pocket and drain coordinates; decide the demo reference rain (D1).
+5. Shared: deadline hour, write-up and credits, video, public repo.
 
 **Wording rule for photo checks:** say "location and time stamped, checked against the report". Never say "unspoofable". A rooted phone with a fake-GPS app can still stamp a false place.
 
@@ -186,7 +182,7 @@ AI never changes rank, owner or status, and never writes safety text.
 
 ## 5. Ranking rule
 
-`gain_h` = (time for the linked pocket to fill after cleaning this drain) minus (time now), at a reference rain of 35 mm/h, capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`. Pocket size, catchment and drain capacity are illustrative parameters. Always shown with the scenario banner and as "about".
+`gain_h` = (time for the linked pocket to fill after cleaning this drain) minus (time now), at a reference rain of 25 mm/h (about the design capacity cited for Delhi drains), capped at 6 h. `rank = gain_h x (1 + 0.25 x (reports - 1))`. Pocket size, catchment and drain capacity are illustrative parameters. Always shown with the scenario banner and as "about".
 
 ## 6. Impact numbers we may show
 
