@@ -112,6 +112,11 @@ try {
   await u.go("#/dash/simulator"); await u.page.waitForSelector("#rain");
   ok("simulator starts at the map's reference rain (25)", (await u.page.inputValue("#rain")) === "25", await u.page.inputValue("#rain"));
   await u.go("#/dash/map"); await u.page.waitForSelector(".map-label"); await u.page.waitForTimeout(500); await u.shot("12-dash-map");
+  // Leaving the map tab right after it loads must not throw (Leaflet _leaflet_pos race).
+  const errs0 = problems.length;
+  await u.page.goto(`${BASE}/#/dash/map`); await u.page.evaluate(() => { location.hash = "#/dash/impact"; });
+  await u.page.waitForTimeout(700);
+  ok("leaving the map tab at once raises no page error", problems.length === errs0, problems.slice(errs0).join(" | "));
   for (const t of ["accountability", "capture"]) { await u.go(`#/dash/${t}`); await u.shot(`12-dash-${t}`); }
   await u.ctx.close();
 
