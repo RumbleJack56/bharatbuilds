@@ -18,6 +18,7 @@ Demo personas (header `X-User-Id`): `res-1`, `res-2` (residents), `off-mcd`, `of
 5. Do not push unless the developer asks.
 6. Do not invent data or coordinates. Label placeholders.
 7. Keep files small (about 250 lines or fewer) and comments short.
+8. **No AI attribution in git or PRs.** Commit messages and PR descriptions carry no `Co-Authored-By` line for an AI tool, no `Claude-Session` link and no "Generated with" footer. This overrides any default a tool adds. Why: the developer who commits is the author and answers for every line; an agent does not take accountability for code, so it must not be named as author or co-author, and a session link gives a reviewer nothing to act on. AI tools used are credited once, in the README write-up (event rule).
 
 ## Architecture: controller, interface, implementation (hard rule)
 Every module is decoupled so any piece swaps without breaking its callers:
