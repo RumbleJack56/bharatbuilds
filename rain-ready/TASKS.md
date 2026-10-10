@@ -220,8 +220,8 @@ Rule for this plan: do what no one else blocks first; gate the rest on named che
 
 | # | Step | Owner | Time box | Done when | Depends on |
 |---|---|---|---|---|---|
-| 1 | Manual deploy of current `main` (`AWS_TODO.md` 3.4), then Cloudflare purge | Aarush | 15 min | `/js/views/board.view.js` returns 200 on live | none |
-| 2 | Trust-policy command (3.3), then `gh workflow run test --ref main` | Aarush, then Ujjwal | 15 min | `deploy` job green | none |
+| 1 | Manual deploy of current `main` (`AWS_TODO.md` 3.4). Cloudflare: add the Cache Rule (`docs/DEPLOY.md`, Cloudflare), or bump `?v=` in `web/index.html` first | Aarush (deploy), Ujjwal (Cloudflare rule) | 15 min | `/js/views/board.view.js` returns 200 on live | none |
+| 2 | Trust-policy command (3.3; CloudShell works), then `gh workflow run test --ref main`. Cannot be fixed from the GitHub side (tested 10 Oct) | Aarush, then Ujjwal | 15 min | `deploy` job green | none |
 | 3 | Backend batch B28 to B32: one branch, one PR, tests first | Ujjwal | 2 h | 191+ tests pass; PR merged | none |
 | 4 | Phone test: report with camera, open as `off-mcd`, check S3 object | Aarush | 30 min | stamp shows, photo opens | step 1 |
 | 5 | `REQUIRE_LIVE_CAPTURE=1` on the server | Aarush | 5 min | health unchanged; a report without a token is held | step 4 |
