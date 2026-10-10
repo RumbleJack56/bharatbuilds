@@ -5,23 +5,35 @@ import { KINDS, FIELD_RULE, EVENT } from "../ui/copy.js";
 
 const overdue = (t) => t.overdue ? '<span class="chip overdue">overdue</span>' : "";
 
-export const taskCard = (t) => `<a class="card tasklink" href="#/task/${esc(t.id)}">
+// Last event of a kind on a task detail (events arrive oldest first).
+const lastEvent = (t, name) => [...(t.events || [])].reverse().find(e => e.event === name);
+export const disputeNote = (t) => lastEvent(t, "disputed")?.note || "";
+
+export const taskCard = (t, note = "") => `<a class="card tasklink" href="#/task/${esc(t.id)}">
   <div>${chip(t.status)} ${overdue(t)} <span class="muted small">rank ${esc(Math.round(t.rank_score * 10) / 10)}</span></div>
   <h3>${esc(t.asset_name)}</h3>
   <p class="small muted">${esc(t.agency_name)} - ${esc(t.pocket_name || "no pocket")} - ${esc(t.report_count)} report(s)</p>
+  ${t.status === "disputed" ? `<p class="small"><strong>Resident's note:</strong> ${esc(note || "(no note)")}</p>` : ""}
   <p class="small">Cleaning this gains ${esc(hrs(t.gain_h))} of fill time (scenario).</p></a>`;
 
-export const inboxView = ({ tasks, banner: b }) => `<h1>Inbox</h1>${banner(b)}` +
-  (tasks.length ? tasks.map(taskCard).join("") : `<p class="muted">No tasks for your agency right now.</p>`);
+export const inboxView = ({ tasks, banner: b }, notes = {}) => `<h1>Inbox</h1>${banner(b)}` +
+  (tasks.length ? tasks.map(t => taskCard(t, notes[t.id])).join("") : `<p class="muted">No tasks for your agency right now.</p>`);
 
 const eventItem = (e) => `<li><strong>${esc(EVENT[e.event] || e.event)}</strong>
     <span class="small muted">${esc(when(e.at))} - ${esc(e.actor_name)}${e.agency_id ? " - " + esc(e.agency_id.toUpperCase()) : ""}</span>
     ${e.note ? `<br>${esc(e.note)}` : ""}${photos([e.photo_url], "Photo")}${flagList(e.flags)}</li>`;
 
+// A disputed job shows the resident's note; a reworked one (accepted again) shows the "to be redone" note.
+function redoBanner(t) {
+  if (t.status === "disputed") return `<p class="banner redo"><strong>Resident's note:</strong> ${esc(disputeNote(t) || "(no note)")}</p>`;
+  const again = t.status === "accepted" && lastEvent(t, "accepted");
+  return again && again.note ? `<p class="banner redo"><strong>To be redone:</strong> ${esc(again.note)}${disputeNote(t) ? ` (resident's note: ${esc(disputeNote(t))})` : ""}</p>` : "";
+}
+
 export const taskDetail = (t, { banner: b, back }) => `<p><a href="${esc(back)}">Back</a></p>
   <h1>${esc(t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
   <p>Owner: <strong>${esc(t.agency_name || "No owner found")}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
-  ${banner(b)}<p>${esc(t.pocket_name || "")} - cleaning this gains ${esc(hrs(t.gain_h))} of fill time.</p>
+  ${banner(b)}${redoBanner(t)}<p>${esc(t.pocket_name || "")} - cleaning this gains ${esc(hrs(t.gain_h))} of fill time.</p>
   ${t.due_at ? `<p class="small muted">Due ${esc(when(t.due_at))}</p>` : ""}
   <p class="rule">${esc(FIELD_RULE)}</p><div id="actions"></div>
   <h2>Reports (${t.incidents.length})</h2>
@@ -38,6 +50,8 @@ const notOurs = (agencies, current) => `<h3 class="gap">Not ours?</h3>
 
 export const openActions = ({ agencies, current }) =>
   `<div class="card"><button class="primary big" id="acc">Accept this task</button>${notOurs(agencies, current)}</div>`;
+export const disputedActions = () => `<div class="card"><p>A resident said the work is not done. Accept to redo it.</p>
+  <button class="primary big" id="acc">Accept to redo</button></div>`;
 export const acceptedActions = ({ agencies, current }) => `<form class="card" id="done"><h3>Mark as done</h3>
   <p class="small muted">Photograph the finished work from the footpath.</p>
   <button type="button" id="ph" class="big primary">Take after-photo</button>

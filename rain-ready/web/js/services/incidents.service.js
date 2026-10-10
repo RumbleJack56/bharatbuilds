@@ -15,5 +15,13 @@ export function createIncidentsService(http) {
       const d = await http.request("GET", "/api/incidents?mine=true");
       return d.incidents.map(fix);
     },
+    async held() {
+      const d = await http.request("GET", "/api/incidents?held=true");
+      return d.incidents.map(fix);
+    },
+    async review(id, { decision, note = "" }) {
+      const r = await http.request("POST", `/api/incidents/${encodeURIComponent(id)}/review`, { json: { decision, note } });
+      return fix(r.incident);
+    },
   };
 }

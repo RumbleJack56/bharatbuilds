@@ -5,9 +5,12 @@ import { LEVEL } from "../ui/copy.js";
 
 const STATES = [["clean", "All cleaned"], ["silted", "All silted"], ["current", "As they are now"]];
 
-export const simControls = (rain = 35, state = "current") => `<div class="card">
+export const DEFAULT_RAIN = 25;             // slider start when the server sends no reference rain
+
+export const simControls = (rain = DEFAULT_RAIN, state = "current", isReference = true) => `<div class="card">
   <label for="rain">Rain: <strong id="rv">${esc(rain)}</strong> mm/h</label>
   <input id="rain" type="range" min="0" max="120" step="5" value="${esc(rain)}" class="wide">
+  <p class="small muted">${isReference ? `Reference rain: ${esc(rain)} mm/h. Drag` : "Drag"} to try other values.</p>
   <fieldset class="plain"><legend><strong>Drains</strong></legend>
   ${STATES.map(([v, t]) => `<label class="opt"><input type="radio" name="st" value="${v}" ${v === state ? "checked" : ""}> ${esc(t)}</label>`).join("")}
   </fieldset></div><div id="res"></div>`;

@@ -3,9 +3,13 @@ import { dashShell, TAB_TITLES, accountabilityView, impactView, captureView } fr
 import { errBox } from "../ui/components.js";
 import { mapPane } from "./dashmap.js";
 import { simPane } from "./sim.js";
+import { actionsPane } from "./actions.js";
+import { insightsPane } from "./insights.js";
 
 const PANES = {
   map: mapPane,
+  actions: actionsPane,
+  insights: insightsPane,
   simulator: simPane,
   accountability: async (pane, ctx) => { pane.innerHTML = accountabilityView(await ctx.services.dashboard.accountability()); },
   impact: async (pane, ctx) => { pane.innerHTML = impactView(await ctx.services.dashboard.impact()); },

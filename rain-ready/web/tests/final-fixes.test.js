@@ -66,7 +66,7 @@ test("I3: #coords shows the pin source, and keeps the GPS failure text", async (
     geo: { current: async () => { throw new Error("Could not get GPS. Tap the map instead."); } },
     toast: { show() {} }, services: {} };
   await report.mount(root, ctx);
-  assert.match(root.els["#coords"].textContent, /^Default pin \(Old Rajinder Nagar\)/);
+  assert.match(root.els["#coords"].textContent, /^Default pin \(Daryai Nallah barrel, Pusa Road crossing\)/);
   clicked(28.6, 77.1);
   assert.match(root.els["#coords"].textContent, /Pin you tapped/);
   await root.els["#gps"].onclick({ target: { disabled: false } });

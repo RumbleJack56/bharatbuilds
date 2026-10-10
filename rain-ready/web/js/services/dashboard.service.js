@@ -7,7 +7,19 @@ export function createDashboardService(http) {
     accountability: () => http.request("GET", "/api/accountability"),
     impact: () => http.request("GET", "/api/impact"),
     opportunities: () => http.request("GET", "/api/opportunities"),
+    leaderboard: () => http.request("GET", "/api/leaderboard"),
+    transparency({ agencyId, status, limit } = {}) {
+      const q = new URLSearchParams();
+      if (agencyId) q.set("agency_id", agencyId);
+      if (status) q.set("status", status);
+      q.set("limit", limit || 50);
+      return http.request("GET", "/api/transparency?" + q);
+    },
     agencies: async () => (await http.request("GET", "/api/agencies")).agencies,
+    actions: (top = 10) => http.request("GET", `/api/actions?top=${encodeURIComponent(top)}`),
+    insights: () => http.request("GET", "/api/insights"),
+    wardReport: () => http.request("GET", "/api/reports/ward?format=json"),
+    wardReportMd: () => http.request("GET", "/api/reports/ward?format=md", { text: true }),
     generatePlan: (top = 5) => http.request("POST", `/api/plan/generate?top=${encodeURIComponent(top)}`),
   };
 }

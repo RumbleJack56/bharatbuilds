@@ -8,3 +8,5 @@ export const MapPort = definePort("MapPort", ["available", "create"]);
 export const MapViewPort = definePort("MapViewPort", ["circle", "badge", "pin", "onClick", "view", "fit", "destroy"]);
 export const ToastPort = definePort("ToastPort", ["show"]);
 export const CameraPort = definePort("CameraPort", ["available", "capture"]);
+export const ImagePort = definePort("ImagePort", ["shrink"]);
+export const DownloadPort = definePort("DownloadPort", ["save"]);

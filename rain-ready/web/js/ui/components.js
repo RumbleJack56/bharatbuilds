@@ -10,6 +10,9 @@ export function photos(urls, alt) {
 }
 export const flagList = (flags) => flags && flags.length
   ? `<ul class="flags">${flags.map(f => `<li class="${f.level === "warn" ? "warn" : "info"}"><strong>${f.level === "warn" ? "Check needed" : "Note"}:</strong> ${esc(f.detail)}</li>`).join("")}</ul>` : "";
+// Message for a refused report or after-photo: the server's own text, except the "kind is required" 422 which gets a hint.
+export const photoError = (e, kind) => e.status === 422 && !kind && /^kind is required/.test(e.message)
+  ? "We could not tell from the photo. Please pick what you see." : e.message || String(e);
 // Runs fn once per tap: ignores taps while busy, re-enables after, reports errors to onError (usually ctx.toast.show).
 export async function guard(btn, fn, onError) {
   if (btn.disabled) return;
