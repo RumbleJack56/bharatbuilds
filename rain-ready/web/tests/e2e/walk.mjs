@@ -47,7 +47,13 @@ async function persona(user, expect4xx = []) {
     (expect4xx.some(e => e.status === r.status() && r.url().includes(e.path)) ? expected : problems).push(line);
   });
   await page.addInitScript(u => { try { if (!sessionStorage.__s) { localStorage.setItem("rr_user", u); sessionStorage.__s = 1; } } catch {} }, user);
-  const shot = (n) => page.screenshot({ path: join(SHOTS, `${n}.png`), fullPage: true });
+  // Full-height capture by growing the viewport to the document height, so the sticky top bar and fixed tab bar each appear once at the edges.
+  const shot = async (n) => {
+    const h = await page.evaluate(() => Math.ceil(document.documentElement.scrollHeight));
+    await page.setViewportSize({ width: 390, height: Math.max(844, h) }); await page.waitForTimeout(250);
+    await page.screenshot({ path: join(SHOTS, `${n}.png`) });
+    await page.setViewportSize({ width: 390, height: 844 });
+  };
   const go = async (hash) => { await page.goto(`${BASE}/${QS}${hash}`); await page.waitForLoadState("networkidle"); };
   return { ctx, page, shot, go };
 }
@@ -65,7 +71,7 @@ try {
   await u.go("#/report"); await u.shot("01-report-form");
   ok("default pin is labelled DR-DN-PUSA's place", /Daryai Nallah barrel, Pusa Road/.test(await u.page.innerText("#coords")));
   await takePhoto(u.page, "#cam");
-  ok("report photo locks the pin", /Pin from your photo/.test(await u.page.innerText("#coords")));
+  ok("report photo locks the pin", /Pin from your photo/.test(await u.page.innerText("#coords"))); await u.shot("01b-report-photo");
   await u.page.selectOption("#kind", "blocked_drain");
   await u.page.fill("#note", "Leaves and plastic block the grate (walk)");
   await u.page.click("#send");
@@ -111,7 +117,7 @@ try {
   await u.go("#/dash/impact"); await u.page.waitForSelector("#pane .grid"); const after = await gained(u.page); await u.shot("11-impact-after");
   const tiles = (await u.page.innerText("#pane")).replace(/\s+/g, " ");
   ok("Impact counts the confirmed task", /1 confirmed/.test(tiles), `gained before=${before} after=${after} (DR-DN-PUSA sits in no pocket, so 0 h is correct)`);
-  await u.go("#/dash/simulator"); await u.page.waitForSelector("#rain");
+  await u.go("#/dash/simulator"); await u.page.waitForSelector("#rain"); await u.shot("11-simulator");
   ok("simulator starts at the map's reference rain (25)", (await u.page.inputValue("#rain")) === "25", await u.page.inputValue("#rain"));
   await u.go("#/dash/map"); await u.page.waitForSelector(".map-label"); await u.page.waitForTimeout(500); await u.shot("12-dash-map");
   // Leaving the map tab right after it loads must not throw (Leaflet _leaflet_pos race).
