@@ -1,0 +1,311 @@
+<title>Pilot Ward Signal Report</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one reading column. Findings first, then a drawn map of the six places, then evidence tables and charts that share one scale. */
+:root{
+  --surface:#fcfcfb; --panel:#f4f3f0; --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#74736d; --grid:#e3e2dd; --road:#c9c7bf;
+  --blue:#2a78d6; --orange:#eb6834; --aqua:#1baf7a; --ring:#fcfcfb;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --surface:#1a1a19; --panel:#232321; --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#9a998f; --grid:#33332f; --road:#4a4944;
+  --blue:#3987e5; --orange:#d95926; --aqua:#199e70; --ring:#1a1a19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --surface:#1a1a19; --panel:#232321; --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#9a998f; --grid:#33332f; --road:#4a4944;
+  --blue:#3987e5; --orange:#d95926; --aqua:#199e70; --ring:#1a1a19; color-scheme:dark}
+body{background:var(--surface);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+.page{max-width:1120px;margin-inline:auto;padding-inline:max(16px,3vw);padding-block:40px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{text-wrap:balance;line-height:1.15;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(28px,4.4vw,44px);font-weight:700}
+h2{font-size:22px;font-weight:650}
+h3{font-size:15px;font-weight:600}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.lede{font-size:17px;color:var(--ink-2);max-width:62ch}
+header{display:flex;flex-direction:column;gap:14px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sub{color:var(--ink-2);max-width:68ch}
+.findings{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px 36px}
+.findings li{border-top:1px solid var(--grid);padding-top:12px;color:var(--ink);max-width:60ch}
+.findings li:last-child{color:var(--ink-2)}
+.frame{background:var(--panel);border-radius:10px;padding:12px;position:relative}
+.scroll{overflow-x:auto}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--ink-2);padding-block:2px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:26px;height:10px;display:inline-block}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:760px}
+th{font-weight:600;text-align:left;font-size:12px;color:var(--ink-2);letter-spacing:.02em;border-bottom:1px solid var(--ink-3);padding:8px 12px 8px 0;vertical-align:bottom}
+td{border-bottom:1px solid var(--grid);padding:10px 12px 10px 0;vertical-align:top}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)}
+.chip{display:inline-block;font-family:var(--mono);font-size:12px;border:1px solid var(--ink-3);border-radius:4px;padding:0 6px;margin-right:4px;white-space:nowrap}
+.chip.strong{border-color:var(--ink);font-weight:500}
+.chip.gap{border-style:dashed}
+.small{font-size:12.5px}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:6px;max-width:260px;z-index:3;opacity:0}
+.tip.on{opacity:1}
+.hs:focus{outline:none}.hs:focus-visible .ring{stroke:var(--ink);stroke-width:2}
+svg text{fill:var(--ink);font-family:var(--sans)}
+svg .t2{fill:var(--ink-2)}svg .t3{fill:var(--ink-3)}
+.halo{paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
+.d-real{stroke:var(--ink);stroke-width:2.8;fill:none}
+.d-documented{stroke:var(--aqua);stroke-width:3.4;fill:none}
+.d-inferred{stroke:var(--aqua);stroke-width:3;stroke-dasharray:7 5;fill:none}
+.d-assumed{stroke:var(--orange);stroke-width:2.4;stroke-dasharray:2 3.5;fill:none}
+.bar{fill:var(--blue)}
+.check{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto;gap:6px 18px;align-items:center;padding-block:12px;border-bottom:1px solid var(--grid)}
+.check .tr{height:10px;background:var(--grid);border-radius:2px;position:relative;margin-block:3px}
+.check .tr i{position:absolute;inset:0 auto 0 0;display:block;border-radius:2px}
+details summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details[open] summary{margin-bottom:10px}
+@media (max-width:640px){.check{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.tip{transition:opacity .12s}}
+</style>
+
+<main class="page">
+<header>
+  <div class="eyebrow">Rain-Ready · Karol Bagh and Old Rajinder Nagar, Delhi</div>
+  <h1>Pilot ward signal report</h1>
+  <p class="lede">Six places where water collects, with the records that name them, where the drains beside them are, who owns those drains, and how sure each position is.</p>
+  <p class="small muted" id="stamp"></p>
+</header>
+
+<section id="findings"><h2>What the data supports</h2><ul class="findings" id="find-list"></ul></section>
+
+<section id="map-sec">
+  <h2>Where the signals fall</h2>
+  <p class="sub">Circles are the uncertainty of each position, from how far apart the source phrases land. Drain lines are styled by how they were placed. Hover or focus a place or drain for its basis.</p>
+  <div class="legend" id="map-legend"></div>
+  <div class="frame" id="map-frame"><svg id="map" role="img" aria-label="Map of six waterlogging places with position uncertainty and drain points"></svg><div class="tip" id="tip"></div></div>
+</section>
+
+<section id="matrix-sec">
+  <h2>Signals by place</h2>
+  <p class="sub">Each row is one place. Position grade A means two independent source phrases agree within 75 m; B within 200 m; C is a single phrase or a wider spread.</p>
+  <div class="scroll"><table id="matrix"><thead><tr>
+    <th>Place</th><th class="n">Position</th><th class="n">Dates</th><th>Years named</th><th class="n">Facilities within 200 m</th><th>Drain evidence</th><th>Evidence index</th>
+  </tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="time-sec">
+  <h2>When each place was listed</h2>
+  <p class="sub">The strip on top counts the places the Traffic Police listed on each day, across all of Delhi. Dots below are the dates for each place, sized by that day's count. A place listed on a day with few other places was flooding on an ordinary rain day.</p>
+  <div class="frame scroll"><svg id="time" role="img" aria-label="Dates on which each place was listed, against the citywide count for each day" style="min-width:680px"></svg></div>
+  <details><summary>Dates by place, as a table</summary><div class="scroll"><table id="date-table" style="min-width:560px"><thead><tr><th>Place</th><th>Date</th><th class="n">Places listed that day</th></tr></thead><tbody></tbody></table></div></details>
+</section>
+
+<section id="rank-sec">
+  <h2>How firm the order is</h2>
+  <p class="sub" id="rank-sub"></p>
+  <div class="frame scroll"><svg id="rank" role="img" aria-label="Range of ranks each place takes under changed weights" style="min-width:560px"></svg></div>
+</section>
+
+<section id="drain-sec">
+  <h2>Where the drain points come from</h2>
+  <p class="sub">OpenStreetMap has no roadside drains here. Points sit on a drain route described in the 1976 plan, on a real OSM line, or on a road with the drain marked as assumed. The three checks compare the 1976 description with the geometry.</p>
+  <div id="checks"></div>
+  <p class="small muted">Owner rule used for roads: a road in the PWD inventory with a Right of Way of 60 ft (18.29 m) or more has its drains with PWD, from the 2012 notification and a 2020 affidavit to the NGT (a South Delhi statement applied here by inference). Trunk drains listed under MCD in the 1976 plan are shown as MCD. Every owner here is a documentary reading, not a field-verified fact.</p>
+  <div class="scroll"><table id="drain-table"><thead><tr><th>Drain point</th><th>Basis</th><th class="n">From the place</th><th>Owner and source</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="reg-sec">
+  <h2>Sources and what they cannot do</h2>
+  <div class="scroll"><table id="registry"><thead><tr><th>Source</th><th>Kind</th><th>Used for</th><th>Limit</th></tr></thead><tbody></tbody></table></div>
+</section>
+</main>
+
+<script>
+const D = /*DATA*/null;
+const NS = "http://www.w3.org/2000/svg";
+const $ = (s, r = document) => r.querySelector(s);
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const h = (t, a = {}, ...kids) => { const e = document.createElement(t); for (const k in a) { if (k === "class") e.className = a[k]; else e.setAttribute(k, a[k]); }
+  kids.flat().forEach(c => e.append(c instanceof Node ? c : document.createTextNode(c))); return e; };
+const byId = Object.fromEntries(D.hotspots.map(x => [x.id, x]));
+const ranked = D.hotspots.filter(x => x.rank).sort((a, b) => a.rank.rank - b.rank.rank);
+const unranked = D.hotspots.filter(x => !x.rank);
+const fmt = n => n.toLocaleString("en-IN");
+
+$("#stamp").textContent = `Sources retrieved ${D.meta.retrieved}. ${fmt(D.meta.generated_from.fco_rows)} Traffic Police list rows, ${fmt(D.meta.generated_from.fco_location_dates)} location-dates, ${D.meta.generated_from.fco_days} days.`;
+D.findings.forEach(t => $("#find-list").append(h("li", {}, t)));
+
+/* tooltip */
+const tip = $("#tip"), frame = $("#map-frame");
+function showTip(ev, html) {
+  tip.textContent = ""; html.forEach(l => tip.append(h("div", {}, l)));
+  const fr = frame.getBoundingClientRect(), x = (ev.clientX ?? fr.left + 40) - fr.left, y = (ev.clientY ?? fr.top + 40) - fr.top;
+  tip.style.left = Math.min(Math.max(8, x + 12), fr.width - 270) + "px"; tip.style.top = Math.max(8, y - 12) + "px"; tip.classList.add("on");
+}
+const hideTip = () => tip.classList.remove("on");
+
+/* map */
+(function () {
+  const B = D.bounds, W = 1000, k = Math.cos(((B.n + B.s) / 2) * Math.PI / 180);
+  const H = Math.round(W * (B.n - B.s) / ((B.e - B.w) * k));
+  const X = lon => (lon - B.w) / (B.e - B.w) * W, Y = lat => (B.n - lat) / (B.n - B.s) * H;
+  const pxm = W / ((B.e - B.w) * 111320 * k);
+  const svg = $("#map"); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const path = c => "M" + c.map(p => X(p[1]).toFixed(1) + " " + Y(p[0]).toFixed(1)).join("L");
+  const wd = { primary: 2.4, secondary: 1.9, tertiary: 1.3 };
+  const g0 = el("g", {}, svg);
+  D.roads.forEach(r => el("path", { d: path(r.c), fill: "none", stroke: "var(--road)", "stroke-width": wd[r.k] || .8, "stroke-linecap": "round" }, g0));
+  const pb = [28.632, 77.170, 28.662, 77.205];
+  el("rect", { x: X(pb[1]), y: Y(pb[2]), width: X(pb[3]) - X(pb[1]), height: Y(pb[0]) - Y(pb[2]), fill: "none", stroke: "var(--ink-3)", "stroke-width": 1, "stroke-dasharray": "5 5" }, svg);
+  el("text", { x: X(pb[1]) + 6, y: Y(pb[2]) + 16, class: "t3 halo", "font-size": 12 }, svg).textContent = "pilot box";
+  /* named road corridors from the 1976 plan */
+  D.roads.filter(r => r.n === "Patel Road").forEach(r => el("path", { d: path(r.c), class: "d-documented", opacity: .45 }, svg));
+  D.roads.filter(r => r.n === "Bazaar Marg").forEach(r => el("path", { d: path(r.c), class: "d-inferred", opacity: .55 }, svg));
+  const ch = D.meta.daryai_chain;                        /* straight links between the road end and the culvert pieces */
+  [[1, 2], [3, 4]].forEach(([a, b]) => el("path", { d: path([ch[a], ch[b]]), class: "d-inferred", opacity: .8 }, svg));
+  const note = (lat, lon, text, dx = 8, dy = 4, anchor = "start") => { const t = el("text", { x: X(lon) + dx, y: Y(lat) + dy, class: "t2 halo", "font-size": 12, "text-anchor": anchor }, svg); t.textContent = text; };
+  note(ch[4][0], ch[4][1], "Daryai Nallah route, 1976 (inferred)", 12, 22);
+  const pr = D.roads.filter(r => r.n === "Patel Road").flatMap(r => r.c).filter(p => X(p[1]) > 70).sort((a, b) => a[1] - b[1])[0];
+  if (pr) note(pr[0], pr[1], "Patel Road barrel, 1976", 6, -12);
+  /* drains */
+  const info = { real: "Real OSM line, unnamed. No owner source.", documented: "Alignment follows the road named in the 1976 plan.",
+    inferred: "Placed from the 1976 route length. Identity is inferred.", assumed: "Drain assumed beside the road. Not observed." };
+  D.drains.forEach(d => {
+    const g = el("g", { class: "hs", tabindex: 0 }, svg);
+    el("path", { d: path(d.geometry.map(p => p)), class: "d-" + d.class }, g);
+    el("circle", { cx: X(d.lon), cy: Y(d.lat), r: 4.5, fill: d.class === "real" ? "var(--ink)" : d.class === "assumed" ? "var(--orange)" : "var(--aqua)", stroke: "var(--ring)", "stroke-width": 2, class: "ring" }, g);
+    const lines = [d.name, info[d.class], d.agency_id ? "Owner: " + d.agency_id.toUpperCase() + " (low confidence)" : "Owner: none found"];
+    g.addEventListener("pointermove", e => showTip(e, lines)); g.addEventListener("pointerleave", hideTip);
+    g.addEventListener("focus", () => showTip({}, lines)); g.addEventListener("blur", hideTip);
+  });
+  /* places */
+  const off = { "LP-KBM": [-12, 22, "end"], "LP-JHB": [14, -10, "start"], "LP-FIL": [-14, -10, "end"], "LP-ANP": [14, 22, "start"], "LP-EPN": [14, 18, "start"], "LP-ORN": [-14, 26, "end"] };
+  D.hotspots.forEach(p => {
+    const g = el("g", { class: "hs", tabindex: 0 }, svg), cx = X(p.position.lon), cy = Y(p.position.lat);
+    el("circle", { cx, cy, r: Math.max(8, p.position.radius_m * pxm), fill: "var(--blue)", "fill-opacity": .13, stroke: "var(--blue)", "stroke-width": 1.2, class: "ring" }, g);
+    el("circle", { cx, cy, r: 6, fill: "var(--blue)", stroke: "var(--ring)", "stroke-width": 2 }, g);
+    const o = off[p.id] || [12, -10, "start"], t = el("text", { x: cx + o[0], y: cy + o[1], "font-size": 13.5, "font-weight": 600, "text-anchor": o[2], class: "halo" }, g);
+    t.textContent = p.short;
+    const lines = [p.name, `Position about ${p.position.radius_m} m, grade ${p.position.grade}`, p.waterlogging.n_dates ? `${p.waterlogging.n_dates} dates listed, ${p.waterlogging.years.join(", ")}` : "In no Traffic Police list",
+      p.exposure.total + " facilities within 200 m"];
+    g.addEventListener("pointermove", e => showTip(e, lines)); g.addEventListener("pointerleave", hideTip);
+    g.addEventListener("focus", () => showTip({}, lines)); g.addEventListener("blur", hideTip);
+  });
+  const sc = 500; const bx = W - 40 - sc * pxm, by = H - 26;           /* scale bar */
+  el("path", { d: `M${bx} ${by}H${bx + sc * pxm}M${bx} ${by - 5}V${by + 5}M${bx + sc * pxm} ${by - 5}V${by + 5}`, stroke: "var(--ink)", "stroke-width": 1.5, fill: "none" }, svg);
+  el("text", { x: bx + sc * pxm / 2, y: by - 9, "text-anchor": "middle", "font-size": 12, class: "halo" }, svg).textContent = "500 m";
+  el("text", { x: 12, y: H - 10, "font-size": 11, class: "t3 halo" }, svg).textContent = "Roads © OpenStreetMap contributors, ODbL";
+  const lg = $("#map-legend");
+  const sw = (cls, txt, extra = "") => h("span", {}, (() => { const s = document.createElementNS(NS, "svg"); s.setAttribute("class", "sw"); s.setAttribute("viewBox", "0 0 26 10");
+    s.style.width = "26px"; s.style.height = "10px"; const l = document.createElementNS(NS, "path"); l.setAttribute("d", "M0 5H26"); l.setAttribute("class", cls); s.append(l); return s; })(), txt);
+  lg.append(sw("d-real", "Real OSM drain line"), sw("d-documented", "Documented 1976 barrel, on its road"), sw("d-inferred", "Inferred from route length"),
+            sw("d-assumed", "Roadside drain assumed"), h("span", {}, "Blue circle: position and its uncertainty"));
+})();
+
+/* matrix */
+(function () {
+  const tb = $("#matrix tbody");
+  const order = [...ranked, ...unranked];
+  order.forEach(p => {
+    const ds = D.drains.filter(d => d.hotspot === p.id);
+    const years = ["1976", "2022", "2023", "2024"].map(y => {
+      const on = y === "1976" ? p.documents.some(d => d.year == 1976 && d.kind === "waterlogging") : p.waterlogging.years.includes(y) || p.documents.some(d => d.year == y && d.kind === "waterlogging" && y === "2024");
+      return h("span", { class: "chip" + (on ? " strong" : " gap") }, on ? y : "no " + y.slice(2));
+    });
+    const dtxt = ds.length ? ds.map(d => h("div", { class: "small" }, `${d.name.replace(/ \(.*?\)/, "")} · ${d.distance_m} m`)) : [h("div", { class: "small muted" }, "none located")];
+    const idx = p.index == null ? h("div", {}, h("span", { class: "chip gap" }, "not ranked"), h("div", { class: "small muted" }, "no list covers interior lanes"))
+      : h("div", {}, h("span", { class: "mono" }, p.index.toFixed(0)), h("div", { class: "small muted" }, p.rank.best === p.rank.worst ? `rank ${p.rank.rank}, fixed` : `rank ${p.rank.rank}, range ${p.rank.best} to ${p.rank.worst}`));
+    tb.append(h("tr", {}, h("td", {}, h("strong", {}, p.short), h("div", { class: "small muted" }, p.name)),
+      h("td", { class: "n" }, `±${p.position.radius_m} m`, h("div", {}, h("span", { class: "chip strong" }, p.position.grade))),
+      h("td", { class: "n" }, p.waterlogging.n_dates || "0"), h("td", {}, years),
+      h("td", { class: "n" }, p.exposure.total, p.exposure.total === 0 && p.exposure.nearest_facility_m ? h("div", { class: "small muted" }, `nearest ${p.exposure.nearest_facility_m} m`) : ""),
+      h("td", {}, dtxt), h("td", {}, idx)));
+  });
+  /* dates table */
+  const dt = $("#date-table tbody");
+  ranked.forEach(p => p.waterlogging.dates.forEach(d => dt.append(h("tr", {}, h("td", {}, p.short), h("td", { class: "mono" }, d), h("td", { class: "n" }, D.days[d])))));
+})();
+
+/* timeline */
+(function () {
+  const svg = $("#time"), W = 1000, L = 214, R = 16, laneH = 38, topH = 96, T0 = Date.UTC(2022, 0, 1), T1 = Date.UTC(2025, 0, 1);
+  const lanes = [...ranked, ...unranked], H = topH + 30 + lanes.length * laneH + 34;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const X = d => L + (Date.parse(d + "T00:00:00Z") - T0) / (T1 - T0) * (W - L - R);
+  const maxN = Math.max(...Object.values(D.days)), base = topH;
+  for (let y = 2022; y <= 2025; y++) {
+    const x = L + (Date.UTC(y, 0, 1) - T0) / (T1 - T0) * (W - L - R);
+    el("line", { x1: x, x2: x, y1: 8, y2: H - 26, stroke: "var(--grid)" }, svg);
+    if (y < 2025) el("text", { x: x + 4, y: H - 8, "font-size": 12, class: "t2" }, svg).textContent = y;
+  }
+  for (let y = 2022; y < 2025; y++) {                                       /* monsoon months */
+    const a = L + (Date.UTC(y, 5, 1) - T0) / (T1 - T0) * (W - L - R), b = L + (Date.UTC(y, 9, 1) - T0) / (T1 - T0) * (W - L - R);
+    el("rect", { x: a, y: 8, width: b - a, height: H - 34, fill: "var(--ink)", "fill-opacity": .045 }, svg);
+  }
+  el("text", { x: L - 10, y: 24, "text-anchor": "end", "font-size": 12, class: "t2" }, svg).textContent = "Places listed";
+  el("text", { x: L - 10, y: 40, "text-anchor": "end", "font-size": 12, class: "t2" }, svg).textContent = "that day, Delhi";
+  Object.entries(D.days).forEach(([d, n]) => el("rect", { x: X(d) - 1, y: base - 8 - (n / maxN) * (topH - 24), width: 2, height: (n / maxN) * (topH - 24), fill: "var(--ink-3)" }, svg));
+  const mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  Object.entries(D.days).sort((a, b) => b[1] - a[1]).slice(0, 3).forEach(([d, n], i) => {
+    const t = el("text", { x: X(d) + 7, y: 22 + i * 14, "font-size": 12, class: "t2" }, svg);
+    t.textContent = `${n} places, ${+d.slice(8)} ${mon[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}`;
+  });
+  lanes.forEach((p, i) => {
+    const y = topH + 30 + i * laneH + laneH / 2;
+    el("line", { x1: L, x2: W - R, y1: y, y2: y, stroke: "var(--grid)" }, svg);
+    el("text", { x: L - 10, y: y + 4, "text-anchor": "end", "font-size": 13, "font-weight": 600 }, svg).textContent = p.short;
+    if (!p.waterlogging.dates.length) { el("text", { x: L + 8, y: y + 4, "font-size": 12, class: "t3" }, svg).textContent = "in no list: the lists record arterial roads"; return; }
+    p.waterlogging.dates.forEach(d => {
+      const n = D.days[d], r = 3.5 + 7 * Math.sqrt(n / maxN);
+      const c = el("circle", { cx: X(d), cy: y, r, fill: "var(--blue)", "fill-opacity": .88, stroke: "var(--ring)", "stroke-width": 2 }, svg);
+      el("title", {}, c).textContent = `${p.short}, ${d}: ${n} places listed that day`;
+    });
+  });
+})();
+
+/* rank stability */
+(function () {
+  const svg = $("#rank"), W = 1000, L = 214, R = 40, rowH = 40, H = 40 + (ranked.length + unranked.length) * rowH + 30;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const n = ranked.length, X = r => L + (r - 1) / (n - 1) * (W - L - R);
+  const lo = Math.min(...Object.values(D.meta.weights)), hi = Math.max(...Object.values(D.meta.weights));
+  $("#rank-sub").textContent = `The index combines recurrence (${Math.round(D.meta.weights.recurrence * 100)}%), persistence (${Math.round(D.meta.weights.persistence * 100)}%), listings on ordinary days (${Math.round(D.meta.weights.ordinary_days * 100)}%) and exposure (${Math.round(D.meta.weights.exposure * 100)}%). `
+    + `It orders the evidence. It is not a chance of flooding. Each bar shows the best and worst rank over 1,000 random re-weightings (each weight scaled 0.4 to 1.6).`;
+  for (let r = 1; r <= n; r++) {
+    el("line", { x1: X(r), x2: X(r), y1: 14, y2: H - 28, stroke: "var(--grid)" }, svg);
+    el("text", { x: X(r), y: H - 8, "text-anchor": "middle", "font-size": 12, class: "t2" }, svg).textContent = "rank " + r;
+  }
+  ranked.forEach((p, i) => {
+    const y = 28 + i * rowH + rowH / 2, a = X(p.rank.best), b = X(p.rank.worst);
+    el("text", { x: L - 10, y: y + 4, "text-anchor": "end", "font-size": 13, "font-weight": 600 }, svg).textContent = p.short;
+    el("rect", { x: a - 7, y: y - 7, width: b - a + 14, height: 14, rx: 7, fill: "var(--blue)", "fill-opacity": .28 }, svg);
+    el("circle", { cx: X(p.rank.rank), cy: y, r: 7, fill: "var(--blue)", stroke: "var(--ring)", "stroke-width": 2 }, svg);
+    const left = b + 80 > W;                                           /* keep the label inside the frame */
+    el("text", { x: left ? a - 16 : b + 16, y: y + 4, "font-size": 12, class: "t2", "text-anchor": left ? "end" : "start" }, svg).textContent = `index ${p.index.toFixed(0)}`;
+  });
+  unranked.forEach((p, j) => {
+    const y = 28 + (ranked.length + j) * rowH + rowH / 2;
+    el("text", { x: L - 10, y: y + 4, "text-anchor": "end", "font-size": 13, "font-weight": 600 }, svg).textContent = p.short;
+    el("text", { x: L + 8, y: y + 4, "font-size": 12, class: "t3" }, svg).textContent = "not ranked: no list row names this place";
+  });
+})();
+
+/* checks and drains */
+(function () {
+  const c = $("#checks"), max = Math.max(...D.meta.checks.map(k => Math.max(k.documented_m, k.measured_m)));
+  D.meta.checks.forEach(k => {
+    const bar = (v, col) => h("div", { class: "tr" }, h("i", { style: `width:${v / max * 100}%;background:var(${col})` }));
+    c.append(h("div", { class: "check" }, h("div", {}, h("div", {}, k.claim), h("div", { class: "small muted" }, k.rule)),
+      h("div", {}, h("div", { class: "small mono" }, `1976 plan ${fmt(k.documented_m)} m`), bar(k.documented_m, "--ink-3"),
+                   h("div", { class: "small mono" }, `measured ${fmt(k.measured_m)} m (${k.difference_pct > 0 ? "+" : ""}${k.difference_pct}%)`), bar(k.measured_m, "--aqua")),
+      h("span", { class: "chip strong" }, k.holds ? "holds" : "does not hold")));
+  });
+  const tb = $("#drain-table tbody"), why = { real: "Real OSM line", documented: "On the road named in the 1976 plan", inferred: "Inferred from the 1976 route length", assumed: "Drain assumed beside the road" };
+  D.drains.forEach(d => tb.append(h("tr", {}, h("td", {}, h("strong", {}, d.name), h("div", { class: "small muted mono" }, d.id)), h("td", {}, why[d.class]),
+    h("td", { class: "n" }, d.hotspot ? d.distance_m + " m" : "context only"),
+    h("td", { class: "small" }, (d.agency_id ? d.agency_id.toUpperCase() + ". " : "No owner found. ") + (d.owner_source || "").split(". ")[0]))));
+})();
+
+/* registry */
+(function () {
+  const tb = $("#registry tbody");
+  D.registry.forEach(r => tb.append(h("tr", {}, h("td", {}, h("strong", {}, r.name), h("div", { class: "small muted" }, r.source)),
+    h("td", {}, h("span", { class: "chip" + (r.id[0] === "N" ? " gap" : "") }, r.kind)), h("td", {}, r.used), h("td", { class: "muted" }, r.limit))));
+})();
+</script>

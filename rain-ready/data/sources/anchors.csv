@@ -1,0 +1,27 @@
+hotspot_id,osm_ref,group,role,weight,phrase
+LP-KBM,node/345234441,metro,landmark,2,Karol Bagh Metro Station (railway=station)
+LP-KBM,node/6743274679,metro,landmark,2,Karol Bagh Metro Station
+LP-KBM,node/5638613674,metro,landmark,2,Karol Bagh Metro Station (bus stop)
+LP-KBM,way/1301371025,locality,locality,1,Karol Bagh
+LP-JHB,way/28190395,dayal,junction,3,Roundabout Bagga and surrounding area of Baba Lal Dayal Chowk
+LP-JHB,way/590610019,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/590610020,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/590610021,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/590610022,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/590610023,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/590610024,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/590610025,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,way/610043964,dayal,junction,3,Baba Lal Dayal Chowk
+LP-JHB,node/345234443,jhandewalan,landmark,2,Roundabout Jhandewalan / Bagga Link
+LP-JHB,relation/8300341,jhandewalan,landmark,2,Jhandewalan (Metro Station)
+LP-FIL,way/265815212,filmistan,landmark,2,Filmistan
+LP-FIL,node/11849811732,filmistan_studio,locality,1,Filmistan (photo studio)
+LP-ANP,way/1312789634,zakhira_foot,structure,3,Anand Parbat at the foot of Flyover / Under Zakhira Flyover
+LP-ANP,way/1312789635,zakhira_foot,structure,3,Anand Parbat at the foot of Flyover / Under Zakhira Flyover
+LP-ANP,node/10815131299,anand_parbat,locality,1,Anand Parbat
+LP-EPN,node/6225480084,epn_bus,landmark,2,East Patel Nagar Bus Stand
+LP-EPN,node/6386259488,epn_bus,landmark,2,East Patel Nagar Bus Stand
+LP-EPN,node/5634522773,epn_bus,landmark,2,East Patel Nagar Bus Stand
+LP-EPN,node/5634525358,epn_bus,landmark,2,East Patel Nagar Bus Stand
+LP-ORN,way/235103423,bazaar,locality,1,Bazaar Marg (Old Rajinder Nagar)
+LP-ORN,way/265927783,bada_bazar,locality,1,Bada Bazar Road (name used by the Tribune for the incident road)

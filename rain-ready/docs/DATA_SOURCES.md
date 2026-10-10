@@ -10,7 +10,7 @@ Detail, quotes and curl commands are in `docs/research/`. Tests ran from one mac
 | SCOPE item | Use | Status |
 |---|---|---|
 | 4.8 Cited ownership rule | 60 ft Right of Way rule (section 3) + PWD road API (section 2) | tested / read |
-| 4.8 Real drain positions | OpenStreetMap via Overpass | **not researched** (agent stopped early) |
+| 4.8 Real drain positions | OpenStreetMap via Overpass | **tested**: 3 unnamed culverts, no roadside drains (section 9) |
 | 4.8 Real pocket positions | Flood Control Order 2025 rows + 2024 inquiry reporting (section 4). Names only, no coordinates | read |
 | 4.5 Elevation suggestion | Copernicus GLO-30 on AWS (section 5). Coarse slope hint only | tested |
 | 4.6 Water-table depth bands | CGWB | **not researched** (agent stopped early) |
@@ -121,20 +121,20 @@ Clean-up cannot give: pocket coordinates (lists have place names only; a geocode
 
 Research not yet run (two agents were stopped before saving anything):
 
-- [ ] Overpass on the bbox: counts for `waterway=drain|ditch|stream|canal`, `tunnel=culvert`, manholes, `highway=*` with names. Decide if OSM drain lines are usable or only road lines.
+- [x] Overpass on the bbox (2026-10-10, section 9): OSM drain lines are not usable as a network; road lines are.
 - [ ] MCD 250-ward boundary file (GeoJSON or shapefile); settle the Rajinder Nagar ward number (141 or 149) from the State Election Commission order.
 - [ ] Which basin Old Rajinder Nagar drains to (Najafgarh or Barapullah); named drains serving it.
 - [ ] CGWB depth-to-water bands for Karol Bagh / Pusa (Ground Water Year Book NCT Delhi, INGRES category); citable minimum depth for recharge structures; DJB and bye-law rainwater harvesting rules.
 - [ ] Soil and lithology near the Ridge (SoilGrids API, CGWB).
-- [ ] Exposure: ward population, building footprints (Overture on AWS, OSM), OSM counts for schools, hospitals, libraries, coaching centres.
+- [ ] Exposure: ward population, building footprints (Overture on AWS, OSM), coaching centres. (OSM schools, clinics, hospitals and libraries within 200 m are done, section 9.)
 
 Build from what is already found (task B7):
 
-- [ ] Script: pull all PWD roads to a road-level JSON (no contact fields).
-- [ ] Script: extract pilot-area rows from the Flood Control Order 2025 PDF with page references.
-- [ ] Join OSM road lines to PWD roads by name; write `owner_source` per drain using the rule table in section 3.
-- [ ] Replace placeholder assets in `data/seed.json`; set `data_source` and `confidence` honestly.
-- [ ] Window the Copernicus tile to the bbox and store a small raster.
+- [x] Script: pull all PWD roads to a road-level JSON (no contact fields): `scripts/fetch_sources.py`.
+- [x] FCO 2025 pilot-area rows with PDF page numbers and dates: `data/sources/hotspots.csv` (checked against the PDF, 2026-10-10).
+- [x] Join OSM road lines to PWD roads; `owner_source` per drain from the section 3 rule: `scripts/prepare_sources.py`.
+- [ ] Replace placeholder assets in `data/seed.json`. Candidate is `data/seed.candidate.json`; blocked on tests and `web/` fixtures that use the placeholder ids (section 9).
+- [x] Copernicus tile windowed and sampled (section 9). Result: not usable as a risk layer; no raster stored.
 
 Needs a person:
 
@@ -142,3 +142,41 @@ Needs a person:
 - [ ] Fetch the Flood Control Order 2026 PDF in a browser from `https://ifc.delhi.gov.in/orders`.
 - [ ] Verify the exact Copernicus attribution wording.
 - [ ] Field capture of pocket and drain coordinates in Old Rajinder Nagar.
+
+## 9. Experiment results (2026-10-10)
+
+Run with the pipeline in `docs/DATA.md`. Candidate output: `data/seed.candidate.json` (9 drains, 6 pockets, passes `make seedcheck`). Presentable view: `docs/data-report.html`.
+
+**OSM (Overpass, ODbL).**
+- Drain lines: 3 unnamed culverts (`waterway=drain`, `tunnel=culvert`; 17, 5 and 3 points), no roadside drains. One manhole, a telecom one. OSM gives no drain network here, so a drain asset beside a road is an assumption and the seed says so.
+- Roads: 389 named highway ways, 117 names. Overpass often returns 500 or 504; the fetch script retries mirrors and splits the bbox.
+
+**Road names to PWD records.** Exact normalised-name join matched 24 of 117 names. Misses are spelling: PWD has "Dr. K. S. Krishanan Marg" (RD-00216), "Vande Martram Marg" (RD-00212), "Dev Prakash Shatri Marg" (RD-01255). Some names are ambiguous across divisions (Gurudwara Road appears 6 times). The same road is often listed twice (South West Road Division 1 and SRD Project Division 2) with equal Right of Way. Rule: every owner row names its PWD asset code by hand, and the script fails on an unknown code.
+
+**Flood Control Order 2025, re-read from the PDF.** Earlier notes under-counted: row 121 (New Rohtak Road, Anand Parbat) carries 8 dates including four in 2024; row 175 (Ram Bagh Road railway underbridge, Azad Market) carries 6 dates including four in 2024. Pilot rows placed on the map: Karol Bagh Metro (2 dates), Bagga Link and Jhandewalan roundabout (10), Filmistan (2), Anand Parbat (16), East Patel Nagar bus stand (1). Pages are PDF page numbers, not the "Page N of 146" stamp.
+
+Rows with no OSM feature of that name in the bbox, so not placed (listed, not guessed): 2022 #35 Azad Market Underpass (p59), #90 Azad Market Chowk (p62), #168 Under Flyover Azad Market (p65); 2023 #175 Railway under bridge, Azad Market (p73), #177 DCM Chowk, #179 Y-Point Underpass, Azad Market, #180 Under Rani Jhansi Road Flyover (p73), #270 Veer Banda Bairagi Marg / Azad Market (p77).
+
+**Elevation (Copernicus GLO-30), tested against the documented points.** Point height minus the mean of cells within 300 m: Karol Bagh Metro +4.3 m, Jhandewalan +4.5, Rani Jhansi flyover +1.0, Anand Parbat -0.4, Filmistan -4.3, East Patel Nagar -2.5, Old Rajinder Nagar (approximate) +0.9. Only 2 of 6 documented waterlogging points sit below their surroundings. The model includes metro structures, flyovers and buildings. Do not present it as a risk layer.
+
+**Exposure.** 75 OSM schools, colleges, clinics, hospitals and libraries in the bbox. Counts within 200 m of each pocket are stored in `exposed_assets`.
+
+**Behaviour found by loading this data.**
+- All five "other" pockets use the same scenario parameters, so the four that have a linked drain tie at 0.407 h. The ranking among them is arbitrary until parameters are measured or recorded dates feed the rank.
+- A pocket with no linked drain (Anand Parbat) is simulated as having clean drains (`planning.build_pockets` uses 0.0), so it looks safer than the rest.
+- `silt_estimate` is 0.496 on every drain: `last_confirmed_clean` is null and `planning.silt_fraction` treats null as 365 days. It is a prior, not a measurement. No public desilting record exists, so silting patterns can only come from confirmed cleans in the app.
+- Tests and `web/` fixtures use the placeholder ids and coordinates (`DR-RN-001`, `LP-RN-1`, 28.6433 / 77.1846). With the candidate seed 13 tests fail for that reason alone.
+
+## 10. Availability tests (2026-10-10)
+
+| Item | Result |
+|---|---|
+| Ward number for Rajinder Nagar | **141** under the 2022 delimitation (SEC ward summary: population 62,224). The Datameet ward GeoJSON uses the 2007 numbering, where "Rajender Nagar" is 149 and 150 is Pusa; 149 and 150 are Malviya Nagar and Green Park in 2022. 2022 boundaries are map PDFs only (`sec.delhi.gov.in/.../ward_141_rajinder_nagar.pdf`). |
+| Basin of Old Rajinder Nagar | **Najafgarh drain system, Karol Bagh Zone**, by the 1976 I&FC master plan (`ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx`). Trunk "Daryai Nallah": originates near Shankar Road, 800 m through Rajinder Nagar, crosses Pusa Road, 3,000 m through Karol Bagh and Sarai Rohilla, 5,700 m in total, 3,386 acres, design 0.7 cusec per acre. Also "Patel Road barrel" (starts at the Pusa Road and Shankar Road crossing, 2,000 m along Patel Road, 0.6 cusec per acre). The plan names Anand Parbat run-off "stagnated in a round-about" and Filmistan "water logged practically every monsoon". |
+| Groundwater (CGWB year book 2019-20, India-WRIS 2024) | Karol Bagh tehsil has **no monitoring well**. Nearest: Pusa (NRL) piezometer 2.2 to 2.6 km away, 30.4 m bgl May 2019, 29.4 m May 2024, 28.5 m Nov 2024 (decadal mean about 20 m); Pusa Institute (WTC) decadal mean about 19 m. India-WRIS works with `districtName=Central` (earlier "no data" was a parameter problem). The seed's 3.5 m "shallow" site is not realistic here. |
+| Soil texture (SoilGrids) | Returns null for built-up Delhi cells. Not available. |
+| Building footprints | Overture (releases 2026-08 and 2026-09 listed on AWS) and ESA WorldCover tile exist; a DuckDB read timed out and was not retried. Not needed for the current parameters. |
+| Population raster | WorldPop 100 m India 2020 is reachable (`data.worldpop.org/GIS/Population/Global_2000_2020/2020/IND/ind_ppp_2020.tif`). Not used. |
+| Delhi drain or sewer layer on OpenCity | None. Only Pune, Bengaluru, Chennai, Hyderabad. |
+| FCO 2026 | Still no PDF link in the static page; needs a browser. |
+| CGWB old site | `cgwb.gov.in/old_website` fails certificate verification from this machine; the year book was fetched with verification off and read, since it is a public PDF. |

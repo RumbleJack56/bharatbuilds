@@ -1,0 +1,90 @@
+<title>Delhi Waterlogging EDA</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: findings first (each with its action), then five small charts that each answer one question, then the evidence table. */
+:root{--surface:#fcfcfb;--panel:#f4f3f0;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#74736d;--grid:#e3e2dd;--blue:#2a78d6;--orange:#eb6834;--aqua:#1baf7a;--ring:#fcfcfb;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#232321;--ink:#f0efec;--ink-2:#c3c2b7;--ink-3:#9a998f;--grid:#33332f;
+  --blue:#3987e5;--orange:#d95926;--aqua:#199e70;--ring:#1a1a19;color-scheme:dark}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#232321;--ink:#f0efec;--ink-2:#c3c2b7;--ink-3:#9a998f;--grid:#33332f;--blue:#3987e5;--orange:#d95926;--aqua:#199e70;--ring:#1a1a19;color-scheme:dark}
+body{background:var(--surface);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+.page{max-width:1120px;margin-inline:auto;padding-inline:max(16px,3vw);padding-block:40px 72px;display:flex;flex-direction:column;gap:52px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.15;letter-spacing:-.01em}h1{font-size:clamp(28px,4.4vw,42px);font-weight:700}h2{font-size:21px;font-weight:650}h3{font-size:15px;font-weight:600}
+p{margin:0}.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.lede{font-size:17px;color:var(--ink-2);max-width:62ch}.sub{color:var(--ink-2);max-width:68ch}.small{font-size:13px}.muted{color:var(--ink-2)}
+header,section{display:flex;flex-direction:column;gap:16px;min-width:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:20px 32px}
+.card{border-top:1px solid var(--grid);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.act{background:var(--panel);border-radius:8px;padding:9px 12px;font-size:13.5px}.act b{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);display:block}
+.frame{background:var(--panel);border-radius:10px;padding:12px}.scroll{overflow-x:auto}svg{display:block;width:100%;height:auto}
+svg text{fill:var(--ink);font-family:var(--sans)}svg .t2{fill:var(--ink-2)}svg .t3{fill:var(--ink-3)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}th{text-align:left;font-size:12px;color:var(--ink-2);border-bottom:1px solid var(--ink-3);padding:8px 12px 8px 0}
+td{border-bottom:1px solid var(--grid);padding:9px 12px 9px 0;vertical-align:top}.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-family:var(--mono);font-size:12px;border:1px solid var(--ink-3);border-radius:4px;padding:0 6px;margin-right:4px;white-space:nowrap}.chip.gap{border-style:dashed}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink-2)}.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+</style>
+<main class="page">
+<header><div class="eyebrow">Rain-Ready · exploratory analysis · Delhi</div><h1>What Delhi's waterlogging records show, and what to do about it</h1>
+<p class="lede" id="lede"></p></header>
+<section><h2>Findings and their actions</h2><div class="cards" id="cards"></div></section>
+<section><h2>When it happens</h2><p class="sub" id="s1"></p><div class="frame"><svg id="month" role="img" aria-label="Recorded location-dates by month"></svg></div></section>
+<section><h2>A few days carry most of the records</h2><p class="sub" id="s2"></p><div class="frame"><svg id="dayc" role="img" aria-label="Places listed per day, largest first"></svg></div></section>
+<section><h2>A few roads carry most of the places</h2><p class="sub" id="s3"></p><div class="frame"><svg id="roadc" role="img" aria-label="Location-dates by road"></svg></div></section>
+<section><h2>Who owns the drains</h2><p class="sub" id="s4"></p><div class="frame"><svg id="own" role="img" aria-label="Location-dates by owner by the 60 ft rule"></svg></div><div class="legend" id="ownleg"></div></section>
+<section><h2>Where the pilot ward sits</h2><p class="sub" id="s5"></p><div class="frame"><svg id="dist" role="img" aria-label="Places by number of dates, with the pilot places marked"></svg></div></section>
+<section><h2>Chronic places</h2><p class="sub">Places listed in three or more different years, with the owner the 60 ft rule gives. A road of this name was found in the PWD inventory by name; the segment is not verified.</p>
+<div class="scroll"><table id="chronic"><thead><tr><th>Road</th><th>Place</th><th class="n">Dates</th><th>Years</th><th>Route to</th></tr></thead><tbody></tbody></table></div></section>
+<section><h2>What to keep in mind</h2><ul class="sub small" id="dq"></ul></section>
+</main>
+<script>
+const D=/*DATA*/null,NS="http://www.w3.org/2000/svg",$=s=>document.querySelector(s),pc=x=>Math.round(x*100)+"%",f=n=>n.toLocaleString("en-IN");
+const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const h=(t,a={},...k)=>{const e=document.createElement(t);for(const x in a)e.setAttribute(x==="cls"?"class":x,a[x]);k.flat().forEach(c=>e.append(c instanceof Node?c:String(c)));return e};
+const P=D.profile,V=D.validate,R=D.roads,O=D.ownership;
+$("#lede").textContent=`${P.location_dates.toLocaleString("en-IN")} location-dates on ${D.days.n_days} days at ${f(D.n_places)} places, from the Traffic Police lists in the Flood Control Order 2025, read against the PWD road inventory. Counts are floors: the lists name places that disrupted traffic.`;
+D.insights.forEach(i=>$("#cards").append(h("div",{cls:"card"},h("h3",{},i.text),h("p",{cls:"small muted"},i.why),h("div",{cls:"act"},h("b",{},"Action · "+i.action.type),i.action.text))));
+const W=1000,L=40,R_=16;
+function axis(svg,H){svg.setAttribute("viewBox",`0 0 ${W} ${H}`)}
+(function(){const s=$("#month"),H=230,mx=Math.max(...Object.values(P.by_month)),bw=(W-L-R_)/12;axis(s,H);
+ $("#s1").textContent=`${pc(P.monsoon_share)} fall between June and September; July alone holds ${pc(P.july_share)}. A cleaning round has to finish by the end of May.`;
+ const mn=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ for(let m=1;m<=12;m++){const v=P.by_month[m],x=L+(m-1)*bw,hh=v/mx*(H-70),on=m>=6&&m<=9;
+  el("rect",{x:x+8,y:H-34-hh,width:bw-16,height:hh,rx:3,fill:on?"var(--blue)":"var(--ink-3)","fill-opacity":on?1:.55},s);
+  el("text",{x:x+bw/2,y:H-40-hh,"text-anchor":"middle","font-size":12},s).textContent=v;
+  el("text",{x:x+bw/2,y:H-14,"text-anchor":"middle","font-size":12,class:"t2"},s).textContent=mn[m-1]}})();
+(function(){const s=$("#dayc"),H=250,sz=D.days.sizes,mx=sz[0],bw=(W-L-R_)/sz.length;axis(s,H);
+ $("#s2").textContent=`The five largest days hold ${pc(D.days.top5_share)} of all listings. The median day lists ${D.days.median} places. Each bar is one day, largest first.`;
+ sz.forEach((v,i)=>el("rect",{x:L+i*bw,y:H-34-v/mx*(H-70),width:Math.max(1,bw-1),height:v/mx*(H-70),fill:i<5?"var(--blue)":"var(--ink-3)"},s));
+ D.days.top.forEach(([d,n],i)=>{el("text",{x:L+i*bw+10,y:H-40-n/mx*(H-70)+6+i*0,"font-size":12,class:"t2"},s).textContent=`${n} places · ${d}`;});
+ const y=H-34-D.days.median/mx*(H-70);el("line",{x1:L,x2:W-R_,y1:y,y2:y,stroke:"var(--orange)","stroke-dasharray":"5 4"},s);
+ el("text",{x:W-R_,y:y-6,"text-anchor":"end","font-size":12},s).textContent=`median day: ${D.days.median} places`;
+ el("text",{x:L,y:H-12,"font-size":12,class:"t2"},s).textContent=`${D.days.n_days} days, largest to smallest`})();
+(function(){const s=$("#roadc"),rows=R.top,H=40+rows.length*30,mx=rows[0].location_dates,lab=200;axis(s,H);
+ $("#s3").textContent=`The ten busiest roads hold ${pc(R.top10_share)} of location-dates out of ${R.n_roads} listed roads. ${rows[0].road} alone holds ${pc(R.top1_share)}. Fixing single points leaves the rest of a long corridor as it was.`;
+ rows.forEach((r,i)=>{const y=20+i*30,w=r.location_dates/mx*(W-lab-250);
+  el("text",{x:lab-10,y:y+14,"text-anchor":"end","font-size":13},s).textContent=r.road.slice(0,30);
+  el("rect",{x:lab,y,width:w,height:20,rx:3,fill:"var(--blue)"},s);
+  el("text",{x:lab+w+8,y:y+15,"font-size":12,class:"t2"},s).textContent=`${r.location_dates} dates at ${r.places} places`})})();
+(function(){const s=$("#own"),H=120,by=O.by_agency,tot=O.location_dates;axis(s,H);
+ $("#s4").textContent=`Only ${pc(O.resolved_share)} of location-dates sit on a road that can be matched to the PWD inventory by name. The rest need an owner named before a task can be accepted.`;
+ const seg=[["pwd","PWD (Right of Way 60 ft or more)","var(--blue)"],["mcd","MCD (under 60 ft)","var(--aqua)"],["unresolved","No owner found from public records","var(--ink-3)"]];let x=L;
+ seg.forEach(([k,lab,col])=>{const v=by[k]||0,w=v/tot*(W-L-R_);if(!v)return;el("rect",{x,y:30,width:Math.max(2,w-2),height:44,rx:3,fill:col},s);
+  if(w>70)el("text",{x:x+w/2,y:57,"text-anchor":"middle","font-size":14,"font-weight":600,fill:"#fff"},s).textContent=`${f(v)} (${pc(v/tot)})`;x+=w});
+ $("#ownleg").append(...seg.map(([k,lab,col])=>h("span",{},h("i",{style:`background:${col}`}),`${lab}: ${f(by[k]||0)}`)))})();
+(function(){const s=$("#dist"),H=270,d=D.dist,mx=Math.max(...d.map(x=>x[1])),maxN=Math.max(...d.map(x=>x[0])),bw=(W-L-R_)/maxN;axis(s,H);
+ const listed=D.pilot.filter(p=>p.n_dates),gap=D.pilot.filter(p=>p.coverage_gap).map(p=>p.short);
+ $("#s5").textContent=`Bars count Delhi's places by how many dates each was listed. Markers are the pilot places. ${gap.length?gap.join(", ")+" is in no list, which is a gap in the lists, not evidence of a dry street.":""}`;
+ d.forEach(([n,c])=>{const x=L+(n-1)*bw,hh=Math.sqrt(c/mx)*(H-110);el("rect",{x:x+3,y:H-34-hh,width:bw-6,height:hh,fill:"var(--ink-3)","fill-opacity":.6,rx:2},s);
+  el("text",{x:x+bw/2,y:H-34-hh-5,"text-anchor":"middle","font-size":11,class:"t2"},s).textContent=c});
+ for(let n=1;n<=maxN;n++)if(n%2===1||n===maxN)el("text",{x:L+(n-1)*bw+bw/2,y:H-14,"text-anchor":"middle","font-size":12,class:"t2"},s).textContent=n;
+ el("text",{x:L,y:H-1,"font-size":12,class:"t3"},s).textContent="dates listed per place (bar height is the square root of the count)";
+ listed.sort((a,b)=>a.n_dates-b.n_dates).forEach((p,i)=>{const x=L+(p.n_dates-1)*bw+bw/2,y=24+(i%3)*22;
+  el("line",{x1:x,x2:x,y1:y+8,y2:H-60,stroke:"var(--orange)","stroke-dasharray":"3 3"},s);el("circle",{cx:x,cy:y,r:6,fill:"var(--orange)",stroke:"var(--ring)","stroke-width":2},s);
+  el("text",{x:x+(x>W-260?-10:10),y:y+4,"text-anchor":x>W-260?"end":"start","font-size":12.5,"font-weight":600},s).textContent=`${p.short.split(" (")[0]} · ${p.n_dates}`})})();
+const tb=$("#chronic tbody");D.chronic.forEach(c=>tb.append(h("tr",{},h("td",{},c.road),h("td",{cls:"muted"},c.place),h("td",{cls:"n"},c.n_dates),h("td",{},c.years.join(", ")),
+ h("td",{},c.agency_id?h("span",{cls:"chip"},c.agency_id.toUpperCase()):h("span",{cls:"chip gap"},"no owner found"),c.pwd_code?h("span",{cls:"small muted"},` ${c.pwd_code}, ${c.row} m`):""))));
+[`The lists cover places that disrupted traffic, mostly arterial roads. Interior lanes are missing.`,`The 2022 list carries dates from ${V.list_2022_first_date.slice(0,4)} onward, so list year is not event year.`,
+ `Row numbers are missing: ${JSON.stringify(V.numbering_gaps)}. ${V.rows_without_dates.length} row has no date; ${V.rows_without_place} rows have no place text.`,
+ `Road names are matched to the PWD inventory by normalised name and close spelling. A name shared by roads with different owners stays unresolved.`,
+ `Merging places across lists uses the road and the words of the place. Different spellings of one place stay separate, so recurrence is a floor.`].forEach(t=>$("#dq").append(h("li",{},t)));
+</script>

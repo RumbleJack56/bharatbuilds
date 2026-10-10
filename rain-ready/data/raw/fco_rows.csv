@@ -1,0 +1,623 @@
+list,row_no,pdf_page,col1,col2,dates,text
+2022,1,58,Bhairon Road,Uchandbnder Railway Bridge,2020-08-13;2020-08-17;2020-08-19;2022-01-23;2023-07-08;2023-07-09;2023-09-10,Bhairon Road         Uchandbnder Railway Bridge
+2022,2,58,Maulana Azad Road,Parking Behind Vigyan,2021-08-31;2022-01-23,Maulana Azad Road    Parking Behind Vigyan          Bhawan
+2022,3,58,Rajpath,Suoth Rajpath,2022-01-23,Rajpath              Suoth Rajpath
+2022,4,58,Ring Road,In front of WHO Building,2020-07-21;2022-01-23,Ring Road            In front of WHO Building
+2022,5,58,DND Flyway,At merging point Sarai Kale,2022-09-02,DND Flyway           At merging point Sarai Kale    Khan
+2022,6,58,NH-24,Gazipur Mandi near Murge,2022-09-02,NH-24                Gazipur Mandi near Murge       Market
+2022,7,58,NH-44,Near Apple Mandi Khampur,2022-08-05,NH-44                Near Apple Mandi Khampur       village and near Banku Rasai
+2022,8,58,Gurugram- Parade,GGR- PDR,2022-05-23;2022-07-20;2022-07-28,Gurugram- Parade     GGR- PDR                       Road
+2022,9,58,New Rohtak Road,Anand Parbat near Gali No.,2022-05-23;2022-06-30;2022-07-11;2022-07-16;2022-07-20;2022-08-05;2022-09-22;2022-10-08,New Rohtak Road      Anand Parbat near Gali No.     10/ Zakhira to Anand Parbat
+2022,10,58,Outer Ring Road,Near Barapulla Flyover,2022-05-23,Outer Ring Road      Near Barapulla Flyover
+2022,11,58,Pusa Road,Bagga Link Hanuman Mandir,2022-05-23,Pusa Road            Bagga Link Hanuman Mandir
+2022,12,58,Rani Jhansi Marg,Filmistan,2022-05-23,Rani Jhansi Marg     Filmistan
+2022,13,58,Seelampur Road,Seelampur Flyover,2022-05-23,Seelampur Road       Seelampur Flyover
+2022,14,58,Shastri Park Road,Loop Shastri Park,2022-05-23,Shastri Park Road    Loop Shastri Park
+2022,15,58,Barapullah Road,Barapullah Round About,2022-05-30,Barapullah Road      Barapullah Round About
+2022,16,58,Burari Road,Burari Authority,2022-05-30,Burari Road          Burari Authority
+2022,17,58,Outer Circle,Connaught Place Regal,2022-05-30,Outer Circle         Connaught Place Regal          Cinema
+2022,18,58,Teen Murti Marge,Near RTMH,2022-05-30,Teen Murti Marge     Near RTMH
+2022,19,58,Tuglak Road,Gol Methi,2022-05-30;2024-06-28;2024-08-20,Tuglak Road          Gol Methi
+2022,20,58,Neela Gumbad,BSF Mess,2022-06-17,Neela Gumbad         BSF Mess
+2022,21,58,Purana Quila Road,Mathura Road New,2022-06-17,Purana Quila Road    Mathura Road New               Underpass
+2022,22,58,Rafi Marg,"Metro Station Rail Bhawan,",2022-06-17;2022-06-30,"Rafi Marg            Metro Station Rail Bhawan,     Boat Club, Udhyog Bhawan       🖷🖷"
+2022,23,59,Ring Road,Moti Bagh to Dhaula Kuan,2022-06-17,Ring Road              Moti Bagh to Dhaula Kuan
+2022,24,59,M.B. Road (Mehrauli-,Pul Prahladpur Railway,2022-06-21;2022-06-30,M.B. Road (Mehrauli-   Pul Prahladpur Railway          Badarpur Road)         Underpass both carriageway
+2022,25,59,Road No. 13A,Shaheen Bagh Market,2022-06-21,Road No. 13A            Shaheen Bagh Market
+2022,26,59,--,Palla Village on the,2022-06-30,--                      Palla Village on the            carriageway from Singhu Border to Mukarba side
+2022,27,59,--,Rohini Sector-24/25 Dividing,2022-06-30,--                      Rohini Sector-24/25 Dividing    Road
+2022,28,59,--,Under Sukhdev Vihar Metro,2022-06-30,--                      Under Sukhdev Vihar Metro       Station
+2022,29,59,Akbar Road – Maulana,Akbar Road roundabout,2022-06-30,Akbar Road – Maulana    Akbar Road roundabout           Azad Road               Maulana Azad Road
+2022,30,59,Anuvrat Marg,Infront of Qutub Minar,2018-08-19;2022-06-30;2023-07-08;2023-07-09,Anuvrat Marg            Infront of Qutub Minar          Metro Station to SSN Marg
+2022,31,59,Ashok Vihar Road,Bartan Market,2021-09-11;2022-06-30,Ashok Vihar Road        Bartan Market
+2022,32,59,Aurobindo Marg,Adhchini Red light/ T-Point/,2022-06-30;2022-08-05;2022-09-23;2022-09-24;2023-05-27;2023-05-30;2023-07-08;2023-07-09,Aurobindo Marg          Adhchini Red light/ T-Point/    Adhchini to PTS Maliva          Nagar
+2022,33,59,Aurobindo Marg,Essex Farm towards Mother,2019-07-21;2022-06-30,Aurobindo Marg          Essex Farm towards Mother       International School (both      carriageway)
+2022,34,59,Aurobindo Marg,Under AIIMS Flyover/INA,2018-07-13;2022-06-30;2022-07-20;2022-09-22;2023-05-03;2023-05-27;2023-05-30;2023-07-08;2023-07-09,Aurobindo Marg          Under AIIMS Flyover/INA
+2022,35,59,Azad Market Road,Azad Market Underpass,2022-06-30;2022-07-20,Azad Market Road        Azad Market Underpass
+2022,36,59,Barapulla Flyover,Barapulla Flyover,2022-06-30,Barapulla Flyover       Barapulla Flyover
+2022,37,59,Bhairon Marg,Near Gate No. 4 Pragati,2022-06-30;2022-07-20;2022-10-09,Bhairon Marg            Near Gate No. 4 Pragati         Maidan
+2022,38,59,Chhawla Road,Chhawla Stand to BDO,2022-06-30,Chhawla Road            Chhawla Stand to BDO            Office Road
+2022,39,59,Dhaula Kuan,Dhaula Kuan,2022-06-30,Dhaula Kuan             Dhaula Kuan
+2022,40,59,"Firni Road, Najafgarh",Dhansa Stand to,2022-06-30;2022-07-11;2022-07-20;2022-09-24,"Firni Road, Najafgarh   Dhansa Stand to                 Bahadurgarh Stand Road            🖷🖷"
+2022,41,60,"Firni Road, Najafgarh",Firni Road,2018-07-02;2018-07-22;2018-07-26;2018-08-28;2018-09-23;2022-06-30,"Firni Road, Najafgarh   Firni Road"
+2022,42,60,Girdhari Lal Goswami,Naraina T-Point,2022-06-30,Girdhari Lal Goswami    Naraina T-Point               Marg
+2022,43,60,GT Road,Underpass Apsara Border,2022-06-30,GT Road                 Underpass Apsara Border
+2022,44,60,GTK Road,Jahangirpuri,2022-06-30,GTK Road                Jahangirpuri
+2022,45,60,GTK Road,Mahendra Park,2022-06-30,GTK Road                Mahendra Park
+2022,46,60,GTK Road,Near GTK Depot,2017-07-01;2017-09-23;2021-09-03;2021-09-11;2022-06-30;2022-07-11;2022-10-08;2022-10-09;2024-06-28;2024-07-22;2024-07-31;2024-08-23;2024-08-29;2024-09-04;2024-09-10;2024-09-11,GTK Road                Near GTK Depot
+2022,47,60,GTK Road,Pipal Thala,2022-06-30,GTK Road                Pipal Thala
+2022,48,60,Gulab Singh Marg,--,2022-06-30,Gulab Singh Marg        --
+2022,49,60,JLN Marg,Near Zakir Hussain College,2022-06-30,JLN Marg                Near Zakir Hussain College
+2022,50,60,Kanjhawala Road,Y-Block to Pole Star,2022-06-30,Kanjhawala Road         Y-Block to Pole Star
+2022,51,60,Kanjhawala Bawana,Kanjhawala Chowk,2021-09-13;2022-06-30,Kanjhawala Bawana       Kanjhawala Chowk              Road
+2022,52,60,Khyala Road,Keshopur Mandi,2022-06-30,Khyala Road             Keshopur Mandi
+2022,53,60,Lala Lajpat Rai Marg,Infront of Moolchand,2022-06-30,Lala Lajpat Rai Marg    Infront of Moolchand          Hospital
+2022,54,60,Lawrence Road,--,2022-06-30,Lawrence Road           --
+2022,55,60,M.B. Road (Mehrauli-,Asain Market to Khanpur T-,2017-07-11;2017-07-20;2021-07-19;2021-09-13;2022-06-30,M.B. Road (Mehrauli-    Asain Market to Khanpur T-    Badarpur Road)          Point (both carriageway)
+2022,56,60,M.B. Road (Mehrauli-,BSF Camp to Tigri,2022-06-30,M.B. Road (Mehrauli-    BSF Camp to Tigri             Badarpur Road)
+2022,57,60,M.B. Road (Mehrauli-,ITBP to Mangal Bazar,2022-06-30,M.B. Road (Mehrauli-    ITBP to Mangal Bazar          Badarpur Road)
+2022,58,60,M.B. Road (Mehrauli-,Kaya Maya Park between,2020-08-20;2022-06-30,M.B. Road (Mehrauli-    Kaya Maya Park between        Badarpur Road)          shooting range & Lal Kuan     both carriageway
+2022,59,60,M.B. Road (Mehrauli-,Khanpur T-Point to Misthan,2022-06-30,M.B. Road (Mehrauli-    Khanpur T-Point to Misthan    Badarpur Road)          Café and Devli Mor to Khanpur Mandi
+2022,60,60,M.B. Road (Mehrauli-,Sainik Farms Gate No. 2,2022-06-30,M.B. Road (Mehrauli-    Sainik Farms Gate No. 2       Badarpur Road)          near SDM office 🖷🖷
+2022,61,61,M.B. Road (Mehrauli-,Vayusenabad to Batra,2017-06-28;2017-07-31;2017-09-23;2020-07-19;2020-08-17;2020-08-19;2020-08-28;2022-06-30,M.B. Road (Mehrauli-   Vayusenabad to Batra            Badarpur Road)         Hospital
+2022,62,61,M.G. Road (Mehrauli-,Ghitorni Market (Mehrauli to,2022-06-30,M.G. Road (Mehrauli-    Ghitorni Market (Mehrauli to    Gurugram Road)          Gurugram carriageway)
+2022,63,61,Maharaja Ajmeed Marg,Near PS Preet Vihar,2022-06-30,Maharaja Ajmeed Marg    Near PS Preet Vihar
+2022,64,61,Malkaganj Road,--,2022-06-30,Malkaganj Road          --
+2022,65,61,Mangolpuri- Udhyog,Mangolpuri- Udhyog Nagar,2022-06-30,Mangolpuri- Udhyog      Mangolpuri- Udhyog Nagar        Nagar underpass road    underpass road
+2022,66,61,Mata Mandir Road,"Mata Mandir Road, NFC",2022-06-30,"Mata Mandir Road        Mata Mandir Road, NFC"
+2022,67,61,Mathura Road,Ashram to Bhogal side,2022-06-30,Mathura Road           Ashram to Bhogal side
+2022,68,61,Mathura R oad,Near Aali Village Red light,2018-08-10;2018-09-01;2022-06-30,Mathura R oad          Near Aali Village Red light
+2022,69,61,Mathura Road,Opposite Pragati Maidan,2022-06-30,Mathura Road           Opposite Pragati Maidan
+2022,70,61,Mathura Road,Under Badarpur Flyover,2022-06-30,Mathura Road           Under Badarpur Flyover          near NTPC both carriageway
+2022,71,61,MGM Road,Rajghat to Shanti Van,2022-06-30,MGM Road               Rajghat to Shanti Van           carriageway
+2022,72,61,Najafgarh Road,"Vikaspuri More redlight,",2022-06-30,"Najafgarh Road         Vikaspuri More redlight,        Najafgarh Road"
+2022,73,61,Narela Bawana Road,Bawana Chowk,2022-06-30;2022-07-28,Narela Bawana Road     Bawana Chowk
+2022,74,61,NH-8,Mahipalpur Flyover toop,2022-06-30,NH-8                   Mahipalpur Flyover toop         towards Gurugram
+2022,75,61,Old GT Road,Near Barafkhana,2022-06-30,Old GT Road            Near Barafkhana
+2022,76,61,Old GTK Road,Old Iron Bridge,2022-06-30,Old GTK Road           Old Iron Bridge
+2022,77,61,Old Palam Road,Under RTR Flyover,2022-06-30,Old Palam Road         Under RTR Flyover
+2022,78,61,Old Patparganj Road,Under Railway Bridge,2022-06-30,Old Patparganj Road    Under Railway Bridge
+2022,79,61,Old Patparganj Road,Mother Dairy towards old PS,2022-06-30,Old Patparganj Road    Mother Dairy towards old PS     underpass Pandav       Pandav Nagar both Nagar                  carriageway
+2022,80,61,Outer Ring Road,Bus Stand near District,2022-06-30,Outer Ring Road        Bus Stand near District         Centre Flyover
+2022,81,61,Outer Ring Road,Chirag Delhi redlight,2022-06-30,Outer Ring Road        Chirag Delhi redlight           towards Sheikh Sarai
+2022,82,61,Outer Ring Road,Deepali Chowk to Madhuban,2022-06-30,Outer Ring Road        Deepali Chowk to Madhuban       Chowk
+2022,83,61,Outer Ring Road,GK-1 Metro Station Savitri,2017-06-30;2017-08-31;2022-06-30,Outer Ring Road        GK-1 Metro Station Savitri      Flyover both carriageway
+2022,84,61,Outer Ring Road,Slip Road from the start of,2022-06-30,Outer Ring Road        Slip Road from the start of     Munirka T-Point
+2022,85,61,Pankha Road,Pankha Road before,2022-06-30,Pankha Road            Pankha Road before              Pedestrian Bridge
+2022,86,61,Press Enclave Road,"Gate No. 5, Max Hospital",2022-06-30,"Press Enclave Road     Gate No. 5, Max Hospital"
+2022,87,61,Press Enclave Road,Opposite Select City Walk,2022-06-30,Press Enclave Road     Opposite Select City Walk       Mall
+2022,88,61,Pusa Road- Vande,Roundabout Bagga and,2022-06-30;2022-10-08,Pusa Road- Vande       Roundabout Bagga and            Matram Marg            surrounding area of Baba        Lal Dayal Chowk 🖷🖷
+2022,89,62,"Raghubir Nagar, Nala","Ghode Wala Mandir,",2022-06-30,"Raghubir Nagar, Nala   Ghode Wala Mandir,              Road                   Raghubir Nagar"
+2022,90,62,Rani Jhansi Marg,Azad Market Chowk,2022-06-30,Rani Jhansi Marg       Azad Market Chowk
+2022,91,62,Ring Road,At merging point of,2022-06-30,Ring Road              At merging point of             Barapullah Flyover & Ring Road near Sarai Kale Khan
+2022,92,62,Ring Road,Descending Flyover Raja,2022-06-30,Ring Road             Descending Flyover Raja         Garden towards Mayapuri
+2022,93,62,Ring Road,Maharani bagh,2020-08-17;2022-06-30,Ring Road             Maharani bagh
+2022,94,62,Ring Road,Near Satya Niketan,2019-07-20;2022-06-30;2024-07-18;2024-07-26;2024-09-02,Ring Road             Near Satya Niketan
+2022,95,62,Ring Road,Nizamuddin Khatta Red,2022-06-30;2024-08-01,Ring Road             Nizamuddin Khatta Red           Light
+2022,96,62,Ring Road,Safdarjung Hospital near,2022-06-30,Ring Road             Safdarjung Hospital near                          start of Barapuallah Flyover
+2022,97,62,Ring Road,Under Hyatt Hotel Flyover,2017-06-20;2022-06-30;2022-07-20;2024-06-28,Ring Road             Under Hyatt Hotel Flyover
+2022,97,62,Ring Road,Under IP Flyover,2020-07-19;2020-08-13;2020-08-17;2020-08-28;2022-06-30,Ring Road             Under IP Flyover
+2022,99,62,Ring Road,Under Moolchand Flyover,2021-08-31;2021-09-11;2022-06-30,Ring Road             Under Moolchand Flyover            (both carriageway
+2022,100,62,Ring Road,Brar Square Ring Road Delhi,2022-06-30,Ring Road             Brar Square Ring Road Delhi                       Cantt. Metro Station
+2022,101,62,Road No. 201,Rajapuri to Madhu Vihar,2022-06-30,Road No. 201          Rajapuri to Madhu Vihar
+2022,102,62,Road No. 201,Side of Dwarka Palam,2022-06-30,Road No. 201          Side of Dwarka Palam                              Flyover
+2022,103,62,Rohtak Road,In front of Lokesh Cinema,2022-06-30,Rohtak Road           In front of Lokesh Cinema
+2022,104,62,Rohtak Road,Metro Pillar No. 422 to 427,2020-06-22;2020-08-17;2021-05-19;2021-07-13;2021-07-14;2021-07-19;2021-07-28;2021-08-08;2021-08-31;2021-09-11;2022-06-30;2022-09-24;2022-10-08;2022-10-09,Rohtak Road           Metro Pillar No. 422 to 427        Rajdhani Park/ Pillar No.          485 to 515 Rajdhani Park/          Near Rajdhani Park Metro           Station
+2022,105,62,Rohtak Road,Tikri Border,2019-07-21;2019-08-16;2021-07-19;2021-08-01;2022-06-30,Rohtak Road           Tikri Border                           🖷🖷
+2022,106,63,Rohtak Road,Zakhira Flyover,2017-06-20;2017-07-20;2018-07-13;2018-07-20;2018-07-26;2018-09-01;2018-09-02;2018-09-06;2018-09-08;2022-06-30,Rohtak Road               Zakhira Flyover
+2022,107,63,SSN Marg,DLF Farms (both carriageway,2021-09-02;2021-09-11;2022-06-30,SSN Marg                 DLF Farms (both carriageway
+2022,108,63,Vikas Marg,Preet Vihar Metro Station,2018-07-13;2018-07-27;2018-09-01;2018-09-02;2018-09-03;2018-09-06,"Vikas Marg               Preet Vihar Metro Station          Gate No. 2 towards Nirman          Vihar, Vikas Marg"
+2022,109,63,Vikas Marg,Under Laxmi Nagar Metro,2017-07-23;2022-06-30,Vikas Marg              Under Laxmi Nagar Metro         Station
+2022,110,63,Vikas Marg,Vijay Chowk,2022-06-30,Vikas Marg              Vijay Chowk
+2022,111,63,Wazirabad Road,Bhajanpura Mazar,2022-06-30,Wazirabad Road          Bhajanpura Mazar
+2022,112,63,Wazirabad Road,Loni Gol Chakkar,2018-07-13;2018-07-19;2018-07-20;2018-07-22;2018-07-25;2018-07-26;2018-08-13;2018-08-18;2018-08-23;2018-09-01;2018-09-06;2022-06-30,Wazirabad Road          Loni Gol Chakkar
+2022,113,63,Palam Road,Near Air Force Station exit,2022-07-16,Palam Road              Near Air Force Station exit    gate
+2022,114,63,Rao Tula Ram Marg,"Near Anand Niketan,",2022-07-16,"Rao Tula Ram Marg       Near Anand Niketan,            (RTR Marg)              R.K. Puram"
+2022,115,63,Ring Road,Dhaula Kuan Flyover Loop,2017-06-20;2017-06-28;2017-06-30;2017-08-07;2020-07-19;2022-07-16,Ring Road               Dhaula Kuan Flyover Loop        towards Naraina
+2022,116,63,Thimayya Marg,Near Redlight,2021-09-11;2022-07-16,Thimayya Marg           Near Redlight
+2022,117,63,Vande Matram Marg,Buddha Garden Gate No. 2,2022-07-17,Vande Matram Marg       Buddha Garden Gate No. 2
+2022,118,63,Mahipalpur to,Under Mahipalpur Flyover,2022-07-19,Mahipalpur to           Under Mahipalpur Flyover       Gurugram (NH-48)
+2022,119,63,Dwarka Road,Rajapuri Chowk near Sector-,2022-07-20,"Dwarka Road             Rajapuri Chowk near Sector-    9, Dwarka"
+2022,120,63,"Firni Road, Najafgarh",Chhawla Bus Stand,2022-07-20,"Firni Road, Najafgarh   Chhawla Bus Stand              Najafgarh"
+2022,121,63,Kautilya Marg,Near Roundabout,2022-07-20,Kautilya Marg           Near Roundabout                🖷🖷
+2022,122,64,Mahipalpur-,Mahipalpur Chowk,2022-07-20,Mahipalpur-            Mahipalpur Chowk             Mehrauli road
+2022,123,64,Manas Marg,Near T-Point,2022-07-20,Manas Marg             Near T-Point
+2022,124,64,Mother Teresa Crescent Round about Teen Murti,01.09.2021,2021-09-01;2022-07-20;2023-07-08;2023-07-09,Mother Teresa Crescent Round about Teen Murti        Road
+2022,125,64,NH-8,Rangpuri Chowk,2022-07-20,NH-8                   Rangpuri Chowk
+2022,126,64,Old Gurugram Road,Kapashera Chowk,2022-07-20,Old Gurugram Road      Kapashera Chowk
+2022,127,64,Outer Ring Road,Munirka Bus Stand,2022-07-20;2022-10-08,Outer Ring Road        Munirka Bus Stand
+2022,128,64,Outer Ring Road,Near Neb Sarai Bus Stand,2022-07-20,Outer Ring Road        Near Neb Sarai Bus Stand
+2022,129,64,Outer Ring Road,Under Savitri Flyover,2022-07-20;2024-07-31,Outer Ring Road        Under Savitri Flyover
+2022,130,64,Panchsheel Marg,Near Roundabout,2022-07-20,Panchsheel Marg        Near Roundabout
+2022,131,64,Ring Road,Mool Chand Underpass,2022-07-20,Ring Road              Mool Chand Underpass
+2022,132,64,Ring Road,Under Dhaula Kuan Flyover,2022-07-20,Ring Road              Under Dhaula Kuan Flyover
+2022,133,64,Ulan Batar Marg,Near NSG Redlight,2022-07-20,Ulan Batar Marg        Near NSG Redlight
+2022,134,64,Vikas Marg,Near Nirman Vihar Metro,2022-07-20,Vikas Marg               Near Nirman Vihar Metro        Station
+2022,135,64,Bawana Road,Maharishi Balmiki Hospital,2022-07-28,Bawana Road              Maharishi Balmiki Hospital
+2022,136,64,Satya Niketan Road,Durga Bai South Campus,2022-07-28,Satya Niketan Road       Durga Bai South Campus
+2022,137,64,Jai Singh Road,Police Headquarters Gate,2022-10-08,Jai Singh Road           Police Headquarters Gate       No. 3
+2022,138,64,Lala Lajpat Rai Marg,Lajpat Nagar Metro Station,2017-08-07;2017-09-23;2021-08-21;2022-10-08,Lala Lajpat Rai Marg     Lajpat Nagar Metro Station
+2022,139,64,Lala Lajpat Rai Marg,Lodhi Flyover Foot,2022-10-08,Lala Lajpat Rai Marg     Lodhi Flyover Foot
+2022,140,64,Najafgarh-Nangloi Road,Near Banke Bihari Sweets,2022-10-08,Najafgarh-Nangloi Road   Near Banke Bihari Sweets
+2022,141,64,Ring Road,Moti Bagh Loop,2022-10-08,Ring Road                Moti Bagh Loop
+2022,142,64,Ring Road,Near BSES office Dhaula,2022-10-08,Ring Road                Near BSES office Dhaula       Kuan
+2022,143,64,Rohtak Road,Peeragarhi Chowk,2018-07-16;2018-08-28;2022-10-08;2023-03-30,Rohtak Road              Peeragarhi Chowk
+2022,144,64,Dwarka Road,Dwarka Court Sector-9 & 10,2022-10-09,Dwarka Road              Dwarka Court Sector-9 & 10
+2022,145,64,Okhla Estate Marg,Sarita Vihar Metro Station,2018-07-26;2018-07-27;2022-10-09,Okhla Estate Marg        Sarita Vihar Metro Station    underpass
+2022,146,64,Ring Road,Ashram to Kilokari Road,2022-10-09,Ring Road                Ashram to Kilokari Road
+2022,147,64,Ring Road,Dhaula Kuan BSES Gate,2022-10-09,Ring Road                Dhaula Kuan BSES Gate
+2022,148,64,M.B. Road,Khanpur T-Point to Hamdard,2018-07-13;2018-07-22;2018-08-07;2018-08-10;2018-08-19;2018-08-23;2018-08-28;2018-09-01;2018-09-03;2018-09-06;2018-09-24;2022-10-22;2024-07-03;2024-07-09;2024-07-31;2024-08-07;2024-08-08;2024-08-11;2024-08-12;2024-08-29;2024-09-12,M.B. Road                Khanpur T-Point to Hamdard    T-Point both carriageway                🖷🖷
+2022,149,65,Mathura Road,Near Apollo Hospital,2022-10-22;2023-07-08;2023-07-09,Mathura Road            Near Apollo Hospital
+2022,150,65,NH-8,Near Shiv Murti,2022-09-22;2022-10-08,NH-8                    Near Shiv Murti
+2022,151,65,Ring Road Mayapuri to,Both side F/O Narayana,2022-10-22,Ring Road Mayapuri to   Both side F/O Narayana       Narayana
+2022,152,65,Ring Road Nigam Both,MCD Chowk,2022-10-22,Ring Road Nigam Both    MCD Chowk                     Ghat
+2022,153,65,Road No. 13-A Sarita,Near Shaheen Bagh Nallah,2022-10-22,Road No. 13-A Sarita    Near Shaheen Bagh Nallah      Vihar
+2022,154,65,Rohtak Road,Rajdhani Park to Mundka,2022-10-09;2022-10-22,Rohtak Road             Rajdhani Park to Mundka      Pillar No. 448 to 460
+2022,155,65,--,CDR Chowk,2022-09-23,--                      CDR Chowk
+2022,156,65,--,Nangli underpass,2022-09-23,--                      Nangli underpass
+2022,157,65,--,Near Kendriya Sachivalaya,2022-09-23,--                      Near Kendriya Sachivalaya
+2022,158,65,GTK Road,Libaspur underpass,2021-09-11;2022-09-23,GTK Road                Libaspur underpass
+2022,159,65,GTK Road,Singhu Border near Petrol,2022-09-23,GTK Road               Singhu Border near Petrol    Pump
+2022,160,65,Mandi Road,Mandi Village Mehrauli,2022-09-23;2024-07-10;2024-09-02,Mandi Road             Mandi Village Mehrauli
+2022,161,65,Mathura Road,W-Point to Zoo,2022-09-23,Mathura Road           W-Point to Zoo
+2022,162,65,MB Road (Mehrauli-,Near Sainik Farm,2017-07-11;2017-07-20;2017-09-23;2022-09-23,MB Road (Mehrauli-     Near Sainik Farm             Badarpur Road)
+2022,163,65,MG Road (Mehrauli –,Andheria Mor towards,2022-09-23,MG Road (Mehrauli –    Andheria Mor towards         Gurugram Road)         Gurugram side and Vasant Kunj
+2022,164,65,NH-44,Khampur Singhu Border,2022-09-23,NH-44                  Khampur Singhu Border
+2022,165,65,Ring Road,Maharani Bagh Taim ur,2022-09-23,Ring Road              Maharani Bagh Taim ur        Nagar Cut
+2022,166,65,Ring Road,Under Nizamuddin Bridge,2022-09-23,Ring Road              Under Nizamuddin Bridge
+2022,167,65,SSN Marg,Near Qutub Minar,2021-08-08;2022-09-23,SSN Marg               Near Qutub Minar
+2022,168,65,Veer Banda Bairagi,Under Flyover Azad Market,2022-09-23,Veer Banda Bairagi     Under Flyover Azad Market    Marg
+2022,169,65,Abai Marg,Chanakyapuri Abai Marg,2022-09-24,Abai Marg              Chanakyapuri Abai Marg       🖷🖷
+2022,170,66,GTK Road,Azadpur Underpass,2020-07-19;2020-08-09;2021-07-13;2021-07-14;2021-08-01;2021-09-11;2022-07-11;2023-05-03,GTK Road            Azadpur Underpass
+2022,171,66,Outer Ring Road,"Sector-9, Rohini near Fire",2022-07-11,"Outer Ring Road     Sector-9, Rohini near Fire     Station"
+2022,172,66,Ring Road,Opposite Royal Pepped,2022-07-11,"Ring Road           Opposite Royal Pepped          Banquet Hall, Shalimar Bagh (Both carriageway) 🖷🖷"
+2023,1,67,100 Foota Road,"Burari 100 Foota Road, Ajit",2023-07-10,"100 Foota Road         Burari 100 Foota Road, Ajit      Vihar"
+2023,2,67,"100 Foota Road,","100 Foota Road, Sant Nagar",2023-07-09,"100 Foota Road,        100 Foota Road, Sant Nagar       Burari"
+2023,3,67,"100 Foota Road,",100 Foota Road Mehrauli,2023-07-09,"100 Foota Road,        100 Foota Road Mehrauli          Mehrauli"
+2023,4,67,60 Foota Road,Vishwas Nagar Shahdara,2023-07-09,60 Foota Road          Vishwas Nagar Shahdara
+2023,5,67,Abai Marg-San Martin,Abai Marg-San Martin Marg,2023-07-09,Abai Marg-San Martin   Abai Marg-San Martin Marg        Marg
+2023,6,67,Army Battle Honours,Army Battle Honours Mess,2023-07-08,Army Battle Honours    Army Battle Honours Mess         Mess (ABHM) Marg       (ABHM) Marg
+2023,7,67,Ashok Vihar Market,Ashok Vihar Market,2023-07-08;2023-07-09,Ashok Vihar Market     Ashok Vihar Market
+2023,8,67,Aurobindo Marg,IIT Flyover,2023-07-08,Aurobindo Marg         IIT Flyover
+2023,9,67,Aurobindo Marg,Kalu Sarai,2023-07-09,Aurobindo Marg         Kalu Sarai
+2023,10,67,Aurobindo Marg,Mother International School,2023-05-03;2023-07-08;2023-07-09,Aurobindo Marg         Mother International School
+2023,11,67,Aurobindo Marg,"Near Safdarjung Madarsa,",2023-07-09,"Aurobindo Marg         Near Safdarjung Madarsa,         Jor Bagh"
+2023,12,67,Aurobindo Marg,Near T.B. Hospital,2023-05-03,Aurobindo Marg         Near T.B. Hospital
+2023,13,67,Aurobindo Marg,"PTS Red Light, Malviya Nagar",2023-07-08;2023-07-09;2023-09-10,"Aurobindo Marg         PTS Red Light, Malviya Nagar"
+2023,14,67,Aurobindo Marg,Yusuf Sarai Market,2023-07-09,Aurobindo Marg         Yusuf Sarai Market
+2023,15,67,Azaz Market Road,"Under ROB, Nawab Ganj",2023-07-09,"Azaz Market Road       Under ROB, Nawab Ganj"
+2023,16,67,Baba Banda Singh,AIIMS to Sarai kale khan both,2023-05-01,Baba Banda Singh       AIIMS to Sarai kale khan both    Bahadur Marg           carriageway
+2023,17,67,Baba Kharak Singh,Baba Kharak Singh Marg,2023-07-08,Baba Kharak Singh      Baba Kharak Singh Marg           Marg
+2023,18,67,Bawana Road,Samaipur Badli under pass,2023-07-08,Bawana Road            Samaipur Badli under pass        Metro station
+2023,19,67,Benito Juarez Marg,"Venkateswara College, Satya",2023-07-09,"Benito Juarez Marg     Venkateswara College, Satya      Niketan"
+2023,20,67,Bhairon Marg,Back side Hall No.14,2023-07-26,Bhairon Marg           Back side Hall No.14
+2023,21,67,Bhairon Marg,"Gate No.2, Pragati Maidan",2023-07-08;2023-07-26,"Bhairon Marg           Gate No.2, Pragati Maidan"
+2023,22,67,Bhairon Marg,Gate No.8 Pragati Maidan,2023-09-10,Bhairon Marg           Gate No.8 Pragati Maidan
+2023,23,67,Bhairon Marg,Gate No.6 Near Craft Museum,2023-07-26,Bhairon Marg           Gate No.6 Near Craft Museum
+2023,24,67,Bhairon Marg,In front of Hall No.5,2023-07-26,Bhairon Marg           In front of Hall No.5
+2023,25,67,Bhairon Marg,Inside Bhairon Mandir Parking,2023-05-27;2023-07-08;2023-07-09,Bhairon Marg           Inside Bhairon Mandir Parking
+2023,26,67,Bhairon Marg,Mathura Marg,2023-07-26,Bhairon Marg           Mathura Marg
+2023,27,67,Bhairon Marg,"Near Gate No.5B, Pragati",2023-05-27;2023-07-08;2023-07-09,"Bhairon Marg           Near Gate No.5B, Pragati         Maidan Infort of Craft Museum"
+2023,28,67,Bhairon Marg,Parking at Hall No.11 &12,2023-07-26,Bhairon Marg           Parking at Hall No.11 &12        🖷🖷
+2023,29,68,Bhairon Marg,Pragati Maidan,2023-07-10;2023-07-15,Bhairon Marg            Pragati Maidan
+2023,30,68,Bhairon Marg,Pragati Maidan Gate No.1,2023-07-26,Bhairon Marg            Pragati Maidan Gate No.1
+2023,31,68,Bhairon Marg,Eastern Plazo Pragati Maidan,2023-07-26,Bhairon Marg            Eastern Plazo Pragati Maidan
+2023,32,68,Bhisham Pitamah Marg,JLN Stadium,2023-07-09,Bhisham Pitamah Marg    JLN Stadium
+2023,33,68,Boulevard Road,Boulevard Road,2023-07-08,Boulevard Road          Boulevard Road
+2023,34,68,Boulevard Road,Near Old Police Lines (OPL),2023-07-09,Boulevard Road          Near Old Police Lines (OPL)      Tarachand Mathur Marg
+2023,35,68,Brigadier Hoshiyar,Roundabout Leela Hotel,2023-11-10,Brigadier Hoshiyar      Roundabout Leela Hotel           Singh Marg
+2023,36,68,BSZ Marg,Express Building,2023-07-15,BSZ Marg                Express Building
+2023,37,68,BSZ Marg,W-Point,2023-07-15,BSZ Marg                W-Point
+2023,38,68,Burari Road,Near Shalimar Place,2023-05-27,Burari Road             Near Shalimar Place
+2023,39,68,Ch. Fateh Singh Marg,Timarpur T-Point/ Nehru Vihar,2023-05-27;2023-07-08;2023-07-09;2023-07-18,Ch. Fateh Singh Marg    Timarpur T-Point/ Nehru Vihar    Crossing near PS Timarpur
+2023,40,68,Ch. Nand Lal Marg,Pratap Nagar,2023-07-08,Ch. Nand Lal Marg       Pratap Nagar
+2023,41,68,CV Raman Marg,Kalandi Colony CV Raman,2023-07-08,CV Raman Marg           Kalandi Colony CV Raman          Marg to MP Road
+2023,42,68,CV Raman Marg,Sarai Julena to Maharani Bagh,2023-07-08,CV Raman Marg           Sarai Julena to Maharani Bagh
+2023,43,68,Dadri Main Road,Dadri Main Road,2023-07-09,Dadri Main Road         Dadri Main Road
+2023,44,68,Dallu Pura Road,Old Kondli,2023-05-30,Dallu Pura Road         Old Kondli
+2023,45,68,Dr. Rajendra Prasad,R/A Dr. Rajendra Prasad Road,2023-07-04,Dr. Rajendra Prasad      R/A Dr. Rajendra Prasad Road    Road
+2023,46,68,Drain Road Dabri,New Dabri R/A,2023-07-04,Drain Road Dabri        New Dabri R/A
+2023,47,68,"Drain Road, Dabri",Near Power House Red Light,2023-07-04,"Drain Road, Dabri       Near Power House Red Light"
+2023,48,68,Dwarka,Near Sector 14 Metro Station,2023-07-04;2023-07-09;2023-07-10,Dwarka                  Near Sector 14 Metro Station     (Vegas Mall side)
+2023,49,68,"Firni Road, Najafgarh",Chhawla Stand,2023-07-08;2023-07-09,"Firni Road, Najafgarh   Chhawla Stand"
+2023,50,68,"Firni Road, Najafgarh",Delhi Gate,2023-07-08,"Firni Road, Najafgarh   Delhi Gate"
+2023,51,68,"Firni Road, Najafgarh",Dhansa Stand to Bahadurgarh,2023-05-27;2023-05-31;2023-06-21;2023-06-30;2023-07-04;2023-07-08;2023-07-09;2023-09-10;2024-07-22;2024-08-07;2024-08-11,"Firni Road, Najafgarh   Dhansa Stand to Bahadurgarh      Stand"
+2023,52,68,"Firni Road, Najafgarh",Nangloi Stand,2023-07-04;2023-07-08,"Firni Road, Najafgarh   Nangloi Stand"
+2023,53,68,Gazipur Dairy Farm,Gazipur Dairy Farm,2023-07-10,Gazipur Dairy Farm      Gazipur Dairy Farm
+2023,54,68,Geeta Colony Road,Shamshan Ghat,2023-06-30,Geeta Colony Road       Shamshan Ghat
+2023,55,68,Girdhari Lal Goswami,Near Loha Mandi,2023-03-31,Girdhari Lal Goswami    Near Loha Mandi                  Marg
+2023,56,68,GT Road,Chintamani Red Light,2023-07-08,GT Road                 Chintamani Red Light
+2023,57,68,GTK Road,"GTK Depot, GTK to",2023-03-31;2023-05-03;2023-07-08;2023-07-09,"GTK Road                GTK Depot, GTK to                Jahangiripuri"
+2023,58,68,GTK Road,Mukarba Chowk to Badli,2023-05-03,GTK Road                Mukarba Chowk to Badli           🖷🖷
+2023,59,69,GTK Road,Near Timarpur Parking,2023-05-03,GTK Road                 Near Timarpur Parking
+2023,60,69,Inside Pragati Maidan,Inside Pragati Maidan near,2023-05-27;2023-07-08,Inside Pragati Maidan   Inside Pragati Maidan near     Convention Centre
+2023,61,69,Jaitpur Road,Near Hari Cycle cut,2023-03-30,Jaitpur Road            Near Hari Cycle cut
+2023,62,69,Kanhiya Nagar,Kanhiya Nagar,2023-07-08;2023-07-09,Kanhiya Nagar           Kanhiya Nagar
+2023,63,69,Kanjhawala Road,Begampur Village,2023-05-01,Kanjhawala Road         Begampur Village
+2023,64,69,Kartavya Marg,Boat Club,2023-07-09,Kartavya Marg           Boat Club
+2023,65,69,Kautilya Marg,Near Fire Station,2023-07-08,Kautilya Marg           Near Fire Station
+2023,66,69,Kautilya Marg,R/A Samrat Hotel,2023-07-08;2024-06-28;2024-07-26,Kautilya Marg           R/A Samrat Hotel
+2023,67,69,Kemal Ataturk Marg,Bhinder Point,2023-07-08;2023-07-09,Kemal Ataturk Marg      Bhinder Point
+2023,68,69,Kemal Ataturk Marg,Kemal Ataturk Marg,2023-07-08,Kemal Ataturk Marg      Kemal Ataturk Marg
+2023,69,69,Khalsa Road,Khalsa Road,2023-07-08,Khalsa Road             Khalsa Road
+2023,70,69,KN Katju Marg (KNK),KN Katju Marg (KNK),2023-07-08,KN Katju Marg (KNK)     KN Katju Marg (KNK)
+2023,71,69,Lodhi Road,JLN Red Light,2023-07-09,Lodhi Road              JLN Red Light
+2023,72,69,Loni Road (Both,Near RTO Loni Gol Chakkar,2023-03-18;2023-03-20;2023-07-08;2023-09-23,Loni Road (Both         Near RTO Loni Gol Chakkar      Carriageway)
+2023,73,69,Lothian Road,"Priyadarshini College,",2023-07-09,"Lothian Road            Priyadarshini College,         Kashmere Gate"
+2023,74,69,Maharaja Surajmal,"Jagatpuri, Near SBI Bank",2023-07-09,"Maharaja Surajmal       Jagatpuri, Near SBI Bank       Marg"
+2023,75,69,Maharaja Surajmal,At community center,2023-05-27,Maharaja Surajmal       At community center            Marg Road No.58         Karkardooma court near Yes Bank
+2023,76,69,Major Hoshiyar Singh,Near Sarojini Nagar cut,2023-07-05,Major Hoshiyar Singh    Near Sarojini Nagar cut        Marg
+2023,77,69,Major Sudesh Marg,"Major Sudesh Marg Junction,",2023-07-04,"Major Sudesh Marg       Major Sudesh Marg Junction,    Rajouri Garden"
+2023,78,69,Mandi House R/A,Mandi House R/A,2023-09-10,Mandi House R/A         Mandi House R/A
+2023,79,69,Mata Mandir Road,Mata Mandir Road to NFC,2023-07-08,Mata Mandir Road        Mata Mandir Road to NFC        Light
+2023,80,69,Mathura Road,Apollo Red Light from,2023-07-08,Mathura Road            Apollo Red Light from          Badarpur to Ashram
+2023,81,69,Mathura Road,Ashram Chowk towards Neela,2023-09-10,Mathura Road            Ashram Chowk towards Neela     Gumband
+2023,82,69,Mathura Road,"Gate No. 10, Pragati Maidan",2023-07-08,"Mathura Road            Gate No. 10, Pragati Maidan"
+2023,83,69,Mathura Road,"Gate No.6, Pragati Maidan",2023-05-27;2023-07-06;2023-07-08;2023-07-09;2023-09-10,"Mathura Road            Gate No.6, Pragati Maidan"
+2023,84,69,Mathura Road,"Gate No.7, Pragati Maidan",2023-07-06;2023-07-08;2023-07-09;2023-09-10,"Mathura Road            Gate No.7, Pragati Maidan"
+2023,85,69,Mathura Road,Near Okhla Tank,2023-05-01,Mathura Road            Near Okhla Tank
+2023,86,69,Mathura Road,Sarita Vihar Chowk,2023-07-08;2023-07-09,Mathura Road            Sarita Vihar Chowk
+2023,87,69,Mathura Road,Sundar Nagar,2023-05-01,Mathura Road            Sundar Nagar                   🖷🖷
+2023,88,70,Mathura Road,"Gate No. 6, Pragati Maidan,",2023-05-27,"Mathura Road           Gate No. 6, Pragati Maidan,      Carriageway from Zoo to W-Point"
+2023,89,70,Maulana Johar Ali,Maulana Johar Ali Marg to,2023-07-08,Maulana Johar Ali     Maulana Johar Ali Marg to        Marg                  Okhla
+2023,90,70,MB Road,Ambedkar Nagar Depot/,2023-06-25;2023-07-08;2023-07-09,MB Road               Ambedkar Nagar Depot/            Terminal
+2023,91,70,MB Road,Badarpur towards Ashram,2023-07-15,MB Road               Badarpur towards Ashram          Jasola Metro Station
+2023,92,70,MB Road,Devli,2023-07-08,MB Road               Devli
+2023,93,70,MB Road,Hamdard Road Both,2023-07-06,MB Road               Hamdard Road Both                Carriageway
+2023,94,70,MB Road,Hamdard T-Point,2023-07-08,MB Road               Hamdard T-Point
+2023,95,70,MB Road,Infront of SDM Office,2023-07-09,MB Road               Infront of SDM Office
+2023,96,70,MB Road,Khanpur to Tigri Mor,2023-05-27;2023-06-25;2023-07-08;2023-07-09,MB Road               Khanpur to Tigri Mor
+2023,97,70,MB Road,MB Road,2023-07-08,MB Road               MB Road
+2023,98,70,MB Road,Pul Prahladpur,2023-04-01;2023-07-08;2024-07-31;2024-08-29,MB Road               Pul Prahladpur
+2023,99,70,MB Road,Saket Metro Station,2023-07-09,MB Road               Saket Metro Station
+2023,100,70,MB Road,Savitri Flyover,2023-07-15,MB Road               Savitri Flyover
+2023,101,70,MB Road,Vayusenabad to T-Point Point,2023-05-27;2023-07-08;2023-07-09,MB Road               Vayusenabad to T-Point Point     Hamdard/near BSF Camp
+2023,102,70,Mehrauli-Mahipalpur,Fortis Hospital Red Light,2023-06-27;2023-07-08;2023-07-09,Mehrauli-Mahipalpur   Fortis Hospital Red Light        Road
+2023,103,70,Mehrauli-Mahipalpur,Mahipalpur Chowk/ Under,2023-07-08;2023-07-09,Mehrauli-Mahipalpur   Mahipalpur Chowk/ Under          Road                  Mahipalpur Flyover
+2023,104,70,Minto Road,Minto Bridge,2023-07-08;2024-06-28;2024-07-31;2024-08-20;2024-08-24,Minto Road            Minto Bridge
+2023,105,70,Mother Teresa,Mother Teresa Crescent -,2023-07-08;2023-07-09,Mother Teresa         Mother Teresa Crescent -         Crescent Road         Sardar Patel Marg/ 11 Murti
+2023,106,70,Motilal Nehru Marg,R/A MLNP,2023-07-09,Motilal Nehru Marg    R/A MLNP
+2023,107,70,MP Road,M.P Road Sukhdev Viahr,2023-07-08,MP Road               M.P Road Sukhdev Viahr
+2023,108,70,Najafgarh-,CRPF Camp Jharoda Kalan,2023-07-09,Najafgarh-            CRPF Camp Jharoda Kalan          Bahadurgarh Road
+2023,109,70,Najafgarh-,Naveen Palace Jharoda Kalan,2023-07-09,Najafgarh-            Naveen Palace Jharoda Kalan      Bahadurgarh Road
+2023,110,70,Najafgarh-,"Sainik Enclave-2, Jharoda",2023-07-09,"Najafgarh-            Sainik Enclave-2, Jharoda        Bahadurgarh Road      Kalan"
+2023,111,70,Najafgarh-,"Subzi Mandi, Najafgarh",2023-07-08,"Najafgarh-            Subzi Mandi, Najafgarh           Bahadurgarh Road"
+2023,112,70,Najafgarh-kapashera,Bijwasan Market,2023-05-27,Najafgarh-kapashera   Bijwasan Market                  Road
+2023,113,70,Najafgarh Road,"Moti Nagar Flyover, near TATA",2023-07-09,"Najafgarh Road        Moti Nagar Flyover, near TATA    Showroom"
+2023,114,70,Najafgarh Road,"Tuda Mandi, Najafgarh",2023-07-04,"Najafgarh Road        Tuda Mandi, Najafgarh            🖷🖷"
+2023,115,71,Najafgarh Road,Uttam Nagar Metro Station,2023-07-09,Najafgarh Road           Uttam Nagar Metro Station
+2023,116,71,Najafgarh Road,Zakhira to Moti Nagar,2023-07-10;2024-06-27,Najafgarh Road           Zakhira to Moti Nagar
+2023,117,71,Najafgarh Road-Azad,Dwarka Mod,2023-07-04;2023-07-09,Najafgarh Road-Azad     Dwarka Mod                       Hind Fauz Marg
+2023,118,71,Near Zakir Nagar Main,Batla House Chowk,2023-06-30,Near Zakir Nagar Main   Batla House Chowk                Road
+2023,119,71,Netaji Subhash Marg,4268 Darya Ganj,2023-07-09,Netaji Subhash Marg     4268 Darya Ganj
+2023,120,71,Netaji Subhash Marg/,Delhi Gate,2023-05-27;2023-07-08;2023-07-09;2023-09-10,Netaji Subhash Marg/      Delhi Gate                       BSZ
+2023,121,71,New Rohtak Road,"Near Gali No.10, Anand Parbat",2023-03-18;2023-05-27;2023-07-08;2023-07-09;2024-07-15;2024-07-22;2024-07-24;2024-08-09;2024-08-23,"New Rohtak Road           Near Gali No.10, Anand Parbat    at the foot of Flyover"
+2023,122,71,New Rohtak Road,Under Zakhira Flyover,2023-03-30;2023-05-27,New Rohtak Road           Under Zakhira Flyover
+2023,123,71,NH-24,"Underpass Street No. 3, East",2023-07-09,"NH-24                     Underpass Street No. 3, East     Vinod Nagar"
+2023,124,71,NH-24/Delhi- Meerut,Khichripur,2023-07-08;2023-07-09,NH-24/Delhi- Meerut       Khichripur                       Expressway (DME)
+2023,125,71,NH-24/Delhi- Meerut,Mayur Vihar Phase-II,2023-07-08;2023-07-09,NH-24/Delhi- Meerut       Mayur Vihar Phase-II             Expressway (DME)          Underpass
+2023,126,71,NH-24/Delhi- Meerut,Murga Mandi Ghazipur,2023-05-01;2023-05-27;2023-05-30;2023-07-08;2023-07-09;2024-06-27,NH-24/Delhi- Meerut       Murga Mandi Ghazipur             Expressway (DME)
+2023,127,71,NH-48,Between Sanjay T-Point and,2023-06-25;2023-06-30,NH-48                   Between Sanjay T-Point and       RTR-Point
+2023,128,71,NH-48,Dhaula Kuan,2023-07-09;2023-07-10,NH-48                     Dhaula Kuan
+2023,129,71,NH-48,DKFO Towa rds Gurugram,2023-07-08,NH-48                     DKFO Towa rds Gurugram
+2023,130,71,NH-48,Jharela Village,2023-07-09,NH-48                     Jharela Village
+2023,131,71,NH-48,Near Loop of Flyover going,2023-07-09,NH-48                     Near Loop of Flyover going       towards going towards T3 Airport
+2023,132,71,NH-48,Near Shiv Murti,2023-07-08,NH-48                     Near Shiv Murti
+2023,133,71,NH-48,Shankar Vihar towards GGR-,2023-07-08,NH-48                     Shankar Vihar towards GGR-       PDR
+2023,134,71,NH-8,Near Uppal Farm House,2023-06-23,NH-8                      Near Uppal Farm House            towards Gurgaon
+2023,135,71,Noida Link Road,Akshardham Metro Station and,2023-07-08;2023-07-09,Noida Link Road           Akshardham Metro Station and     under flyover ‘U’ turn
+2023,136,71,Noida Link Road,Chilla Border,2023-07-09,Noida Link Road           Chilla Border
+2023,137,71,Okhla Estate Marg,Okhla underpass,2023-05-01;2023-06-30;2023-07-08;2023-07-09;2024-06-28;2024-06-30;2024-07-31;2024-08-29;2024-09-02,Okhla Estate Marg         Okhla underpass                       🖷🖷
+2023,138,72,Old Delhi Gurugram,Kapashera Chowk,2023-05-27;2023-07-09,Old Delhi Gurugram      Kapashera Chowk                  Road
+2023,139,72,Old GT Road/ Ansari,Old Iron Bridge,2023-05-27,Old GT Road/ Ansari     Old Iron Bridge                  Road Shastri Park
+2023,140,72,Old Seelam Pur,Old Seelam Pur,2023-05-27,Old Seelam Pur          Old Seelam Pur
+2023,141,72,Outer Circle,Outer Circle Connaught Place,2023-07-08,Outer Circle            Outer Circle Connaught Place
+2023,142,72,Outer Ring Road,"Beneath Flyover Mangolpuri,",2023-03-30,"Outer Ring Road         Beneath Flyover Mangolpuri,      C- Block"
+2023,143,72,Outer Ring Road,Chirag Dilli Red Light,2023-07-08;2023-07-09;2023-07-10;2023-07-12,Outer Ring Road         Chirag Dilli Red Light
+2023,144,72,Outer Ring Road,"F-Block, Gandhi Vihar, Gopal",2023-07-09,"Outer Ring Road         F-Block, Gandhi Vihar, Gopal     Pur"
+2023,145,72,Outer Ring Road,Haiderpur,2023-07-08;2023-07-09,Outer Ring Road         Haiderpur
+2023,146,72,Outer Ring Road,"Main Gate Delhi Haat,",2023-05-03,"Outer Ring Road         Main Gate Delhi Haat,            Pitampura"
+2023,147,72,Outer Ring Road,Mangolpuri Flyover both side,2023-03-30,Outer Ring Road         Mangolpuri Flyover both side
+2023,148,72,Outer Ring Road,Munirka Village,2023-07-08;2023-07-09,Outer Ring Road         Munirka Village
+2023,149,72,Outer Ring Road,"National Market, Paschim",2023-07-09,"Outer Ring Road         National Market, Paschim         Vihar"
+2023,150,72,Outer Ring Road,Peeragarhi Chowk to,2023-07-08,Outer Ring Road         Peeragarhi Chowk to              Mangolpuri Flyover
+2023,151,72,Outer Ring Road,Pitampura Police Line to West,2023-03-30,Outer Ring Road         Pitampura Police Line to West    Enclave
+2023,152,72,Outer Ring Road,Under Modi Mill Flyover,2023-07-06;2023-07-08;2023-07-09,Outer Ring Road         Under Modi Mill Flyover
+2023,153,72,Panchsheel Marg,Panchsheel Marg-San Martin,2023-07-08,Panchsheel Marg         Panchsheel Marg-San Martin       Red Light
+2023,154,72,Panchsheel Marg,Shantipath/Panchsheel,2023-07-08,Panchsheel Marg         Shantipath/Panchsheel            Crossing towards R/A Kautliya
+2023,155,72,Pankha Road,Dabri Flyover on the Loop,2023-06-21;2024-08-12,Pankha Road             Dabri Flyover on the Loop        Coming from Dabari Side
+2023,156,72,Pankha Road/,Near Kirby Place Red Light,2023-06-25,Pankha Road/            Near Kirby Place Red Light       Cariappa Marg
+2023,157,72,Patparganj Road,Infront of Mother Dairy,2023-04-04,Patparganj Road         Infront of Mother Dairy
+2023,158,72,Patparganj Road,"Pandev Nagar Flyover, main",2023-05-03;2023-07-09,"Patparganj Road         Pandev Nagar Flyover, main       road mother Dairy"
+2023,159,72,Patparganj Road,Pandev Nagar UnderPass,2023-05-27;2023-05-30;2023-07-08,Patparganj Road         Pandev Nagar UnderPass
+2023,160,72,"Pocket-16, Sector-22,","Pocket-16, Sector-22, Rohini",2023-07-09,"Pocket-16, Sector-22,   Pocket-16, Sector-22, Rohini     Rohini"
+2023,161,72,Pragati Maidan Tunnel,"Pragati Maidan Tunnel,",2023-07-10,"Pragati Maidan Tunnel   Pragati Maidan Tunnel,           Bhairon Road to Ring Road & vice versa 🖷🖷"
+2023,162,73,Press Enclave Road,Near Hauz Rani Red Light Max,2023-05-30;2023-07-08;2023-07-09;2023-09-10;2024-09-02,Press Enclave Road     Near Hauz Rani Red Light Max      Hospital Gate No.5&6/ Mandir      Marg
+2023,163,73,Purana Quila Road,Purana Quila Road,2023-07-08,Purana Quila Road       Purana Quila Road
+2023,164,73,PUSA Road,Karol Bagh Metro Station,2023-07-09;2024-07-22,PUSA Road               Karol Bagh Metro Station
+2023,165,73,PUSA Road,R/A Bagga Link,2023-07-08;2023-07-09,PUSA Road               R/A Bagga Link
+2023,166,73,Pusta Road,Roundabout Jhandewalan/,2023-03-18;2023-03-20;2023-03-30;2023-06-27,"Pusta Road              Roundabout Jhandewalan/           Bagga Link, Near Hanuman          Murti/ Near Bagga Link Service    Station"
+2023,167,73,Pusta Road,"Service Road, Geeta Colony",2023-07-09,"Pusta Road              Service Road, Geeta Colony"
+2023,168,73,R.K. Ashram Marg,R.K. Ashram Marg,2023-07-08;2023-07-09,R.K. Ashram Marg        R.K. Ashram Marg
+2023,169,73,Rafi Marg,Central Secretariat,2023-07-09,Rafi Marg               Central Secretariat
+2023,170,73,Rafi Marg,R/A Sunehri Bagh,2023-07-09,Rafi Marg               R/A Sunehri Bagh
+2023,171,73,Rail Bhawan Rafi Marg,R/A Rail Bhawan Rafi Marg,2023-07-09,Rail Bhawan Rafi Marg   R/A Rail Bhawan Rafi Marg         R/A
+2023,172,73,Rajesh Pilot Marg-,R/A Amrita Shergill,2023-05-30,Rajesh Pilot Marg-      R/A Amrita Shergill               Subramaniam Bharti Marg
+2023,173,73,Rajpur Road,MCD Chowk,2023-07-08,Rajpur Road             MCD Chowk
+2023,174,73,Rajpur Road,Towards Tirath Ram Hospital,2023-07-08,Rajpur Road             Towards Tirath Ram Hospital
+2023,175,73,Ram Bagh Road,"Railway under bridge, Azad",2023-07-08;2023-07-10;2024-06-28;2024-07-09;2024-07-10;2024-07-26;2024-07-27;2024-07-31;2024-08-09;2024-08-20,"Ram Bagh Road           Railway under bridge, Azad        Market"
+2023,176,73,Ram Kumar Gautam,West Vinod Nagar,2023-07-09,Ram Kumar Gautam        West Vinod Nagar                  Marg
+2023,177,73,Rani Jhansi Marg,DCM Chowk,2023-07-09,Rani Jhansi Marg        DCM Chowk
+2023,178,73,Rani Jhansi Marg,Filmistan,2023-05-03,Rani Jhansi Marg        Filmistan
+2023,179,73,Rani Jhansi Marg,"Y-Point Underpass, Azad",2023-04-01,"Rani Jhansi Marg        Y-Point Underpass, Azad           Market"
+2023,180,73,Rani Jhansi Road,Under Rani Jhansi Road,2023-07-06,Rani Jhansi Road        Under Rani Jhansi Road            Flyover
+2023,181,73,Ring Road,Ashram Chowk,2023-06-30;2023-07-08,Ring Road               Ashram Chowk
+2023,182,73,Ring Road,AIIMS Loop,2023-03-30;2023-05-18;2023-07-09,Ring Road               AIIMS Loop
+2023,183,73,Ring Road,Atma Ram Sanatan Dharam,2023-06-27,Ring Road               Atma Ram Sanatan Dharam           (ARSD) College 🖷🖷
+2023,184,74,Ring Road,"Bharat Darshan Park, Punjabi",2023-05-03;2023-05-27;2023-06-25;2023-07-05;2023-07-08;2023-07-09;2024-06-27,"Ring Road            Bharat Darshan Park, Punjabi     Bagh"
+2023,185,74,Ring Road,Brar Square Metro Station,2023-07-08,Ring Road             Brar Square Metro Station
+2023,186,74,Ring Road,CNG Pump Sarai Kale Khan,2023-07-09,Ring Road             CNG Pump Sarai Kale Khan
+2023,187,74,Ring Road,Dhaula Kuan Flyover,2023-07-09;2024-08-29,Ring Road             Dhaula Kuan Flyover
+2023,188,74,Ring Road,Durga Bai Deshmukh Metro,2023-07-09,Ring Road             Durga Bai Deshmukh Metro         Station
+2023,189,74,Ring Road,IGI Stadium to Rajghat Chowk,2023-07-09,Ring Road             IGI Stadium to Rajghat Chowk
+2023,190,74,Ring Road,Infront of Delhi Secretariate,2023-07-17,Ring Road             Infront of Delhi Secretariate
+2023,191,74,Ring Road,"IP Flyover to Rajghat, Sarai",2023-07-26;2024-06-28;2024-07-24,"Ring Road             IP Flyover to Rajghat, Sarai     Kale Khan & Old Police           Headquarters Vikas Marg"
+2023,192,74,Ring Road,Kela Ghat,2023-07-08;2023-07-09,Ring Road             Kela Ghat
+2023,193,74,Ring Road,Lajput Nagar Underpass,2023-07-08;2023-07-09,Ring Road             Lajput Nagar Underpass
+2023,194,74,Ring Road,Maharani Bagh Bus Stand,2023-07-09,Ring Road             Maharani Bagh Bus Stand
+2023,195,74,Ring Road,Maharani Bagh Flyover,2023-06-30,Ring Road             Maharani Bagh Flyover
+2023,196,74,Ring Road,Mayapuri Chowk,2023-07-08;2024-06-27;2024-07-15;2024-07-24,Ring Road             Mayapuri Chowk
+2023,197,74,Ring Road,Moti Bagh to Durga Bai,2023-05-30,Ring Road           Moti Bagh to Durga Bai           Deshmukh Metro Station
+2023,198,74,Ring Road,Naraina T-Point,2023-07-08;2024-07-15,Ring Road             Naraina T-Point
+2023,199,74,Ring Road,"Near IGI Stadium, Gate No.22",2023-07-08,"Ring Road             Near IGI Stadium, Gate No.22"
+2023,200,74,Ring Road,"Near Nizamuddin Khatta, on",2023-07-08;2023-11-10,"Ring Road             Near Nizamuddin Khatta, on       both carriageway"
+2023,201,74,Ring Road,Near PS Timarpur,2023-07-10,Ring Road             Near PS Timarpur
+2023,202,74,Ring Road,Nehru Nagar Bus Stand,2023-07-08,Ring Road             Nehru Nagar Bus Stand
+2023,203,74,Ring Road,"Nigam Bodh Ghat, Near ISBT",2023-07-08;2023-07-09;2023-07-10;2024-07-24;2024-07-26;2024-07-27;2024-07-31;2024-08-20,"Ring Road             Nigam Bodh Ghat, Near ISBT"
+2023,204,74,Ring Road,Nizamudddin Khatta near,2023-06-30;2023-07-09,Ring Road             Nizamudddin Khatta near          Meerut Expressway
+2023,205,74,Ring Road,Prem Bari Pul,2023-07-08;2023-07-09,Ring Road             Prem Bari Pul
+2023,206,74,Ring Road,Rajghat-Shanti Van,2023-07-08,Ring Road             Rajghat-Shanti Van
+2023,207,74,Ring Road,Rajouri Garden Towards,2023-06-23,Ring Road             Rajouri Garden Towards           Punjabi Bagh
+2023,208,74,Ring Road,Salimgarh Fort,2023-07-09;2023-07-18,Ring Road             Salimgarh Fort                    🖷🖷
+2023,209,75,Ring Road,Sarai Kalen Khan near CNG,2023-07-08,"Ring Road              Sarai Kalen Khan near CNG          Station, carriageway Ashram to Maharani Bagh"
+2023,210,75,Ring Road,Shalimar Bagh T-Point,2023-07-09,Ring Road               Shalimar Bagh T-Point
+2023,211,75,Ring Road,"Shanti Van, Rajghat",2023-07-09,"Ring Road               Shanti Van, Rajghat"
+2023,212,75,Ring Road,Sun Dial Park,2023-06-30;2023-07-08;2023-07-09,Ring Road               Sun Dial Park
+2023,213,75,Ring Road,Timarpur T-Point,2023-07-08,Ring Road               Timarpur T-Point
+2023,214,75,Ring Road,Under DKFO Ring Road Loop,2023-05-30,Ring Road               Under DKFO Ring Road Loop          Flyover towards Naraina
+2023,215,75,Ring Road,Under IP Flyover,2023-07-09;2023-07-10,Ring Road               Under IP Flyover
+2023,216,75,Ring Road,Under Mool Chand Flyover,2023-07-08;2024-06-28,Ring Road               Under Mool Chand Flyover
+2023,217,75,Ring Road,Yamuna Bazar Hanuman,2023-07-08;2023-07-09,Ring Road             Yamuna Bazar Hanuman               Mandir
+2023,218,75,Ring Road,Yudhistir Setu,2023-07-08,Ring Road             Yudhistir Setu
+2023,219,75,Ring Road,Shalimar T-Point,2023-07-08,Ring Road             Shalimar T-Point
+2023,220,75,"Road No.201, Dwarka",ISKON Chowk,2023-07-04,"Road No.201, Dwarka   ISKON Chowk"
+2023,221,75,"Road No.201, Dwarka",Raja Puri Red Light/ Tiranga,2023-05-03;2023-05-27;2023-05-31;2023-06-21;2023-06-25;2023-07-09;2024-07-15;2024-07-31;2024-09-04,"Road No.201, Dwarka   Raja Puri Red Light/ Tiranga       Chowk"
+2023,222,75,"Road No.214, Dwarka",Sector-12 Marble Market,2023-07-05,"Road No.214, Dwarka     Sector-12 Marble Market"
+2023,223,75,"Road No.226, Dwarka",Sector-19/20 Marble Market,2023-07-04;2023-07-09,"Road No.226, Dwarka     Sector-19/20 Marble Market         Dwarka"
+2023,224,75,"Road No.226, Dwarka",Sector-20 Dwarka,2023-05-27,"Road No.226, Dwarka   Sector-20 Dwarka"
+2023,225,75,Road No.316,Mangolpuri Industrial Area,2023-07-09,Road No.316           Mangolpuri Industrial Area
+2023,226,75,Road No.57,Road No.57,2023-07-08,Road No.57            Road No.57
+2023,227,75,Road No.57 IP Extn,Near DCP/T/East office in front,2023-07-06,Road No.57 IP Extn    Near DCP/T/East office in front    Road                  of VVIP Gate Bageshwar Dham Function
+2023,228,75,Road No.57A,Underpass Kasturba Nagar,2023-07-08,Road No.57A             Underpass Kasturba Nagar
+2023,229,75,Road No.57A,UTSAV Ground VVIP Entry,2023-07-08,Road No.57A             UTSAV Ground VVIP Entry            gate
+2023,230,75,Road No:235,Mangolpuri Industrial area,2023-06-23,Road No:235           Mangolpuri Industrial area
+2023,231,75,Rohtak Road,"Avtar Enclave, Paschim Vihar",2023-07-09,"Rohtak Road           Avtar Enclave, Paschim Vihar"
+2023,232,75,Rohtak Road,Kamruddin Nagar Red Light,2023-04-04,Rohtak Road           Kamruddin Nagar Red Light
+2023,233,75,Rohtak Road,Nangloi Flyover to Mundka,2023-05-01;2023-06-21;2023-07-09,Rohtak Road           Nangloi Flyover to Mundka          Both carriageway                    🖷🖷
+2023,234,76,Rohtak Road,Near Mundka Metro Station,,Rohtak Road             Near Mundka Metro Station       27.07. 2023
+2023,235,76,Rohtak Road,Rajdhani Park,2023-05-27;2023-06-21;2023-06-26;2023-07-04;2023-07-08;2023-07-09,Rohtak Road             Rajdhani Park
+2023,236,76,Rohtak Road,Swarn Park Mundaka Near,2023-05-31;2023-07-09;2023-07-10,Rohtak Road             Swarn Park Mundaka Near          Maruti Suzuki Showroom/ Near     Swarn Park Bus Stand
+2023,237,76,Rohtak Road,Tikri Border Metro Station,2023-07-04;2023-07-05;2023-07-06;2023-07-08;2023-07-09;2023-07-10;2023-09-16,Rohtak Road           Tikri Border Metro Station
+2023,238,76,Rohtak Road,Tyagi Park Mundka,2023-07-09,Rohtak Road             Tyagi Park Mundka
+2023,239,76,Rohtak Road,"Tyagi Vihar, Ghevra",2023-07-09,"Rohtak Road             Tyagi Vihar, Ghevra"
+2023,240,76,Rohtak Road (Both,Near Metro Pillar No.455,2023-03-31;2023-05-31,Rohtak Road (Both       Near Metro Pillar No.455         carriageway)            Nangloi
+2023,241,76,Roshanara Road,Opposite PS Subzi Mandi,2023-07-09,Roshanara Road          Opposite PS Subzi Mandi
+2023,242,76,San Martin Marg,Near Jesus Mary College,2023-07-09,San Martin Marg         Near Jesus Mary College
+2023,243,76,Sant Durbal Nath,"Phase-I, B Block, Mangolpuri",2023-07-10,"Sant Durbal Nath        Phase-I, B Block, Mangolpuri     Mandir Marg"
+2023,244,76,Sant Nagar Marg,"Ekta Garden, Harijan Basti,",2023-07-09,"Sant Nagar Marg         Ekta Garden, Harijan Basti,      Burari"
+2023,245,76,Sant Nagar,"Near Shalimar Palace Banquet,",2023-03-20,"Sant Nagar              Near Shalimar Palace Banquet,    MargTowards Burari      Burari Chowk)"
+2023,246,76,Sardar Patel Marg,CHP-I SPM Service Road,2023-05-27,Sardar Patel Marg       CHP-I SPM Service Road
+2023,247,76,Sarojini Nagar Market,Sarojini Nagar Market,2023-07-09,Sarojini Nagar Market   Sarojini Nagar Market
+2023,248,76,Satguru Ram Singh,Lajwnati Chowk,2023-07-04,Satguru Ram Singh       Lajwnati Chowk                   Marg
+2023,249,76,Satya Marg,R/A Rail Museum,2023-07-09,Satya Marg              R/A Rail Museum
+2023,250,76,Satya Marg,Vinai Marg Chambery,2023-07-09,Satya Marg              Vinai Marg Chambery
+2023,251,76,"Sector 22, Dwarka","Sector 22, Dwarka",2023-07-09,"Sector 22, Dwarka       Sector 22, Dwarka"
+2023,252,76,Shamnat Hedge Marg,Near Kashmere Gate ISBT,2023-07-09,Shamnat Hedge Marg      Near Kashmere Gate ISBT
+2023,253,76,Shanti Path,Kautilya Marg to Panchsheel,2023-07-09,Shanti Path             Kautilya Marg to Panchsheel      Marg
+2023,254,76,Shanti Path,Near American Ambassy,2023-07-09,Shanti Path             Near American Ambassy
+2023,255,76,Shanti Path-,Shanti Path-Panchsheel Marg,2023-07-09,Shanti Path-            Shanti Path-Panchsheel Marg      Panchsheel Marg
+2023,256,76,Shyama Prasad,Chhatta Rail Chowk,2023-07-08;2023-07-10;2023-07-24;2024-07-26;2024-07-27;2024-07-31,Shyama Prasad           Chhatta Rail Chowk               Mukherjee Marg                                           (SPM Marg)/ Nishad                                       Raj Marg
+2023,257,76,SPM Marg,Abai Marg between San Martin,2023-07-08,SPM Marg              Abai Marg between San Martin     Marg to SPM
+2023,258,76,Subramaniam Bharti,Khan Market,2023-05-30;2023-07-08;2023-07-09;2023-07-15,Subramaniam Bharti      Khan Market                      Marg (SBM Marg)                                            🖷🖷
+2023,259,77,Sunheri Bagh- Rafi,R/A RML Hospital,2023-07-09,Sunheri Bagh- Rafi        R/A RML Hospital                 Marg
+2023,260,77,Sunheri Masjid R/A,R/A Sunheri Masjid,2023-07-09,Sunheri Masjid R/A         R/A Sunheri Masjid
+2023,261,77,Suraj Kund Road,Near MCD Toll,2023-03-30,Suraj Kund Road            Near MCD Toll
+2023,262,77,Surajkund Road,Near Dr.Karni Singh Shooting,2023-04-01,Surajkund Road             Near Dr.Karni Singh Shooting     (towards Sangam            Range Red Light near Border Vihar)
+2023,263,77,Surajmal Marg,"Karkardooma Court, Gate No.-",2023-07-08,"Surajmal Marg              Karkardooma Court, Gate No.-     1"
+2023,264,77,Swami Dayanand,Bihari Colony,2023-07-08,Swami Dayanand             Bihari Colony                    Marg
+2023,265,77,Talkatora Road,RML Hospital,2023-07-09,Talkatora Road             RML Hospital
+2023,266,77,Teen Murti Haifa Marg,Haifa Chowk,2023-07-09,Teen Murti Haifa Marg      Haifa Chowk
+2023,267,77,Teen Murti Marg,R/A GKP,2023-07-08;2023-07-09,Teen Murti Marg            R/A GKP
+2023,268,77,Ulan Batar Marg,Mehram Nagar,2023-07-09,Ulan Batar Marg            Mehram Nagar                     Opp.PalamAirpot
+2023,269,77,Urban Extension Road,Samalkha crossing Pushpanjali,2023-07-09,Urban Extension Road       Samalkha crossing Pushpanjali    II (UER-II)                Farms
+2023,270,77,Veer Banda Bairagi,Azad Market,2023-04-01;2023-07-09,Veer Banda Bairagi         Azad Market                      Marg/ Rani Jhansi                                           Marg
+2023,271,77,Vikas Marg,Laxmi Nagar,2023-07-09,Vikas Marg                 Laxmi Nagar
+2023,272,77,Vikas Marg,Shakkarpur Laxmi Nagar,2023-07-09,Vikas Marg                 Shakkarpur Laxmi Nagar
+2023,273,77,Vikas Marg,Under IP Flyover,2023-07-08,Vikas Marg                 Under IP Flyover
+2023,274,77,Vikas Marg,Vijay Chowk to Laxmi Nagar,2023-07-09,Vikas Marg                 Vijay Chowk to Laxmi Nagar
+2023,275,77,Vikas Marg,Vijay Chowk to Nirman Vihar,2023-07-09,Vikas Marg                 Vijay Chowk to Nirman Vihar
+2023,276,77,Vikas Marg,"Yamuna Bank underpass,",2023-07-09,"Vikas Marg                 Yamuna Bank underpass,           Akshardham to Geeta Colony"
+2023,277,77,Vinay Marg,Ashoka Hotel,2023-07-09,Vinay Marg               Ashoka Hotel
+2023,278,77,Vir Banda Bairagi Marg,Inder Lok Chowk,2023-07-08,Vir Banda Bairagi Marg   Inder Lok Chowk
+2023,279,77,Vir Banda Bairagi Marg,Indra Colony Daya Basti,2023-07-08,Vir Banda Bairagi Marg   Indra Colony Daya Basti
+2023,280,77,Vir Banda Bairagi Marg,RUB Zakhira Shahzada Bagh,2023-07-08;2023-07-09,Vir Banda Bairagi Marg   RUB Zakhira Shahzada Bagh
+2023,281,77,Wazirabad Road,"Service Road Opposite of ITI,",2023-05-27;2023-07-08,"Wazirabad Road             Service Road Opposite of ITI,    Nand Nagri"
+2023,282,77,Wazirabad Road,Under Loni Flyover towards,2023-07-08,Wazirabad Road             Under Loni Flyover towards       Bhopura
+2023,283,77,Wazirabad Road,Wazirabad to Bhajanpura Road,2023-07-08,Wazirabad Road             Wazirabad to Bhajanpura Road     to Dayal Pur
+2023,284,77,Wazirabad Road,Wazirabad to service road,2023-07-08,Wazirabad Road             Wazirabad to service road        near T.R. Sahani in front of Maruti Showroom
+2023,285,77,Motilal Nehru Marg,Sunehri Bagh Masjid,2023-09-11,Motilal Nehru Marg         Sunehri Bagh Masjid
+2023,286,77,Rohtak Road,Pillar No.488 to 507,2023-09-23,Rohtak Road                Pillar No.488 to 507
+2023,287,77,GT Road,Shyam Lal College,2023-09-23,GT Road                    Shyam Lal College                🖷🖷
+2024,1,78,Ansari Road,Vivek Vihar underpass,2024-06-28,Ansari Road                     Vivek Vihar underpass
+2024,2,78,Arakshan Road,Paharganj,2024-06-28,Arakshan Road                   Paharganj
+2024,3,78,Avantika Market Marg,Pole Star School,2024-06-27,Avantika Market Marg            Pole Star School
+2024,4,78,Badli Road,Underpass,2024-06-28,Badli Road                      Underpass
+2024,5,78,Bamnikhera Road,Hasanpur,2024-06-28,Bamnikhera Road                 Hasanpur
+2024,6,78,Bhiku Ram Jain Marg,Civil Lines,2024-06-28,Bhiku Ram Jain Marg             Civil Lines
+2024,7,78,Boulevard Road,Gate No. 5 Metro Station,2024-06-28,Boulevard Road                  Gate No. 5 Metro Station
+2024,8,78,Boulevard Road,Khoya Mandi U-Turn,2024-06-28;2024-07-15;2024-07-31,Boulevard Road                  Khoya Mandi U-Turn
+2024,9,78,Ch. Fateh Singh Marg,PS Timarpur to Wazirabad Pul,2024-08-10;2024-08-18;2024-08-20,Ch. Fateh Singh Marg            PS Timarpur to Wazirabad Pul    Kalyanpuri Senior Secondary
+2024,10,78,Chand Cinema Road,28.06.2024,2024-06-28,Chand Cinema Road                                                    School
+2024,11,78,Chelmsford Road Munja Chowk,Near NDRS,2024-06-28,Chelmsford Road Munja Chowk     Near NDRS
+2024,12,78,DDU Marg,"Minto Road to DDU, Kali Mandir",2024-06-28,"DDU Marg                        Minto Road to DDU, Kali Mandir       Bagga      Link     Roundabout"
+2024,13,78,Dr. Bhim Rao Ambedkar Marg,27.06.2024,2024-06-27,Dr. Bhim Rao Ambedkar Marg                                           Hanuman Mandir East Patel Nagar Bus Stand on
+2024,14,78,Dr. K.S. Krishnan Marg,the carriageway going towards,2024-08-13,Dr. K.S. Krishnan Marg          the carriageway going towards        Ratanpuri Opposite main gate of Katputli
+2024,15,78,Girdhari Lal Goswami Marg,Colony on the carriage towards,2024-07-15,Girdhari Lal Goswami Marg       Colony on the carriage towards       Naraina
+2024,16,78,GTK Road,Ashok Vihar flyover,2024-06-28,GTK Road                        Ashok Vihar flyover
+2024,17,78,IP Marg,Indraprastha,2024-08-20,IP Marg                         Indraprastha                         Near     Old     Delhi   Police
+2024,18,78,IP Marg,31.07.2024,2024-06-27;2024-07-31,IP Marg                                                              Headquarters to IP Flyover
+2024,19,78,Jawahar Lal Nehru Marg,JLN Marg to Delhi Gate,2024-08-01,Jawahar Lal Nehru Marg          JLN Marg to Delhi Gate
+2024,20,78,Kela Godam Road,Azadpur Mandi,2024-06-28,Kela Godam Road                 Azadpur Mandi
+2024,21,78,Khoda Chowk,"Khoda Chowk, Kalyanpuri",2024-08-07,"Khoda Chowk                     Khoda Chowk, Kalyanpuri"
+2024,22,78,Khudiram Bose Marg,Mayur Vihar Metro Station,2024-08-09,Khudiram Bose Marg              Mayur Vihar Metro Station
+2024,23,78,Max Hospital Road,Haiderpur Metro Station,2024-06-27,"Max Hospital Road               Haiderpur Metro Station              In front of Khatu Shyam Mandir,"
+2024,24,78,"NH-44, GTK Road",31.07.2024,2024-07-31,"NH-44, GTK Road                                                      Alipur (Lower GTK Road) Libaspur Underpass Lower GTK"
+2024,25,78,"NH-44, GTK Road",28.06.2024,2024-06-28,"NH-44, GTK Road                                                      Road Nangli Underpass Lower GTK"
+2024,26,78,"NH-44, GTK Road",28.06.2024,2024-06-28;2024-07-24,"NH-44, GTK Road                                                      Road  Swaroop Nagar to Village Nangli"
+2024,27,78,"NH-44, GTK Road",13.08.2024,2024-08-13;2024-08-16;2024-09-11,"NH-44, GTK Road                                                      Poona  🖷🖷  T-Point      Sanjay      Gandhi"
+2024,28,79,"NH-44, GTK Road",Transport Nagar to Libaspur,2024-06-28,"NH-44, GTK Road                 Transport Nagar to Libaspur          underpass Lower GTK Road"
+2024,29,79,Noida Link Road,Pandav Nagar Metro Station,2024-08-09,Noida Link Road                 Pandav Nagar Metro Station
+2024,30,79,Outer Ring Road,Chandgi Ram Akhara,2024-06-28,Outer Ring Road                 Chandgi Ram Akhara
+2024,31,79,Outer Ring Road,ISBT Kashmere Gate,2024-06-28,Outer Ring Road                 ISBT Kashmere Gate
+2024,32,79,Outer Ring Road,Kela Ghat,2024-06-28,Outer Ring Road                 Kela Ghat
+2024,33,79,Outer Ring Road,Majnu Ka Tila,2024-06-28;2024-07-03,Outer Ring Road                 Majnu Ka Tila                        Metro Pillar No. 289 on the carriageway     leading    from
+2024,34,79,Outer Ring Road,,2024-09-10,Outer Ring Road Mukarba Chowk to Madhuban            Chowk
+2024,35,79,Outer Ring Road,Wazirpur Industrial Area,2024-06-28,Outer Ring Road                 Wazirpur Industrial Area
+2024,36,79,Outer Ring Road,"Y-Point, Ashok Vihar",2024-06-28,"Outer Ring Road                 Y-Point, Ashok Vihar"
+2024,37,79,Raj Niwas Marg,Civil Lines,2024-06-28,Raj Niwas Marg                  Civil Lines
+2024,38,79,Rind Road,Prembari underpass,2024-06-27,Rind Road                       Prembari underpass                   Both Carriageway opposite Gate
+2024,39,79,Ring Road,28.06.2024,2024-06-28,Ring Road                                                            No. 22 IGI Stadium
+2024,40,79,Ring Road,IP College,2024-06-28,Ring Road                       IP College
+2024,41,79,Ring Road,Mandoli,2024-06-28;2024-07-31,Ring Road                       Mandoli
+2024,42,79,Ring Road,Mangi Bridge,2024-08-20,Ring Road                       Mangi Bridge
+2024,43,79,Ring Road,Nehru Nagar bus stand,2024-08-07,Ring Road                       Nehru Nagar bus stand                Opposite Gandhi Smriti near U-
+2024,44,79,Ring Road,28.06.2024,2024-06-28,Ring Road                                                            Turn
+2024,45,79,Ring Road,Rajghat,2024-06-28,Ring Road                       Rajghat
+2024,46,79,Ring Road,Salimgarh Bypass,2024-06-28,Ring Road                       Salimgarh Bypass
+2024,47,79,Ring Road,Under Iron Bridge,2024-06-28,Ring Road                       Under Iron Bridge
+2024,48,79,Sai Hospital Road,Khora Chowk,2024-06-28,Sai Hospital Road               Khora Chowk
+2024,49,79,Shalimar Bagh Road,Y-Point,2024-06-28,Shalimar Bagh Road              Y-Point
+2024,50,79,Sham Nath Marg,Civil Lines,2024-06-28,Sham Nath Marg                  Civil Lines
+2024,51,79,Swami Narayan Marg,Gulabi Bagh,2024-07-26,Swami Narayan Marg              Gulabi Bagh
+2024,52,79,Vikas Marg,Nirman Vihar,2024-06-28;2024-09-02,Vikas Marg                      Nirman Vihar
+2024,53,79,Ring Road,Gupta Market,2024-07-03;2024-07-26;2024-07-27;2024-09-17,Ring Road                       Gupta Market
+2024,54,79,Anuvrat Marg,Near Qutub Minar Metro Station,2024-07-31;2024-08-02;2024-08-07;2024-08-11,Anuvrat Marg                    Near Qutub Minar Metro Station
+2024,55,79,August Kranti Marg,Siri Fort Redlight,2024-06-28;2024-07-10,August Kranti Marg              Siri Fort Redlight                    Green Park Metro Station / near
+2024,56,79,Aurobindo Marg,31.07.2024,2024-07-31;2024-08-11,Aurobindo Marg                                                       U Turn
+2024,57,79,Baba Kharak Singh Marg,"Gate No. 4, RML Hospital",2024-08-01;2024-08-20,"Baba Kharak Singh Marg          Gate No. 4, RML Hospital             Bahadur Shah Zafar Marg and     Under Tilak Bridge BSZ Marg 58.                                                                         Jawahar Lal Nehru Marg          W-P"
+2024,59,79,Barapullah Road,Near Seva Nagar,2024-06-28,Barapullah Road                 Near Seva Nagar
+2024,60,79,Bhairon Road,Purana Quila,2024-06-28,Bhairon Road                    Purana Quila
+2024,61,79,Bhairon Road,Railway Bridge / Bhairon Road,2024-08-13;2024-08-20,Bhairon Road                    Railway Bridge / Bhairon Road        🖷🖷 underpass
+2024,62,80,Bharat Scouts & Guide Marg,Neela Gumbad,2024-07-25,Bharat Scouts & Guide Marg      Neela Gumbad
+2024,63,80,Captain Gaur Marg,Okhla Mandi,2024-06-28,Captain Gaur Marg               Okhla Mandi
+2024,64,80,Captain Kumud Kumar Marg,Jwalaheri market,2024-07-15;2024-07-24;2024-07-31;2024-08-11;2024-08-12;2024-08-20,Captain Kumud Kumar Marg        Jwalaheri market
+2024,65,80,"Drain Road, Dwarka – Dabri",Dabri Roundabout,2024-08-12;2024-08-13;2024-08-29;2024-09-02;2024-09-04;2024-09-12;2024-09-14,"Drain Road, Dwarka – Dabri      Dabri Roundabout                              Sector 2/6 crossing towards"
+2024,66,80,"Drain Road, Dwarka – Dabri",,2024-07-31;2024-08-12;2024-09-04;2024-09-12;2024-09-14,"Drain Road, Dwarka – Dabri Dabri                                      Service   Road     near   DTC"
+2024,67,80,"Drain Road, Dwarka – Dabri",13.08.2024,2024-08-13;2024-08-29;2024-09-04,"Drain Road, Dwarka – Dabri                                             Terminal Sector-2, Dwarka   Power     House     to    Dabri"
+2024,68,80,Dwarka – Dabri Drain Road,29.08.2024,2024-08-29,Dwarka – Dabri Drain Road                                              Roundabout at several locations
+2024,69,80,Dwarka Road,"Dwarka Sector 19, 20, 21 & 23",2024-06-28,"Dwarka Road                     Dwarka Sector 19, 20, 21 & 23"
+2024,70,80,Firoz Shah Road,Near blinker,2024-08-20,Firoz Shah Road                 Near blinker
+2024,71,80,GGR-PDR,RR Hospital,2024-07-24;2024-08-12,GGR-PDR                         RR Hospital
+2024,72,80,Girdhari Lal Goswami Marg,"Mail Motor Office, Naraina",2024-08-11;2024-08-12,"Girdhari Lal Goswami Marg       Mail Motor Office, Naraina"
+2024,73,80,Goyla Dairy Road,Goyla Village,2024-07-04,Goyla Dairy Road                Goyla Village
+2024,74,80,Kapashera - Najafgarh Road,Bijwasan to Kapashera,2024-06-28,Kapashera - Najafgarh Road      Bijwasan to Kapashera
+2024,75,80,Kasturba Nagar Road,Underpass,2024-06-28,Kasturba Nagar Road             Underpass
+2024,76,80,Krishna Menon Marg,Tuglak Road,2024-06-28,Krishna Menon Marg              Tuglak Road
+2024,77,80,Lala Lajpat Rai Marg,Central School,2024-07-31,Lala Lajpat Rai Marg            Central School
+2024,78,80,Maa Anandmayee Marg,Govindpuri Metro Station,2024-06-28,Maa Anandmayee Marg             Govindpuri Metro Station
+2024,79,80,Maharishi Dayanand Marg,Kapashera,2024-07-04,Maharishi Dayanand Marg         Kapashera
+2024,80,80,Mathura Road,"Gate No. 5, Pragati Maidan",2024-08-01,"Mathura Road                    Gate No. 5, Pragati Maidan             Hazrat Nizamuddin Railway"
+2024,81,80,Mathura Road,28.06.2024,2024-06-28,Mathura Road                                                           Station
+2024,82,80,Mathura Road,Madanpur Khadar,2024-06-28,Mathura Road                    Madanpur Khadar                        Near Sarita Vihar Metro Station /
+2024,83,80,Mathura Road,Apollo Hospital / Sarita Vihar,2024-07-31,Mathura Road                    Apollo Hospital / Sarita Vihar         Flyover MB Road (Mehrauli – Badarpur
+2024,84,80,Air Force Station bus stand,01.08.2024,2024-08-01,Air Force Station bus stand               Road) MB Road (Mehrauli – Badarpur
+2024,85,80,Batra Hospital,28.06.2024,2024-06-28,Batra Hospital                            Road)
+2024,86,80,MB Road (Mehrauli – Badarpur Gate No. 1 Sainik Farm,29.08.2024,2024-08-29,MB Road (Mehrauli – Badarpur Gate No. 1 Sainik Farm                    🖷🖷 Road) MB Road (Mehrauli – Badarpur
+2024,87,81,Gate No. 1 and 2 Sainik Farm,12.09.2024,2024-09-12,Gate No. 1 and 2 Sainik Farm         Road) MB Road (Mehrauli – Badarpur
+2024,88,81,Hamdard to Badarpur,01.08.2024,2024-08-01,Hamdard to Badarpur                  Road) MB Road (Mehrauli – Badarpur
+2024,89,81,Iron Bridge,28.06.2024,2024-06-28,Iron Bridge                          Road) MB Road (Mehrauli – Badarpur
+2024,90,81,Near Kaya Maya Park,31.07.2024,2024-07-31,Near Kaya Maya Park                  Road) MB Road (Mehrauli – Badarpur
+2024,91,81,Outer Ring Road,28.06.2024,2024-06-28;2024-07-03,Outer Ring Road                      Road) MB Road (Mehrauli – Badarpur
+2024,92,81,Near Saket Metro Station,,2024-08-29,Near Saket Metro Station Road)
+2024,93,81,Mother Teresa Crescent Marg,GKP to TMR,2024-07-26,Mother Teresa Crescent Marg     GKP to TMR                           Opposite carriageway of 11
+2024,94,81,Mother Teresa Crescent Marg,26.07.2024,2024-07-26,Mother Teresa Crescent Marg                                          Murti
+2024,95,81,Mother Teresa Crescent Marg,Panchsheel Marg to 35 SP Marg,2024-07-26,Mother Teresa Crescent Marg     Panchsheel Marg to 35 SP Marg
+2024,96,81,Najafgarh – Dhansa Road,Infront of Balaji Temple,2024-08-11,Najafgarh – Dhansa Road         Infront of Balaji Temple             Near Fire Station / Dhansa
+2024,97,81,Najafgarh – Dhansa Road,11.08.2024,2024-08-11,Najafgarh – Dhansa Road                                              Stand Metro Station
+2024,98,81,Najafgarh,Bakkarwala Cut,2024-09-16,Najafgarh                       Bakkarwala Cut
+2024,99,81,New Friends Colony,A 29,2024-06-28,New Friends Colony              A 29
+2024,100,81,NH-48,Near APS Colony,2024-08-29,NH-48                           Near APS Colony
+2024,101,81,NH-48,Shiv Murti,2024-06-28;2024-07-18;2024-07-26;2024-08-29,NH-48                           Shiv Murti
+2024,102,81,"NH-48, Gurugram Road",GGR-PDR,2024-07-31;2024-08-29;2024-09-02;2024-09-14,"NH-48, Gurugram Road              GGR-PDR"
+2024,103,81,Nishad Marg,Sunhari Masjid,2024-06-28,Nishad Marg                     Sunhari Masjid
+2024,104,81,Okhla Road,Crown Plaza Hotel,2024-06-28,Okhla Road                      Crown Plaza Hotel
+2024,105,81,Okhla Road,Gandhi Camp,2024-06-28,Okhla Road                      Gandhi Camp
+2024,106,81,Okhla Road,Lotus Temple,2024-06-28,Okhla Road                      Lotus Temple
+2024,107,81,Okhla Road,Near Metro Station,2024-06-28,Okhla Road                      Near Metro Station                   Kapashera Chowk to Kapashera
+2024,108,81,Old Gurugram Road,28.06.2024,2024-06-27;2024-06-28,Old Gurugram Road                                                      Border
+2024,109,81,Outer Ring Road,Bhera Enclave to Peeragarhi,2024-06-28,Outer Ring Road                   Bhera Enclave to Peeragarhi
+2024,110,81,Outer Ring Road,Bhera Enclave Underpass,2024-07-31;2024-08-29,Outer Ring Road                   Bhera Enclave Underpass              Chirag Delhi towards Nehru
+2024,111,81,Outer Ring Road,,2024-08-11,Outer Ring Road Place
+2024,112,81,Outer Ring Road,Vikas Puri to Peeragarhi,2024-07-24,Outer Ring Road                   Vikas Puri to Peeragarhi
+2024,113,81,Outer Ring Road,Y-Block Mangolpuri,2024-08-20,Outer Ring Road                   Y-Block Mangolpuri                   Palam Metro Station to Palam
+2024,114,81,Palam Colony Road,24.07.2024,2024-07-24,Palam Colony Road                                                      Colony under Palam Flyover
+2024,115,81,Panchsheel Marg,PSL Australia Embassy,2024-07-26,Panchsheel Marg                 PSL Australia Embassy
+2024,116,81,Patel Road,Near Kirti Nagar Metro Station,2024-07-24,Patel Road                      Near Kirti Nagar Metro Station
+2024,117,81,Police Colony Road,Sarojini Nagar,2024-06-28,Police Colony Road              Sarojini Nagar
+2024,118,81,Rajaji Marg,Tuglak Road,2024-06-28,Rajaji Marg                     Tuglak Road
+2024,119,81,Rao Tula Ram Marg,Moti Bagh Chowk,2024-08-23,Rao Tula Ram Marg               Moti Bagh Chowk                      🖷🖷
+2024,120,82,Ring Road,Aatma Ram College to Naraina,2024-06-28;2024-07-26,Ring Road                         Aatma Ram College to Naraina
+2024,121,82,Ring Road,Ashram Underpass,2024-06-28;2024-07-31;2024-09-11,Ring Road                         Ashram Underpass
+2024,122,82,Ring Road,Dhaula Kuan,2024-08-23,Ring Road                         Dhaula Kuan  Durgabai     Deshmukh South
+2024,123,82,Ring Road,12.08.2024,2024-08-12,Ring Road                                                               Campus Metro Station ESI Hospital near Rajdhani
+2024,124,82,Ring Road,24.07.2024,2024-07-24,Ring Road                                                               College
+2024,125,82,Ring Road,Infront of Peeragarhi Village,2024-08-08,Ring Road                       Infront of Peeragarhi Village
+2024,126,82,Ring Road,Rose Garden,2024-06-28,Ring Road                       Rose Garden
+2024,127,82,Ring Road,Sarai Kale Khan towards ITO,2024-08-07,Ring Road                       Sarai Kale Khan towards ITO
+2024,128,82,Ring Road,Under Delhi Cantt. Metro Station,2024-08-13,Ring Road                       Under Delhi Cantt. Metro Station      Under Moti Bagh flyover &
+2024,129,82,Ring Road,26.07.2024,2024-07-26,Ring Road                                                               under RTR flyover
+2024,130,82,"Road No. 201, Dwarka",Rajapuri to Madhu Vihar,2024-07-22;2024-07-24;2024-07-31;2024-08-16,"Road No. 201, Dwarka              Rajapuri to Madhu Vihar                 Mundka to Tikri Border /"
+2024,131,82,Rohtak Road,Mundka Metro Station / Mundka,2024-07-04;2024-07-09;2024-08-07;2024-08-08;2024-08-09;2024-09-02;2024-09-04;2024-09-10;2024-09-14,Rohtak Road                       Mundka Metro Station / Mundka         Red light                                   Nangloi to Mundka / Mundka to
+2024,132,82,Rohtak Road,Rajdhani Park / Rajdhani Park,2024-08-11;2024-08-12;2024-08-20;2024-08-23;2024-09-07,Rohtak Road                       Rajdhani Park / Rajdhani Park  to Mundka both carriageway     Nangloi      to     Peeragarhi
+2024,133,82,Rohtak Road,08.08.2024,2024-06-27;2024-07-15;2024-08-08,Rohtak Road                                                             carriageway Peeragarhi Chowk / Slip Road          Peeragarhi    Chowk    towards
+2024,134,82,Rohtak Road,,2024-08-07;2024-08-20,Rohtak Road Punjabi Bagh while coming from        Mangolpuri side                       Rajdhani Park to Mundka Metro
+2024,135,82,Rohtak Road,29.08.2024,2024-08-29,Rohtak Road                                                             Station
+2024,136,82,Saket Road,A01 Block,2024-06-28,Saket Road                        A01 Block
+2024,137,82,Sardar Patel Marg,Taj Place to Dhaula Kuan,2024-07-26,Sardar Patel Marg                 Taj Place to Dhaula Kuan
+2024,138,82,Satya Marg,Satya Marg,2024-07-26;2024-08-11,Satya Marg                        Satya Marg                            Adjacent to Dwarka Sector 14
+2024,139,82,"Sector 14 Road, Dwarka","Metro Station (both side), slip",2024-08-12;2024-08-13,"Sector 14 Road, Dwarka            Metro Station (both side), slip       roads provided for ‘U’ turns          Near Metro Pillar No. 950A near"
+2024,140,82,"Sector 14 Road, Dwarka",11.08.2024,2024-08-11,"Sector 14 Road, Dwarka                                                  roundabout Vegas Mall"
+2024,141,82,"Sector 14 Road, Dwarka",Near Vegas Mall,2024-07-31,"Sector 14 Road, Dwarka            Near Vegas Mall"
+2024,142,82,"Sector 14 Road, Dwarka",Roundabout Golf Course Road,2024-07-31;2024-08-29,"Sector 14 Road, Dwarka            Roundabout Golf Course Road           🖷🖷 to Metro Station Dwarka Sector 14 Roundabout Raddison Blu to Roundabout Vegas Mall (both inclusive), near EROS Mall /"
+2024,143,83,"Sector-13 Road, Dwarka",,2024-09-14,"Sector-13 Road, Dwarka Sector 13 Metro Station, MCD                Parking, Park near R/A Vegas Mall Near Metro Pillar No. 950A near"
+2024,144,83,"Sector-14 Road, Dwarka",29.08.2024,2024-08-13;2024-08-29,"Sector-14 Road, Dwarka                                                Round About Vegas Mall Shahid Bhagat Singh Marg, Foot of Janak Setu starting from            145. Delhi Cantt.              Delhi Cantt. side                           At"
+2024,146,83,Pankha Road,12.09.2024,2024-09-12,Pankha Road                                                           towards Janak Cinema
+2024,147,83,Parade Road,Parade Road Gate No. 3,2024-09-15,Parade Road                     Parade Road Gate No. 3
+2024,148,83,Sikandra Marg,Roundabout Mandi House,2024-07-27,Sikandra Marg                   Roundabout Mandi House
+2024,149,83,Teen Murti Marg,Teen Murti,2024-06-28,Teen Murti Marg                 Teen Murti
+2024,150,83,Tilak Marg,"Tilak Bridge, near ITO",2024-06-28,"Tilak Marg                      Tilak Bridge, near ITO"
+2024,151,83,TT Park Road,Central Market,2024-08-29,TT Park Road                    Central Market
+2024,152,83,Tuglak Road,Roundabout Tuglak Road,2024-07-03,Tuglak Road                     Roundabout Tuglak Road
+2024,153,83,Ulan Batar Marg,Nav Sena Bhawan,2024-07-18,Ulan Batar Marg                 Nav Sena Bhawan
+2024,154,83,Ulan Batar Marg,Near Raksha Sampda Bhawan,2024-06-28;2024-07-10;2024-07-24,Ulan Batar Marg                 Near Raksha Sampda Bhawan              Under Zakhira flyover / Zakhira
+2024,155,83,Veer Banda Bairagi Marg,,2024-07-31;2024-08-23,Veer Banda Bairagi Marg underpass
+2024,156,83,Vivekanand Marg,"Sector 1, RK Puram",2024-06-28,"Vivekanand Marg                   Sector 1, RK Puram"
+2024,157,83,Outer Ring Road,Paras Cinema,2024-09-02,Outer Ring Road                   Paras Cinema                          MB Road (Mehrauli – Badarpur
+2024,158,83,SDM South Office,02.09.2024,2024-09-02,SDM South Office                      Road)
+2024,159,83,Ring Road,Safdarjung to Dhaula Kuan,2024-09-04,Ring Road                         Safdarjung to Dhaula Kuan
+2024,160,83,Ring Road,Shanti Niketan,2024-09-06,Ring Road                         Shanti Niketan                        Delhi Gate Chawala Stand
+2024,161,83,Najafgarh Road,10.09.2024,2024-09-10,Najafgarh Road                                                          Khaira Mor and Sainik Enclave On the carriageway from Mangolpuri          B-Block
+2024,162,83,Road No. 201,10.09.2024,2024-09-10,Road No. 201                                                            Roundabout       to    TVS Showroom
+2024,163,83,Shiv Das Puri Marg,Punjabi Bagh Bus Stand,2024-09-10,Shiv Das Puri Marg                Punjabi Bagh Bus Stand
+2024,164,83,Dada Maheshwar Road,Karala to Mundka,2024-09-10,Dada Maheshwar Road               Karala to Mundka                      MB    Road    (Mehrauli     –
+2024,165,83,Metro Station Western Marg,14.09.2024,2024-09-14,Metro Station Western Marg            Badarpur Road) 🖷🖷

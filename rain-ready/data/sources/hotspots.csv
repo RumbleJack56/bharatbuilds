@@ -1,0 +1,7 @@
+id,name,kind,fco_rows,design_cusec_per_acre,docs,note
+LP-KBM,Pusa Road at Karol Bagh Metro Station,other,2023:164,0.7,D76-ROUTE;D76-DESIGN,"Waterlogging place named in the FCO (Pusa Road, Karol Bagh Metro Station)."
+LP-JHB,Bagga Link / Jhandewalan roundabout (Dayal Chowk),other,2022:11;2022:88;2023:165;2023:166;2024:13,0.7,D76-DESIGN,"Rows merged by place name: Bagga Link, Dayal Chowk and the Jhandewalan roundabout are one place in 2022 #88 and 2023 #166. 2024 #13 is merged by the same phrase (the row's table columns are swapped in the PDF)."
+LP-FIL,Rani Jhansi Road at Filmistan,other,2022:12;2023:178,0.7,D76-FIL;D76-DESIGN,FCO calls the road Rani Jhansi Marg.
+LP-ANP,New Rohtak Road at Anand Parbat (foot of Zakhira Flyover),other,2022:9;2023:121;2023:122,0.7,D76-ANP;D76-DESIGN,2023 #122 (Under Zakhira Flyover) is included as the same structure. This place is about 400 m north of the pilot bbox.
+LP-EPN,"East Patel Nagar bus stand, Dr K S Krishnan Marg",other,2024:14,0.6,D76-PATEL;D76-EPN,FCO gives the carriageway going towards Ratanpuri; the four OSM bus stops of that name are used.
+LP-ORN,Old Rajinder Nagar low point (Bazaar Marg),saucer,,0.7,D76-ROUTE;D76-BARREL;D76-SILT;D24-SAUCER;D24-BARREL;D24-SILT;D24-HC;D24-RESIDENTS,"From reported findings of the 2024 inquiry, not from an FCO list (no FCO row names this area). The exact low point is not published."
