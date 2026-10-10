@@ -37,3 +37,7 @@ A manual purge (Caching, Configuration, Purge Everything) also works but must be
 | Photos 403 | bucket private: they load via `/media/` pre-signed redirect; check the IAM role |
 | Bedrock denied | model access, region or quota |
 | Data lost on redeploy | `./var` not mounted |
+
+## Persona keys
+
+Set `PERSONA_KEYS=admin-1:<key>,off-mcd:<key>,off-pwd:<key>` in the server `.env` (one `openssl rand -hex 16` each) to stop strangers using the admin and official personas on a public URL. The web must send each key as `X-Persona-Key` first (Aarush). Turn it on only after that ships; with it on, an old client gets 401 on official and admin actions. Keys are not in the repo.

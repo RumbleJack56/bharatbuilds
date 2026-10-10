@@ -139,6 +139,8 @@ If time allows:
 - [x] B31 After-photo stamp checks: allow officials on `GET /api/capture-token`; `POST /api/tasks/{id}/complete` accepts `lat`, `lon`, `accuracy_m`, `capture_token` and returns the same flags as a report. Report item 5. Biggest backend item; Aarush then adds the token call to the after-photo flow
 - [x] B32 Note that `DOMAIN` may list several hosts (comma separated) in `.env.example` and `docs/DEPLOY.md`. Report item 7
 - [x] B33 Refresh demo docs at the reference rain: run `make demo` against a local server on a scratch DB for `docs/DEMO_RUN.md`; recompute the PITCH scenario numbers; fix stale lines (`docs/DATA.md` "do not copy the candidate seed", `docs/PITCH.md` "not yet checked in a browser", `docs/DEMO_FLOW.md` narration at 35 mm/h, the TODO in `rain-ready/README.md`)
+- [x] B34 Persona keys: `PERSONA_KEYS` makes officials and admins send `X-Persona-Key` (off by default, so the web keeps working). Aarush: send the header; Ujjwal: set the keys on the server after that ships
+- [x] B35 Illustrative silt series for the demo chart: `silt_curve_illustrative` (`GET /api/projection`) and `silt_series_illustrative` (`GET /api/assets/{id}`), seeded wobble, labelled, never used in ranking. `--demo` history leaves 5 of 9 drains with a clean date so the silt estimates differ
 
 Known and accepted for the demo: persona header auth (anyone with the URL can act as admin; cover is the hourly backup and a fresh AMI), one shared SQLite connection with no rollback.
 

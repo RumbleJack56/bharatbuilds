@@ -19,3 +19,18 @@ CAPTURE_SECRET = os.getenv("CAPTURE_SECRET", "")        # signs capture tokens; 
 CAPTURE_MAX_AGE_S = int(os.getenv("CAPTURE_MAX_AGE_S", "900"))
 REQUIRE_LIVE_CAPTURE = os.getenv("REQUIRE_LIVE_CAPTURE", "0") == "1"   # 1: a report photo without a valid capture token is held
 REPORTS_PER_DAY = int(os.getenv("REPORTS_PER_DAY", "20"))            # per user, rolling 24 h; stops report floods
+
+
+def parse_persona_keys(text: str) -> dict[str, str]:
+    """'admin-1:key1,off-mcd:key2' -> {'admin-1': 'key1', 'off-mcd': 'key2'}. Malformed or empty pairs are skipped."""
+    out = {}
+    for pair in text.split(","):
+        who, _, key = pair.strip().partition(":")
+        if who.strip() and key.strip():
+            out[who.strip()] = key.strip()
+    return out
+
+
+# Officials and admins must send their key in X-Persona-Key when this is set. Empty: header-only demo auth (local, tests).
+# Residents stay open: the product takes reports from anyone. Set on the server; never commit a value.
+PERSONA_KEYS = parse_persona_keys(os.getenv("PERSONA_KEYS", ""))
