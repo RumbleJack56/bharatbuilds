@@ -64,9 +64,8 @@ def test_token_roundtrip_and_rejections():
     assert capture.verify(None, "res-1") is None and capture.verify("junk", "res-1") is None
 
 
-def test_token_endpoint_needs_a_resident(client):
-    assert client.get("/api/capture-token").status_code == 401
-    assert client.get("/api/capture-token", headers=as_("off-mcd")).status_code == 403
+def test_token_endpoint_needs_a_login(client):
+    assert client.get("/api/capture-token").status_code == 401        # officials get one too, for the after photo (B31)
     j = client.get("/api/capture-token", headers=as_("res-1")).json()
     assert capture.verify(j["token"], "res-1") == j["ref"]
 

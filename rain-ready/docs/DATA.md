@@ -49,7 +49,7 @@ How a point is placed (`scripts/signals.py`, tested):
 - **Drain capacity**: `drain_mm_h` is the 1976 design unit discharge converted from cusec per acre (0.7 gives 17.6 mm/h). Catchment, runoff coefficient and storage stay scenario defaults and the pocket note says so.
 - **Linked drains**: only the primary drain of a pocket is linked. A pocket's drainage is limited by its worst linked drain, so linking two would make cleaning either one worth 0 h in the simulator.
 
-Do not copy `data/seed.candidate.json` over `data/seed.json` until `tests/` and `web/` fixtures stop depending on the placeholder ids (`DR-RN-001`, `LP-RN-1`) and coordinates. Do not commit `data/raw/pwd_roads.json` if the PWD API terms change; it holds no contact fields.
+`data/seed.json` is this pipeline's output (the candidate was promoted; tests use `data/seed.placeholder.json` through `SEED_PATH`). Do not commit `data/raw/pwd_roads.json` if the PWD API terms change; it holds no contact fields.
 
 ## Seed, database and EDA (v4)
 - `data/seed.json` is the real seed (9 drains, 6 pockets, from the pipeline above). `data/seed.placeholder.json` is the old placeholder set: tests use it, and so can UI work (`SEED_PATH=data/seed.placeholder.json make run`). `app/config.py` reads `SEED_PATH`.

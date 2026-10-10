@@ -25,6 +25,9 @@ export BUCKET=rainready-photos-896128818776
 export EC2_ROLE=rainready-ec2
 export GH_REPO=RumbleJack56/bharatbuilds
 export GH_ROLE=rainready-github-deploy
+# This repo uses GitHub's immutable OIDC subject (owner and repo ids in the claim). If it changes:
+#   gh api repos/$GH_REPO/actions/oidc/customization/sub --jq .sub_claim_prefix
+export GH_SUB_IMMUTABLE="repo:RumbleJack56@57482148/bharatbuilds@1412276053"
 SSH="ssh -i rain-ready/rainready.pem ec2-user@$IP"
 APP=bharatbuilds/rain-ready     # the app directory on the server
 ```
@@ -71,7 +74,7 @@ aws iam create-open-id-connect-provider \
 
 ### 3.3 Deploy role for GitHub
 
-Only workflows on the `main` branch of this one repo can use the role.
+Only workflows on the `main` branch of this one repo can use the role. The trust policy lists both subject formats: the classic `repo:<owner>/<repo>` and the immutable one with owner and repo ids. With only the classic one the deploy job fails with `Not authorized to perform sts:AssumeRoleWithWebIdentity`.
 
 ```bash
 cat > /tmp/gh-trust.json <<EOF
@@ -80,7 +83,9 @@ cat > /tmp/gh-trust.json <<EOF
  "Action":"sts:AssumeRoleWithWebIdentity",
  "Condition":{"StringEquals":{
    "token.actions.githubusercontent.com:aud":"sts.amazonaws.com",
-   "token.actions.githubusercontent.com:sub":"repo:$GH_REPO:ref:refs/heads/main"}}}]}
+   "token.actions.githubusercontent.com:sub":[
+     "repo:$GH_REPO:ref:refs/heads/main",
+     "$GH_SUB_IMMUTABLE:ref:refs/heads/main"]}}}]}
 EOF
 cat > /tmp/gh-policy.json <<EOF
 {"Version":"2012-10-17","Statement":[
@@ -98,7 +103,14 @@ aws iam put-role-policy --role-name $GH_ROLE --policy-name deploy --policy-docum
 aws iam get-role --role-name $GH_ROLE --query Role.Arn --output text
 ```
 
-**Check:** the last command prints `arn:aws:iam::896128818776:role/rainready-github-deploy`.
+**Check:** the last command prints `arn:aws:iam::896128818776:role/rainready-github-deploy`, and
+`aws iam get-role --role-name $GH_ROLE --query "Role.AssumeRolePolicyDocument.Statement[0].Condition.StringEquals"` lists two `sub` values.
+
+If the GitHub `deploy` job already failed with `Not authorized to perform sts:AssumeRoleWithWebIdentity`, re-running the block above repairs it (`update-assume-role-policy` replaces the trust policy). Then run `gh workflow run test --repo $GH_REPO --ref main` and check the `deploy` job.
+
+**This cannot be fixed from the GitHub side.** The repo's OIDC subject is immutable (it carries the owner and repo ids). Tested on 10 Oct: the customization API ignores `use_immutable_subject=false`, and a custom template built from the `repo` and `context` claim keys still produces the immutable prefix. Only the role's trust policy can change. The command replaces the whole trust policy, so it works whatever the role holds now.
+
+No AWS CLI on the machine? Open **AWS CloudShell** (the terminal icon in the console's top bar, region `ap-south-1`). It has the CLI and the console login. Paste the block from section 1 and the block above.
 
 ### 3.4 Test one deploy by hand
 
