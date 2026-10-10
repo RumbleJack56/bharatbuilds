@@ -19,12 +19,11 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `POST /api/incidents/{id}/review` | admin | JSON `{decision: "release"\|"reject", note}`. Release creates or bumps the task for the linked drain. Reject keeps the report visible and uncounted. 404 unknown id; 409 not held, already reviewed, or no linked drain on release |
 | `GET /api/tasks?agency_id=&status=` | public | ranked tasks. `agency_id=none` lists tasks with no owner |
 | `GET /api/tasks/{id}` | public | task with `events` (timeline), `incidents` and `banner` |
-| `POST /api/tasks/{id}/accept` | official of the agency, admin | open -> accepted |
+| `POST /api/tasks/{id}/accept` | official of the agency, admin | open -> accepted; also disputed -> accepted (rework: clears `done_by`, event note "to be redone ...") |
 | `POST /api/tasks/{id}/reject` | official of the agency, admin | `{reason, reassign_to?}`; with a target it bounces to that agency and stays open |
 | `POST /api/tasks/{id}/assign` | admin | `{agency_id}` for tasks with no owner |
 | `POST /api/tasks/{id}/complete` | official of the agency, admin | multipart: `photo` (required), `note` -> done. The after-photo is checked like a report photo; `flags` appear on the `completed` event. 422 when the file is not a readable image |
 | `POST /api/tasks/{id}/confirm` | resident (not the one who did the work, and not the one who raised the task) | `{ok, note}` -> confirmed or disputed; confirmed resets the drain's silt estimate. 403 for the person who did the work or who made the first report on the task. A resident who added a later report may confirm |
-| `POST /api/tasks/{id}/reopen` | official of the agency, admin | `disputed` -> `accepted` (event `reopened`), so the owner can complete it again with a new after-photo. 409 unless the task is disputed |
 | `POST /api/plan/generate?top=5` | admin | create tasks for the top-ranked drains with no live task |
 | `GET /api/accountability` | public | per agency: assets owned, tasks by status, overdue, bounced away, median hours to accept and complete; includes the "No owner found" row (`agency_id: null`) |
 | `GET /api/insights` | public | rule-based facts: `[{id, text, why, evidence}]` with `banner`. Rules: reports near a drain with no owner; an agency that bounced 3 or more tasks; a silted, unassigned drain in a fast-filling pocket; a task more than 3 days overdue; a drain of the fastest pocket not confirmed clean for 60 days. Placeholder rows say "placeholder data" |
@@ -33,7 +32,7 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `GET /api/opportunities` | public | rain-capture candidates with decision, rule id, m3/year |
 | `GET /media/{key}` | public | photo (S3 pre-signed redirect when `STORAGE=s3`) |
 
-**Task lifecycle:** `open -> accepted -> done -> confirmed | disputed`; `disputed -> accepted` through `reopen`. A bounce stays `open` under the new agency. A reject with no target is `rejected`. Every step writes a `task_events` row.
+**Task lifecycle:** `open -> accepted -> done -> confirmed | disputed`; `disputed -> accepted` through `accept` (rework; `done_by` is cleared). A bounce stays `open` under the new agency. A reject with no target is `rejected`. Every step writes a `task_events` row.
 
 **Errors:** JSON `{"detail": "..."}`. 401 no persona, 403 wrong role or agency, 409 wrong status, 422 bad input, 404 unknown id.
 

@@ -104,7 +104,7 @@ From the backend review of 10 Oct. Each fix needs a test. Keep changes additive.
 Do first (demo blocker and loop bugs):
 
 - [x] B13 **Photos 403 on the live site (blocks the video).** `app/storage.py` signs for the global S3 host. Use one regional client (`endpoint_url=https://s3.<region>.amazonaws.com`, `signature_version="s3v4"`, virtual addressing; exact line in `PLAN.md` section 7 item 8) in `presigned()`, `save_photo()` and `app/checks.py`
-- [x] B14 **A disputed task is a dead end.** Every action returns 409 and new reports attach to the dead task. Done: `POST /api/tasks/{id}/reopen` by the owning official or admin, `disputed` to `accepted`, event `reopened`. Aarush: V11
+- [x] B14 **A disputed task is a dead end.** Every action returns 409 and new reports attach to the dead task. Done: `accept` also takes a `disputed` task (rework: `disputed` to `accepted`, `done_by` cleared, note "to be redone ..."). No new endpoint. Aarush: V11
 - [x] B15 **The reporter can confirm their own report.** The check in `confirm` compares with `done_by`, which is never a resident. Block the resident who made the first report on the task; 403 with a plain message. A later reporter may confirm (the demo loop needs a second resident). Done in branch `ujjwal/backend-fixes`
 - [x] B16 **A file that is not an image passes as a report photo.** Done as 422 "the photo could not be read as an image" on both report and after-photo; nothing is stored
 - [x] B17 **The photo is stored before the report is checked.** Validate `kind` and read the image first; save to storage last. Stops orphan objects and the upload path that skips the rate limit
@@ -140,7 +140,7 @@ Known and accepted for the demo: persona header auth (anyone with the URL can ac
 - [ ] V8 Screenshots and clean empty states for the video
 - [ ] V9 Photo capture camera, stamp, token, flags display (section 4, "what the backend now needs")
 - [ ] V10 Shrink the photo on the phone before upload (longest side about 1600 px, JPEG, under 2 MB), after the stamp is drawn. Bedrock cannot read large images (B19). `PLAN.md` section 6 has the adapter slot
-- [ ] V11 Disputed tasks: when B14 lands, show a disputed task in the official inbox with its reason and a "Take it up again" button
+- [ ] V11 Disputed tasks: when B14 lands, show a disputed task in the official inbox with its reason and the existing Accept button (the task is `disputed`; accept sends it back to `accepted`)
 - [ ] V12 Confirm screen: show the plain 403 message when the reporter tries to confirm their own report (B15), and the 422 "could not be read as an image; please take it again" message when a photo cannot be read (B16)
 
 AWS work (Aarush owns the account). The full AWS CLI playbook, written so an agent can run it, is `docs/AWS_TODO.md`. Fill in its section 10 and send it to Ujjwal.

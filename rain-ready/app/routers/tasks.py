@@ -81,10 +81,13 @@ def _set(db, tid: int, **cols) -> None:
 
 @router.post("/tasks/{tid}/accept")
 def accept(tid: int, user=Depends(need("official", "admin")), db=Depends(get_db)):
-    t = _task(db, tid); _own(user, t); _need_status(t, "open")
+    t = _task(db, tid); _own(user, t); _need_status(t, "open", "disputed")      # a disputed job is redone: accept it again
     if not t["agency_id"]:
         raise HTTPException(409, "no owner found: an admin must assign an agency first")
-    _set(db, tid, status="accepted"); service.log_event(db, tid, user["id"], "accepted", agency_id=t["agency_id"]); db.commit()
+    rework = t["status"] == "disputed"
+    _set(db, tid, status="accepted", done_by=None if rework else t["done_by"])
+    service.log_event(db, tid, user["id"], "accepted", "to be redone after a resident disputed the job" if rework else None,
+                      agency_id=t["agency_id"]); db.commit()
     return _out(db, _task(db, tid), True)
 
 
@@ -138,15 +141,6 @@ async def complete(tid: int, note: str = Form(""), photo: UploadFile = File(...)
     key = storage.save_photo(data, ctype)
     _set(db, tid, status="done", done_by=user["id"])
     service.log_event(db, tid, user["id"], "completed", note[:300], key, t["agency_id"], phash, flags); db.commit()
-    return _out(db, _task(db, tid), True)
-
-
-@router.post("/tasks/{tid}/reopen")
-def reopen(tid: int, user=Depends(need("official", "admin")), db=Depends(get_db)):
-    """A disputed fix goes back to the owning agency: disputed -> accepted, so it can be completed again."""
-    t = _task(db, tid); _own(user, t); _need_status(t, "disputed")
-    _set(db, tid, status="accepted")
-    service.log_event(db, tid, user["id"], "reopened", "taken up again after a dispute", agency_id=t["agency_id"]); db.commit()
     return _out(db, _task(db, tid), True)
 
 

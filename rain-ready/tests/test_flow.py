@@ -103,27 +103,28 @@ def _disputed(client):
     return tid
 
 
-def test_disputed_task_can_be_taken_up_again_and_confirmed(client):
+def test_disputed_task_is_accepted_again_and_confirmed(client):
     tid = _disputed(client)
-    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-pwd")).status_code == 403     # other agency
-    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("res-2")).status_code == 403
-    r = client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-mcd"))
-    assert r.status_code == 200 and r.json()["status"] == "accepted"
-    assert r.json()["events"][-1]["event"] == "reopened"
-    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-mcd")).status_code == 409    # not disputed any more
+    assert client.post(f"/api/tasks/{tid}/accept", headers=as_("off-pwd")).status_code == 403     # other agency
+    assert client.post(f"/api/tasks/{tid}/accept", headers=as_("res-2")).status_code == 403
+    r = client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
+    assert r.status_code == 200 and r.json()["status"] == "accepted" and r.json()["done_by"] is None
+    assert r.json()["events"][-1]["note"].startswith("to be redone")
+    assert client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd")).status_code == 409    # not open or disputed now
     client.post(f"/api/tasks/{tid}/complete", data={"note": "again"}, files=photo(), headers=as_("off-mcd"))
-    c = client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-2")).json()
-    assert c["status"] == "confirmed"
+    assert client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-2")).json()["status"] == "confirmed"
 
 
-def test_admin_can_reopen(client):
+def test_admin_can_accept_a_disputed_task_for_the_agency(client):
     tid = _disputed(client)
-    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("admin-1")).status_code == 200
+    assert client.post(f"/api/tasks/{tid}/accept", headers=as_("admin-1")).json()["status"] == "accepted"
 
 
-def test_reopen_needs_a_disputed_task(client):
+def test_done_task_cannot_be_accepted(client):
     tid = report(client).json()["task_id"]
-    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-mcd")).status_code == 409
+    client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
+    client.post(f"/api/tasks/{tid}/complete", data={}, files=photo(), headers=as_("off-mcd"))
+    assert client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd")).status_code == 409
 
 
 def test_report_validation(client):
