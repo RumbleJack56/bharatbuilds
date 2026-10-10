@@ -43,7 +43,7 @@ export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml
     catch { if (!ran) await swap(); }                        // a failed transition must still leave the new route rendered
     shown = true;
     if (stale() || redirected) return;
-    root.focus();
+    root.focus({ preventScroll: true });   // plain focus() scrolls the page under the sticky top bar
     ctx.glass?.refresh();                               // re-snapshot the lens background once the view and its images settle
   }
   return {

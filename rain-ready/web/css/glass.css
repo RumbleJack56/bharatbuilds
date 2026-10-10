@@ -26,6 +26,7 @@ button:active,.btn:active{transform:scale(.97)}
 button.primary,.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--accent-ink);border-color:transparent;font-weight:700}
 button.link{border:0;background:none;color:var(--accent);padding:4px 8px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#view:focus-visible{outline:none}                    /* router focuses the view container on navigation; it is not an interactive control */
 input::placeholder,textarea::placeholder{color:var(--fg-muted)}
 .sub{border-radius:var(--radius);padding:4px;gap:4px}
 .sub a{border:0;background:none;color:var(--fg);border-radius:var(--radius-sm);transition:background var(--dur-fast) var(--ease)}

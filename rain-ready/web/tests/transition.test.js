@@ -172,3 +172,11 @@ test("adapter: a skipped transition (ready/finished reject with AbortError) rais
   } finally { process.off("unhandledRejection", h); }
   assert.deepEqual(seen, []);
 });
+
+test("router: focusing the new view must not scroll the page (a sticky top bar would hide the page title)", async () => {
+  env("#/a");
+  const args = [], { router, root } = mkRt([{ path: "a", roles: null, mount: async () => {} }], passThrough);
+  root.focus = (...a) => args.push(a);
+  await router.start();
+  assert.deepEqual(args, [[{ preventScroll: true }]]);
+});

@@ -55,3 +55,4 @@ test("E2: the toast clears the fixed tab bar at <= 640 px and honours the safe-a
   const m = css("app.css").match(/\.toast\{[^}]*bottom:calc\((\d+)px \+ env\(safe-area-inset-bottom\)\)/);
   assert.ok(m && Number(m[1]) >= 56 + 8, "tab bar is min 56 px tall plus border");
 });
+test("the programmatically focused view container shows no focus ring (it is not a control)", () => assert.match(css("glass.css"), /#view:focus-visible\{outline:none\}/));

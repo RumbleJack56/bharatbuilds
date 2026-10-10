@@ -1,5 +1,5 @@
 // web/js/core/glass.js — pure rules for picking the glass implementation. No window access: main.js builds env.
-export const PHONE_LIQUID = true;   // Task 6 sets this to false if the measured phone median frame is > 33 ms
+export const PHONE_LIQUID = false;   // Task 6: lens looked wrong on phones in headless liquid mode (doubled text behind the bars, bright tab bar); ?glass=liquid still opts in
 
 // env: { hasLiquid, hasGL, reducedMotion, deviceMemory (number|undefined), search, phone }
 export function chooseGlass(env, phoneLiquid = PHONE_LIQUID) {
