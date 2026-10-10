@@ -20,7 +20,8 @@ export function createMediaCamera(doc, nav = globalThis.navigator) {
       shoot.setAttribute("aria-label", "Capture photo");
       const cancel = el("button", { type: "button", className: "big", textContent: "Cancel" });
       cancel.setAttribute("aria-label", "Cancel and close camera");
-      const bar = el("div", { className: "cam-bar" });
+      const bar = el("div", { className: "cam-bar glass-strong lg" });
+      bar.setAttribute("data-lg-css", "");
       bar.append(cancel, shoot); ov.append(video, bar); doc.body.append(ov);
       return new Promise((resolve, reject) => {
         const close = () => { doc.removeEventListener?.("keydown", onKey); stream.getTracks().forEach(t => t.stop()); ov.remove(); };

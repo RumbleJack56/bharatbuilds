@@ -19,3 +19,5 @@ export async function guard(btn, fn, onError) {
   btn.disabled = true;
   try { return await fn(); } catch (e) { onError(e.message || String(e)); } finally { btn.disabled = false; }
 }
+// Style attribute for the n-th list item: --i drives the fade-up delay (30 ms steps, capped at 8 items).
+export const stagger = (i) => `style="--i:${Math.min(7, Math.max(0, Number(i) | 0))}"`;

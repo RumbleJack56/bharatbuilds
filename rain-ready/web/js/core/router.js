@@ -11,8 +11,8 @@ export function resolve(controllers, name, role) {
   return { controller: c };
 }
 
-export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml }) {
-  let cleanup = null, seq = 0;
+export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml, transition = { run: (fn) => fn() } }) {
+  let cleanup = null, seq = 0, shown = false;
   async function render() {
     const my = ++seq, stale = () => my !== seq;
     const { name, params } = parseHash(location.hash);
@@ -23,19 +23,28 @@ export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml
     if (hit.redirect && location.hash !== target) { location.hash = target; return; }
     const controller = hit.controller || controllers.find(c => c.path === "login");
     onChrome(me, location.hash);
-    if (cleanup) { cleanup(); cleanup = null; }
-    const host = document.createElement("div");      // a stale render writes into a host nobody sees
-    root.replaceChildren(host);
-    let done = null;
-    try { done = (await controller.mount(host, ctx, params)) || null; }
-    catch (e) {
-      if (stale()) return;
-      if (e && e.status === 401) { ctx.services.session.logout(); location.hash = "#/login"; return; }
-      host.innerHTML = errorHtml(e);
-    }
-    if (stale()) { if (done) done(); return; }
-    cleanup = done;
-    root.focus();
+    let ran = false, redirected = false;
+    const swap = async () => {
+      ran = true;
+      if (cleanup) { try { cleanup(); } catch (e) { console.error(e); } cleanup = null; }
+      const host = document.createElement("div");      // a stale render writes into a host nobody sees
+      root.replaceChildren(host);
+      let done = null;
+      try { done = (await controller.mount(host, ctx, params)) || null; }
+      catch (e) {
+        if (stale()) return;
+        if (e && e.status === 401) { ctx.services.session.logout(); location.hash = "#/login"; redirected = true; return; }
+        host.innerHTML = errorHtml(e);
+      }
+      if (stale()) { if (done) done(); return; }
+      cleanup = done;
+    };
+    try { await (shown ? transition.run(swap) : swap()); }   // first paint is not animated
+    catch { if (!ran) await swap(); }                        // a failed transition must still leave the new route rendered
+    shown = true;
+    if (stale() || redirected) return;
+    root.focus({ preventScroll: true });   // plain focus() scrolls the page under the sticky top bar
+    ctx.glass?.refresh();                               // re-snapshot the lens background once the view and its images settle
   }
   return {
     start() { addEventListener("hashchange", render); return render(); },

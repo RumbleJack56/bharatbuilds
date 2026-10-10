@@ -1,0 +1,27 @@
+/* web/css/tokens.css — design tokens, reset, body and the static monsoon backdrop. Contrast is gated by web/tests/contrast.test.js. */
+:root{
+  color-scheme:dark;
+  --bd-1:#0b1220;--bd-2:#0f2a3a;--bd-3:#123f4a;
+  --bd-darkest:#0b1220;--bd-brightest:#3c93a4;   /* brightest = --bd-3 under two overlapping blobs at --blob-a */
+  --blob:#5ad1e6;--blob-a:.35;
+  /* glass stays translucent (.62 / .56); contrast on the brightest backdrop is met by lightening level text colours, not by opacity */
+  --glass-bg:rgba(20,32,48,.62);--glass-bg-strong:rgba(16,26,40,.72);--lg-tint:rgba(8,14,24,.56);
+  --glass-border:rgba(255,255,255,.14);--field-border:rgba(255,255,255,.45);
+  --glass-blur:16px;--glass-sat:140%;--radius:18px;--radius-sm:12px;
+  --shadow:0 8px 32px rgba(0,0,0,.35);--hl:inset 0 1px 0 rgba(255,255,255,.08);
+  --fg:#eef4f8;--fg-muted:#a9bccb;--accent:#5ad1e6;--accent-2:#3aa6e0;--accent-ink:#06121e;
+  --high:#ffa093;--high-dot:#ff7a6b;--elev:#ffb547;--low:#5ad1a0;--info:#8cbfff;--watch:#e6d36a;
+  --warn-bg:rgba(255,181,71,.16);--warn-ink:#ffe2b0;--err-bg:rgba(255,122,107,.16);--err-ink:#ffd2cd;
+  --ease:cubic-bezier(.2,.8,.2,1);--dur-fast:120ms;--dur:220ms;--top-h:60px;
+  /* legacy names still used by app.css and inline styles */
+  --bg:var(--bd-1);--card:var(--glass-bg);--ink:var(--fg);--mute:var(--fg-muted);--line:var(--glass-border);--none:var(--fg-muted);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:linear-gradient(160deg,var(--bd-1) 0%,var(--bd-2) 55%,var(--bd-3) 100%) fixed}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;font:16px/1.45 system-ui,sans-serif;color:var(--fg);background:transparent;
+  padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;width:60vmax;height:60vmax;border-radius:50%;opacity:var(--blob-a);will-change:transform;
+  background:radial-gradient(circle at 50% 50%,var(--blob),transparent 65%)}
+.blob.b1{left:-20vmax;top:-18vmax}.blob.b2{right:-26vmax;top:30vh}.blob.b3{left:8vw;bottom:-32vmax}
+[hidden]{display:none!important}                       /* B-2: a display rule must never beat the hidden attribute */

@@ -1,6 +1,5 @@
 // web/js/controllers/dashmap.js — map pane: pockets as labelled pixel-radius circles (B-1), drains, ranked tasks.
-import { mapLegend, pocketPopup, assetPopup, taskPopup } from "../views/dash.view.js";
-import { LEVEL } from "../ui/copy.js";
+import { mapLegend, pocketCircle, pocketPopup, assetPopup, taskPopup } from "../views/dash.view.js";
 
 export async function mapPane(pane, ctx) {
   const d = await ctx.services.dashboard.map();
@@ -9,8 +8,8 @@ export async function mapPane(pane, ctx) {
   const view = ctx.map.create(pane.querySelector("#m"));
   const pts = [];
   d.pockets.forEach(p => {
-    const [color, label] = LEVEL[p.level] || LEVEL.none;
-    view.circle([p.lat, p.lon], { color, radiusPx: 14, label: `${p.name}: ${label}`, popup: pocketPopup(p) });
+    const [at, o] = pocketCircle(p);
+    view.circle(at, { ...o, popup: pocketPopup(p) });
     pts.push([p.lat, p.lon]);
   });
   d.assets.forEach(a => {

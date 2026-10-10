@@ -8,7 +8,7 @@ function fakeL() {
   const live = (n) => (...a) => { if (removed) throw new TypeError("Cannot read properties of undefined (reading '_leaflet_pos')"); log.push(n); return obj; };
   const obj = { addTo: live("addTo"), bindTooltip: live("bindTooltip"), bindPopup: live("bindPopup"), setLatLng: live("setLatLng") };
   const map = { setView: live("setView"), fitBounds: live("fitBounds"), invalidateSize: live("invalidateSize"), on: live("on"), remove() { removed = true; log.push("remove"); } };
-  return { log, L: { map: () => map, tileLayer: () => obj, circleMarker: () => obj, marker: () => obj, divIcon: () => ({}) } };
+  return { log, L: { map: () => map, tileLayer: () => obj, layerGroup: () => obj, clearLayers: live("clearLayers"), circleMarker: () => obj, marker: () => obj, divIcon: () => ({}) } };
 }
 test("leaflet: every view method is a no-op after destroy and the deferred invalidate is cancelled", async () => {
   const { L, log } = fakeL(), view = createLeafletMap(L).create({});
