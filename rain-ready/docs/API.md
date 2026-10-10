@@ -12,7 +12,7 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `GET /api/agencies` | public | agency list (for reassign selects) |
 | `GET /api/map` | public | pockets (level at 35 mm/h), drains with owner and last cleaned, open tasks, capture sites, banner |
 | `POST /api/simulate` | public | `{rain_mm_h, drain_state: clean\|silted\|current, at_h}` -> pockets in fill order. Each pocket also has `time_to_fill_h_low` and `time_to_fill_h_high` (null: does not fill in that case); show "about X to Y h" with the banner and `range_note` |
-| `POST /api/incidents` | resident, admin | multipart: `lat, lon, kind, note, photo`, optional `accuracy_m` (phone GPS accuracy). Links to the nearest drain within 150 m; creates or bumps a task. Photo checks add `flags` (`code`, `level` warn or info, `detail`). A warn flag (photo geotag far from the spot, photo older than 2 days, picture already submitted) sets `held_for_review: true` (a repeat report of the same spot by the same person within 50 m and 24 h gets the warn flag `duplicate_nearby`; more than `REPORTS_PER_DAY` reports in 24 h returns 429): the report is saved and linked to the drain but does not create or bump a task |
+| `POST /api/incidents` | resident, admin | multipart: `lat, lon, kind, note, photo`, optional `accuracy_m` (phone GPS accuracy). Links to the nearest drain within 150 m; creates or bumps a task. Photo checks add `flags` (`code`, `level` warn or info, `detail`). A warn flag (photo geotag far from the spot, photo older than 2 days, picture already submitted) sets `held_for_review: true` (a repeat report of the same spot by the same person within 50 m and 24 h gets the warn flag `duplicate_nearby`; more than `REPORTS_PER_DAY` reports in 24 h returns 429): the report is saved and linked to the drain but does not create or bump a task. A photo that cannot be read as an image returns 422 and nothing is stored; nothing is stored for any refused report |
 | `GET /api/capture-token` | resident, admin | `{token, ref, issued_at, valid_for_s, server_time}`. Call just before opening the camera; send `token` as `capture_token` with the report |
 | `GET /api/incidents?mine=true` | any persona | reports. Each has `flags` and the review fields `reviewed_by`, `reviewed_at`, `review_decision`, `review_note` |
 | `GET /api/incidents?held=true` | official, admin | reports held for review and not yet decided. An official sees only reports linked to a drain of their agency |
@@ -22,8 +22,9 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `POST /api/tasks/{id}/accept` | official of the agency, admin | open -> accepted |
 | `POST /api/tasks/{id}/reject` | official of the agency, admin | `{reason, reassign_to?}`; with a target it bounces to that agency and stays open |
 | `POST /api/tasks/{id}/assign` | admin | `{agency_id}` for tasks with no owner |
-| `POST /api/tasks/{id}/complete` | official of the agency, admin | multipart: `photo` (required), `note` -> done. The after-photo is checked like a report photo; `flags` appear on the `completed` event |
-| `POST /api/tasks/{id}/confirm` | resident (not the one who did the work) | `{ok, note}` -> confirmed or disputed; confirmed resets the drain's silt estimate |
+| `POST /api/tasks/{id}/complete` | official of the agency, admin | multipart: `photo` (required), `note` -> done. The after-photo is checked like a report photo; `flags` appear on the `completed` event. 422 when the file is not a readable image |
+| `POST /api/tasks/{id}/confirm` | resident (not the one who did the work, and not the one who raised the task) | `{ok, note}` -> confirmed or disputed; confirmed resets the drain's silt estimate. 403 for the person who did the work or who made the first report on the task. A resident who added a later report may confirm |
+| `POST /api/tasks/{id}/reopen` | official of the agency, admin | `disputed` -> `accepted` (event `reopened`), so the owner can complete it again with a new after-photo. 409 unless the task is disputed |
 | `POST /api/plan/generate?top=5` | admin | create tasks for the top-ranked drains with no live task |
 | `GET /api/accountability` | public | per agency: assets owned, tasks by status, overdue, bounced away, median hours to accept and complete; includes the "No owner found" row (`agency_id: null`) |
 | `GET /api/insights` | public | rule-based facts: `[{id, text, why, evidence}]` with `banner`. Rules: reports near a drain with no owner; an agency that bounced 3 or more tasks; a silted, unassigned drain in a fast-filling pocket; a task more than 3 days overdue; a drain of the fastest pocket not confirmed clean for 60 days. Placeholder rows say "placeholder data" |
@@ -32,7 +33,7 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `GET /api/opportunities` | public | rain-capture candidates with decision, rule id, m3/year |
 | `GET /media/{key}` | public | photo (S3 pre-signed redirect when `STORAGE=s3`) |
 
-**Task lifecycle:** `open -> accepted -> done -> confirmed | disputed`. A bounce stays `open` under the new agency. A reject with no target is `rejected`. Every step writes a `task_events` row.
+**Task lifecycle:** `open -> accepted -> done -> confirmed | disputed`; `disputed -> accepted` through `reopen`. A bounce stays `open` under the new agency. A reject with no target is `rejected`. Every step writes a `task_events` row.
 
 **Errors:** JSON `{"detail": "..."}`. 401 no persona, 403 wrong role or agency, 409 wrong status, 422 bad input, 404 unknown id.
 

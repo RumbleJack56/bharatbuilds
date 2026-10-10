@@ -3,13 +3,11 @@ import json
 
 from core import copy
 
-from .conftest import as_
-
-PNG = b"\x89PNG\r\n\x1a\n" + b"0" * 64
+from .conftest import as_, fresh_photo
 
 
 def photo():
-    return {"photo": ("p.png", PNG, "image/png")}
+    return fresh_photo()
 
 
 def pocket_ttf(c, pid="LP-RN-1"):
@@ -76,12 +74,56 @@ def test_bounce_wrong_owner_and_no_owner(client):
     assert acc["mcd"]["bounced_away"] == 1
 
 
-def test_same_person_cannot_confirm_and_dispute_path(client):
+def test_reporter_cannot_confirm_or_dispute_own_report(client):
     tid = report(client).json()["task_id"]
     client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
     client.post(f"/api/tasks/{tid}/complete", data={}, files=photo(), headers=as_("off-mcd"))
-    d = client.post(f"/api/tasks/{tid}/confirm", json={"ok": False, "note": "still blocked"}, headers=as_("res-1")).json()
+    for ok in (True, False):
+        r = client.post(f"/api/tasks/{tid}/confirm", json={"ok": ok, "note": "mine"}, headers=as_("res-1"))
+        assert r.status_code == 403 and "reported" in r.json()["detail"]
+    assert client.get(f"/api/tasks/{tid}").json()["status"] == "done"
+    d = client.post(f"/api/tasks/{tid}/confirm", json={"ok": False, "note": "still blocked"}, headers=as_("res-2")).json()
     assert d["status"] == "disputed"
+
+
+def test_later_reporter_may_confirm(client):
+    tid = report(client).json()["task_id"]
+    assert report(client, "res-2").json()["task_id"] == tid       # res-2 adds a report, res-1 raised it
+    client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
+    client.post(f"/api/tasks/{tid}/complete", data={}, files=photo(), headers=as_("off-mcd"))
+    assert client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-1")).status_code == 403
+    assert client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-2")).status_code == 200
+
+
+def _disputed(client):
+    tid = report(client).json()["task_id"]
+    client.post(f"/api/tasks/{tid}/accept", headers=as_("off-mcd"))
+    client.post(f"/api/tasks/{tid}/complete", data={}, files=photo(), headers=as_("off-mcd"))
+    client.post(f"/api/tasks/{tid}/confirm", json={"ok": False, "note": "still blocked"}, headers=as_("res-2"))
+    return tid
+
+
+def test_disputed_task_can_be_taken_up_again_and_confirmed(client):
+    tid = _disputed(client)
+    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-pwd")).status_code == 403     # other agency
+    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("res-2")).status_code == 403
+    r = client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-mcd"))
+    assert r.status_code == 200 and r.json()["status"] == "accepted"
+    assert r.json()["events"][-1]["event"] == "reopened"
+    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-mcd")).status_code == 409    # not disputed any more
+    client.post(f"/api/tasks/{tid}/complete", data={"note": "again"}, files=photo(), headers=as_("off-mcd"))
+    c = client.post(f"/api/tasks/{tid}/confirm", json={"ok": True}, headers=as_("res-2")).json()
+    assert c["status"] == "confirmed"
+
+
+def test_admin_can_reopen(client):
+    tid = _disputed(client)
+    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("admin-1")).status_code == 200
+
+
+def test_reopen_needs_a_disputed_task(client):
+    tid = report(client).json()["task_id"]
+    assert client.post(f"/api/tasks/{tid}/reopen", headers=as_("off-mcd")).status_code == 409
 
 
 def test_report_validation(client):

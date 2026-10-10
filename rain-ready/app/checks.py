@@ -20,9 +20,8 @@ def aws_probe() -> dict:
     out = {}
     if config.STORAGE == "s3" and config.S3_BUCKET:
         try:
-            import boto3
-            s3 = boto3.client("s3", region_name=config.AWS_REGION)
-            s3.put_object(Bucket=config.S3_BUCKET, Key="healthcheck.txt", Body=b"ok", ContentType="text/plain")
+            from .storage import s3_client
+            s3_client().put_object(Bucket=config.S3_BUCKET, Key="healthcheck.txt", Body=b"ok", ContentType="text/plain")
             out["s3"] = "ok"
         except Exception as e:  # noqa: BLE001
             out["s3"] = f"error: {e!r}"[:300]

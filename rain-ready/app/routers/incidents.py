@@ -36,20 +36,23 @@ async def create_incident(lat: float = Form(...), lon: float = Form(...), kind: 
     sent = db.execute("SELECT COUNT(*) FROM incidents WHERE user_id=? AND created_at>=?", (user["id"], since)).fetchone()[0]
     if sent >= config.REPORTS_PER_DAY:
         raise HTTPException(429, f"You have sent {sent} reports in the last 24 hours. Please try again later.")
-    key, ai, phash, flags = None, None, None, []
+    data, ctype, ai, phash, flags = None, "", None, None, []
     if photo is not None:
-        data = await photo.read()
+        data, ctype = await photo.read(), photo.content_type or ""
         try:
-            key = storage.save_photo(data, photo.content_type or "")
+            storage.validate_photo(data, ctype)
         except ValueError as e:
             raise HTTPException(422, str(e))
-        ai = triage.triage_photo(data, photo.content_type, note)
         phash, flags = service.check_photo(db, data, lat, lon, user["id"], accuracy_m)
-        flags += service.check_stamp(data, photo.content_type, lat, lon, user["id"], capture_token)
+        if phash is None:
+            raise HTTPException(422, "the photo could not be read as an image; please take it again")
+        ai = triage.triage_photo(data, ctype, note)
+        flags += service.check_stamp(data, ctype, lat, lon, user["id"], capture_token)
     flags += service.check_duplicate(db, user["id"], lat, lon)
     kind = kind if kind in KINDS else (ai["kind"] if ai else "")
     if kind not in KINDS:
         raise HTTPException(422, f"kind is required (one of {', '.join(KINDS)}) when the photo could not be classified")
+    key = storage.save_photo(data, ctype) if data is not None else None     # last: nothing is stored for a refused report
     asset, dist = service.nearest_asset(db, lat, lon)
     task_id, pocket_id, created = None, None, False
     held = photocheck.suspect(flags)        # saved and visible, but not counted toward a task until reviewed

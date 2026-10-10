@@ -127,14 +127,26 @@ def assign(tid: int, body: AssignIn, user=Depends(need("admin")), db=Depends(get
 async def complete(tid: int, note: str = Form(""), photo: UploadFile = File(...),
                    user=Depends(need("official", "admin")), db=Depends(get_db)):
     t = _task(db, tid); _own(user, t); _need_status(t, "accepted")
-    data = await photo.read()
+    data, ctype = await photo.read(), photo.content_type or ""
     try:
-        key = storage.save_photo(data, photo.content_type or "")
+        storage.validate_photo(data, ctype)
     except ValueError as e:
         raise HTTPException(422, str(e))
     phash, flags = service.check_photo(db, data, t["lat"], t["lon"], user["id"])   # flags are shown to the confirming resident
+    if phash is None:
+        raise HTTPException(422, "the photo could not be read as an image; please take it again")
+    key = storage.save_photo(data, ctype)
     _set(db, tid, status="done", done_by=user["id"])
     service.log_event(db, tid, user["id"], "completed", note[:300], key, t["agency_id"], phash, flags); db.commit()
+    return _out(db, _task(db, tid), True)
+
+
+@router.post("/tasks/{tid}/reopen")
+def reopen(tid: int, user=Depends(need("official", "admin")), db=Depends(get_db)):
+    """A disputed fix goes back to the owning agency: disputed -> accepted, so it can be completed again."""
+    t = _task(db, tid); _own(user, t); _need_status(t, "disputed")
+    _set(db, tid, status="accepted")
+    service.log_event(db, tid, user["id"], "reopened", "taken up again after a dispute", agency_id=t["agency_id"]); db.commit()
     return _out(db, _task(db, tid), True)
 
 
@@ -148,6 +160,9 @@ def confirm(tid: int, body: ConfirmIn, user=Depends(need("resident")), db=Depend
     t = _task(db, tid); _need_status(t, "done")
     if user["id"] == t["done_by"]:
         raise HTTPException(403, "the person who did the work cannot confirm it")
+    first = db.execute("SELECT user_id FROM incidents WHERE task_id=? ORDER BY id LIMIT 1", (tid,)).fetchone()
+    if first and first["user_id"] == user["id"]:     # the person who raised it; later reporters are independent
+        raise HTTPException(403, "you reported this problem, so someone else has to check the fix")
     if body.ok:
         service.refresh_rank(db, tid)                       # gain is recorded as it stands before the reset
         db.execute("UPDATE assets SET last_confirmed_clean=? WHERE id=?", (date.today().isoformat(), t["asset_id"]))
