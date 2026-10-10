@@ -50,17 +50,18 @@ test("waitFor resolves true as soon as the predicate holds and false at the dead
 // ---- liquid adapter with a fake window ----
 const ticks = async (n = 8) => { for (let i = 0; i < n; i++) await Promise.resolve(); };
 function rig({ images = [], els = [mkEl()], liquid } = {}) {
+  const canvases = [{ style: {} }, { style: {} }];
   const timers = [], events = [], handlers = {}, calls = [];
   const root = { classes: new Set(["glass-css"]), classList: { add(c) { root.classes.add(c); }, remove(c) { root.classes.delete(c); }, contains: (c) => root.classes.has(c) } };
   const win = {
-    document: { documentElement: root, images, querySelectorAll: () => els },
-    liquidGL: liquid || ((o) => { calls.push(o); return { destroy() { this.dead = true; } }; }),
+    document: { documentElement: root, images, querySelectorAll: (q) => q === "body > canvas" ? canvases : els },
+    liquidGL: liquid || ((o) => { calls.push(o); return {}; }),
     addEventListener: (t, f) => { handlers[t] = f; }, removeEventListener() {},
     dispatchEvent: (e) => { events.push(e.type); return true; }, Event: class { constructor(t) { this.type = t; } },
   };
   const glass = createLiquidGlass(win, { settleMs: 10, imgTimeoutMs: 100, setTimeoutFn: (fn) => { timers.push(fn); } });
   const flush = async () => { await ticks(); while (timers.length) timers.shift()(); await ticks(); };
-  return { glass, win, root, events, handlers, calls, els, flush };
+  return { glass, win, root, events, handlers, calls, els, flush, canvases };
 }
 function mkEl() { const e = { cls: [], isConnected: true }; e.classList = { add: (c) => e.cls.push(c) }; return e; }
 const el = mkEl;
@@ -82,12 +83,12 @@ test("a throwing liquidGL (bad engine, CDN script half-loaded) falls back to css
   assert.equal(r.glass.mode(), "css"); assert.equal(r.root.classes.has("glass-css"), true);
 });
 
-test("webglcontextlost (phone GPU reset) -> css look returns and lenses are destroyed", () => {
-  const lenses = [];
-  const r = rig({ els: [el()], liquid: () => { const l = { destroy() { l.dead = true; } }; lenses.push(l); return l; } });
+test("webglcontextlost (phone GPU reset) -> css look returns and the library canvases are hidden", () => {
+  const r = rig({ els: [el()] });
   r.glass.mount(".lg");
   r.handlers.webglcontextlost({});
-  assert.equal(r.glass.mode(), "css"); assert.equal(r.root.classes.has("glass-css"), true); assert.equal(lenses[0].dead, true);
+  assert.equal(r.glass.mode(), "css"); assert.equal(r.root.classes.has("glass-css"), true);
+  assert.deepEqual(r.canvases.map(c => c.style.display), ["none", "none"]);
 });
 
 test("refresh waits for an image that is still loading, then re-snapshots once via a resize event", async () => {
@@ -120,13 +121,12 @@ test("only the last of several quick refreshes re-snapshots", async () => {
   assert.equal(r.events.length, 1);
 });
 
-test("refresh destroys lenses of removed nodes and mounts new ones", async () => {
-  const e1 = el(), els = [e1], lenses = [];
-  const r = rig({ els, liquid: () => { const l = { destroy() { l.dead = true; } }; lenses.push(l); return l; } });
+test("refresh never mounts or removes lenses (no destroy in liquid-gl 2.2.4): per-route nodes added later get no lens", async () => {
+  const e1 = el(), els = [e1], r = rig({ els });
   r.glass.mount(".lg");
-  e1.isConnected = false; const e2 = el(); els.splice(0, 1, e2);
+  els.push(el());                                   // a route renders a new .lg node after boot
   const p = r.glass.refresh(); for (let i = 0; i < 3; i++) await r.flush(); await p;
-  assert.equal(lenses[0].dead, true); assert.equal(lenses.length, 2);
+  assert.equal(r.calls.length, 1); assert.deepEqual(r.events, ["resize"]);
 });
 
 test("in css mode refresh is a no-op that resolves", async () => {

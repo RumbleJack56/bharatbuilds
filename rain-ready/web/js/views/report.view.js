@@ -6,7 +6,7 @@ export function reportForm({ fieldRule, kinds }) {
   return `<h1>Report a problem</h1><p class="rule">${esc(fieldRule)}</p>
   <form id="f">
     <label>Photo (from the footpath)</label>
-    <button type="button" id="cam" class="big primary">Take photo</button>
+    <button type="button" id="cam" class="big primary lg" data-lg-css>Take photo</button>
     <p class="small muted">The photo is location and time stamped.</p>
     <p class="small" id="camnote" role="alert"></p>
     <div id="prev" class="photos"></div>
@@ -14,14 +14,14 @@ export function reportForm({ fieldRule, kinds }) {
     <label>Where is it?</label>
     <div class="row"><button type="button" id="gps">Use my location</button></div>
     <p class="small muted" id="coords"></p>
-    <div id="mini" class="map mini"></div>
+    <div id="mini" class="map mini" data-liquid-ignore></div>
     <p class="small muted">Tap the map to move the pin.</p>
     <label for="kind">What do you see?</label>
     <select id="kind"><option value="">Not sure (the app suggests from the photo)</option>
       ${Object.entries(kinds).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join("")}</select>
     <label for="note">Note (optional)</label>
     <textarea id="note" maxlength="500" placeholder="For example: leaves and plastic block the grate"></textarea>
-    <button class="primary big" id="send" type="submit">Send report</button>
+    <button class="primary big lg fab" data-lg-css id="send" type="submit">Send report</button>
   </form><div id="out"></div>`;
 }
 

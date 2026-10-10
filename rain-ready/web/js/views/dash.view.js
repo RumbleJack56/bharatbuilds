@@ -10,7 +10,7 @@ export const dashShell = (tab) => `<h1>Dashboard</h1><nav class="sub" aria-label
   .map(([k, t]) => `<a href="#/dash/${k}" class="${k === tab ? "on" : ""}">${esc(t)}</a>`).join("")}</nav>
   <div id="pane">Loading...</div><p class="small muted"><a class="back" href="#/login">Switch persona</a></p>`;
 
-export const mapLegend = (d) => `${banner(d.banner)}<div id="m" class="map tall"></div>
+export const mapLegend = (d) => `${banner(d.banner)}<div id="m" class="map tall" data-liquid-ignore></div>
   <p class="small">Pockets at ${esc(d.reference_rain_mm_h)} mm/h: ${Object.values(LEVEL).map(([, l]) => `<strong>${esc(l)}</strong>`).join(" &middot; ")}
   (each pocket is labelled on the map).<br>Squares: drains (red = No owner found). Numbered markers: open tasks by rank.</p>`;
 export const pocketPopup = (p) => `<strong>${esc(p.name)}</strong><br>Level: <strong>${esc(LEVEL[p.level][1])}</strong>

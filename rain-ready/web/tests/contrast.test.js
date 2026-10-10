@@ -31,6 +31,12 @@ test("banner and error ink are readable on their tinted strong glass", () => {
 test("primary button ink is readable on both accent stops", () => {
   for (const k of ["accent", "accent-2"]) assert.ok(ratio(rgb("accent-ink"), rgb(k)) >= 4.5, k);
 });
+test("the High status dot is >= 3:1 non-text contrast on every glass surface over both backdrops", () => {
+  for (const sk of Object.values(SURFACES)) for (const bd of Object.values(BACKDROPS)) {
+    const r = ratio(rgb("high-dot"), over(parseColor(t[sk]), bd));
+    assert.ok(r >= 3, `high-dot on ${sk} = ${r.toFixed(2)}`);
+  }
+});
 test("field borders are >= 3:1 against the glass behind them", () => {
   for (const bd of Object.values(BACKDROPS)) {
     const glass = over(parseColor(t["glass-bg"]), bd);

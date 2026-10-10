@@ -58,7 +58,7 @@ export const acceptedActions = ({ agencies, current }) => `<form class="card" id
   <p class="small muted">The photo is location and time stamped.</p>
   <p class="small" id="camnote" role="alert"></p><div id="prev" class="photos"></div>
   <label for="nt">Note</label><textarea id="nt" maxlength="300"></textarea>
-  <button class="primary big" type="submit">Submit with after-photo</button></form>
+  <button class="primary big lg fab" data-lg-css type="submit">Submit with after-photo</button></form>
   <div class="card">${notOurs(agencies, current)}</div>`;
 export const assignActions = ({ agencies }) => `<div class="card"><p class="banner">No owner found for this drain.</p>
   <label for="ag">Assign to</label><select id="ag">${options(agencies, null)}</select>

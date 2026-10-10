@@ -8,7 +8,7 @@ const css = (f) => readFileSync(new URL(f, dir), "utf8");
 test("every stylesheet stays within ~250 lines", () => {
   for (const f of readdirSync(dir).filter(f => f.endsWith(".css"))) assert.ok(css(f).split("\n").length <= 250, f);
 });
-test("tokens carry the spec values", () => {
+test("tokens carry the token values", () => {
   const t = css("tokens.css");
   for (const s of ["--glass-bg-strong:rgba(16,26,40,.72)", "--glass-border:rgba(255,255,255,.14)", "--glass-blur:16px", "--glass-sat:140%", "--radius:18px",
     "--radius-sm:12px", "--fg:#eef4f8", "--fg-muted:#a9bccb", "--accent:#5ad1e6", "--high:#ffa093", "--high-dot:#ff7a6b", "--elev:#ffb547", "--low:#5ad1a0", "--info:#8cbfff",
@@ -20,7 +20,7 @@ test("glass has the solid fallback when backdrop-filter is unsupported", () => {
   assert.match(g, /-webkit-backdrop-filter/);
 });
 test("liquid mode drops the CSS blur and keeps a tint on .lg", () => {
-  assert.match(css("glass.css"), /html:not\(\.glass-css\) \.lg\{[^}]*background:var\(--lg-tint\)[^}]*backdrop-filter:none/);
+  assert.match(css("glass.css"), /html:not\(\.glass-css\) \.lg:not\(\[data-lg-css\]\)\{[^}]*background:var\(--lg-tint\)[^}]*backdrop-filter:none/);
 });
 test("focus ring and 44 px controls exist", () => {
   const g = css("glass.css");

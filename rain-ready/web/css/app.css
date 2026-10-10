@@ -1,6 +1,6 @@
 /* web/css/app.css — layout and screen rules. Tokens: tokens.css. Surfaces: glass.css. Motion: motion.css. */
 a{color:var(--accent)}
-.top{display:flex;align-items:center;gap:8px;padding:8px 12px;position:sticky;top:0;z-index:1000;min-height:var(--top-h);border-width:0 0 1px}
+.top{display:flex;align-items:center;gap:8px;padding:8px 12px;position:sticky;top:0;z-index:1000;min-height:var(--top-h);}
 .brand{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none;color:var(--fg);font-size:1.1rem}
 .who{flex:1;text-align:right;font-size:.8rem;color:var(--fg-muted)}
 main{width:100%;max-width:720px;margin:0 auto;padding:12px;flex:1}
@@ -18,7 +18,7 @@ button:disabled{opacity:.5}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.row>*{flex:1 1 140px}
 label{display:block;font-weight:600;margin:10px 0 4px}
 .lvl{font-weight:700}.lvl.high{color:var(--high)}.lvl.elevated{color:var(--elev)}.lvl.watch{color:var(--watch)}.lvl.none{color:var(--fg-muted)}
-.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:1000;border-width:1px 0 0}
+.tabs{display:flex;z-index:1000}
 .tabs a{flex:1;min-height:56px;display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;color:var(--fg-muted);font-size:.85rem;padding:4px}
 .tabs a.on{color:var(--accent);font-weight:700;border-top:3px solid var(--accent)}
 .sub{display:flex;flex-wrap:wrap;margin:0 0 10px}.sub a{flex:0 0 auto;min-height:44px;display:flex;align-items:center;padding:0 12px;text-decoration:none}
@@ -42,5 +42,17 @@ fieldset.plain{border:0;padding:0;margin:8px 0}
 .flags li.warn{border-left-color:var(--high-dot);color:var(--warn-ink)}
 .cam-overlay{position:fixed;inset:0;z-index:3000;background:#05080d;display:flex;flex-direction:column}
 .cam-video{flex:1;min-height:0;width:100%;object-fit:contain;background:#05080d}
-.cam-bar{display:flex;gap:8px;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));border-width:1px 0 0}.cam-bar button{flex:1}
+.cam-bar{display:flex;gap:8px;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom))}.cam-bar button{flex:1}
 .back{display:inline-flex;align-items:center;min-height:44px}   /* V5b: links outside the nav are still 44 px targets */
+.fab{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom));z-index:1000}
+@media (max-width:640px){
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  .tabs{position:fixed;bottom:0;left:0;right:0;padding-bottom:env(safe-area-inset-bottom);border-radius:var(--radius) var(--radius) 0 0}
+}
+@media (min-width:641px){
+  body{padding-bottom:16px}
+  .top{order:-2}
+  .tabs{position:sticky;top:var(--top-h);order:-1;width:min(720px,calc(100% - 24px));margin:8px auto 0;border-radius:var(--radius);z-index:999}
+  .fab{bottom:16px}
+  .toast{left:50%;right:auto;width:min(480px,calc(100% - 24px));transform:translateX(-50%);bottom:24px}
+}

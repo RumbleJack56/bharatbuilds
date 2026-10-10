@@ -5,16 +5,14 @@ const MAX_LENSES = 12;
 
 export function createLiquidGlass(win = globalThis.window, { settleMs = 150, imgTimeoutMs = 1500, setTimeoutFn = setTimeout } = {}) {
   const doc = win.document, root = doc.documentElement;
-  const lenses = new Map();                       // element -> lens (one liquidGL() call per element so each can be destroyed alone)
+  const lenses = new Map();                       // element -> lens. liquid-gl 2.2.4 has no lens destroy(), so lenses are mounted once, on persistent chrome only
   let state = "liquid", selector = "", serial = 0, gen = 0;
 
-  const teardown = () => { for (const l of lenses.values()) { try { l.destroy?.(); } catch { /* already gone */ } } lenses.clear(); };
-  const fallback = () => { state = "css"; gen++; root.classList.add("glass-css"); teardown(); };   // context lost or library threw
+  // The library appends its shared renderer canvas (and mirror canvases) straight to <body> with no teardown API: hide them.
+  const hideCanvases = () => { for (const c of doc.querySelectorAll("body > canvas")) if (c.style) c.style.display = "none"; };
+  const fallback = () => { state = "css"; gen++; root.classList.add("glass-css"); hideCanvases(); lenses.clear(); };   // context lost or library threw
   win.addEventListener("webglcontextlost", fallback, true);
 
-  function prune() {
-    for (const [el, lens] of lenses) if (!el.isConnected) { try { lens.destroy?.(); } catch { /* ignore */ } lenses.delete(el); }
-  }
   function add() {
     if (state !== "liquid" || !selector) return;
     for (const el of doc.querySelectorAll(selector)) {
@@ -35,7 +33,7 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
 
   return {
     mode: () => state,
-    mount(sel) { selector = sel; add(); },
+    mount(sel) { selector = sel; add(); },        // call once at boot; per-route elements use CSS glass (data-lg-css), never a lens
     // Called after each route render. Only the newest call re-snapshots; liquidGL re-captures on a debounced window "resize".
     async refresh() {
       if (state !== "liquid") return;
@@ -44,11 +42,10 @@ export function createLiquidGlass(win = globalThis.window, { settleMs = 150, img
         await imagesSettled();
         await new Promise(r => setTimeoutFn(r, settleMs));
         if (my !== gen || state !== "liquid") return;
-        prune(); add();
         if (state === "liquid") win.dispatchEvent(new win.Event("resize"));
       } catch { fallback(); }
     },
-    destroy() { gen++; teardown(); win.removeEventListener("webglcontextlost", fallback, true); },
+    destroy() { gen++; hideCanvases(); lenses.clear(); win.removeEventListener("webglcontextlost", fallback, true); },
   };
 }
 
