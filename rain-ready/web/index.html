@@ -21,7 +21,6 @@
 <main id="view" tabindex="-1"></main>
 <nav id="tabs" class="tabs" aria-label="Main"></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script async src="https://cdn.jsdelivr.net/npm/liquid-gl@2.2.4/liquidGL.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <!-- Cache-busting: Cloudflare caches /css and /js for 4 h. On every deploy bump ?v= here on the css link, on main.js and on EVERY
      line of the import map (a module import has no query of its own, the map adds it). web/tests/cache-bust.test.js fails if one differs.
@@ -78,6 +77,7 @@
   "./js/views/sim.view.js": "./js/views/sim.view.js?v=1"
 }}
 </script>
+<script async type="module" src="https://cdn.jsdelivr.net/npm/liquid-gl@2.2.4/liquidGL.min.js"></script>
 <script src="config.js"></script>
 <script type="module" src="js/main.js?v=1"></script>
 </body>

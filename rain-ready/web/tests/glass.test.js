@@ -138,8 +138,8 @@ test("in css mode refresh is a no-op that resolves", async () => {
 
 // ---- index.html: pinned, non-blocking script ----
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
-test("liquidGL loads from the exact pinned URL with async (never defer: a hung CDN must not block the app)", () => {
-  assert.match(html, /<script async src="https:\/\/cdn\.jsdelivr\.net\/npm\/liquid-gl@2\.2\.4\/liquidGL\.min\.js"><\/script>/);
+test("liquidGL loads from the exact pinned URL with async (a module script, because the minified file ends in `export default`; never defer: a hung CDN must not block the app)", () => {
+  assert.match(html, /<script async type="module" src="https:\/\/cdn\.jsdelivr\.net\/npm\/liquid-gl@2\.2\.4\/liquidGL\.min\.js"><\/script>/);
   assert.doesNotMatch(html, /liquid-gl@(latest|\^|~|\d+(\.\d+)?["\/])/);
 });
 test("glass adapters are in the import map", () => {
