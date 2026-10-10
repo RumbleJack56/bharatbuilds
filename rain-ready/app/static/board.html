@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rain-Ready public board</title>
+<style>
+:root{--bg:#fcfcfb;--panel:#f4f3f0;--ink:#0b0b0b;--ink2:#52514e;--grid:#e3e2dd;--blue:#2a78d6;--orange:#eb6834;--aqua:#1baf7a;--warn:#fff4d6;--warn-ink:#5b4300}
+@media(prefers-color-scheme:dark){:root{--bg:#1a1a19;--panel:#232321;--ink:#f0efec;--ink2:#c3c2b7;--grid:#33332f;--blue:#3987e5;--orange:#d95926;--aqua:#199e70;--warn:#3a3012;--warn-ink:#f3dc9a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1060px;margin:auto;padding:28px max(16px,3vw) 64px;display:flex;flex-direction:column;gap:36px}
+h1{font-size:clamp(26px,4vw,38px);margin:0;letter-spacing:-.01em}h2{font-size:20px;margin:0}p{margin:0}.muted{color:var(--ink2)}.small{font-size:13px}
+.banner{background:var(--warn);color:var(--warn-ink);padding:10px 14px;border-radius:8px;font-size:14px}
+table{border-collapse:collapse;width:100%;min-width:640px}th{text-align:left;font-size:12px;color:var(--ink2);border-bottom:1px solid var(--ink2);padding:8px 10px 8px 0}
+td{border-bottom:1px solid var(--grid);padding:10px 10px 10px 0;vertical-align:top}.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}.bar{height:8px;background:var(--grid);border-radius:4px;min-width:90px}.bar i{display:block;height:100%;background:var(--blue);border-radius:4px}
+.chip{display:inline-block;border:1px solid var(--ink2);border-radius:4px;padding:0 6px;font-size:12px;white-space:nowrap}
+.card{background:var(--panel);border-radius:10px;padding:14px 16px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+select{font:inherit;padding:5px 8px;background:var(--panel);color:var(--ink);border:1px solid var(--grid);border-radius:6px}
+details{border-top:1px solid var(--grid);padding:10px 0}summary{cursor:pointer}ol.tl{margin:10px 0 0;padding-left:18px}ol.tl li{margin:4px 0}
+.od{color:var(--orange);font-weight:600}
+</style></head><body><main>
+<header><div class="small muted">Rain-Ready · Karol Bagh and Old Rajinder Nagar, Delhi · public, no login</div><h1>Who acts, how fast, and did it hold</h1>
+<p class="muted" style="max-width:62ch;margin-top:8px">Every drain task with its route, its reason and each step taken. Agencies are scored from this log by a formula that is printed below.</p></header>
+<div class="banner" id="demo" hidden></div>
+<section><h2>Agency leaderboard</h2><div class="scroll"><table id="lb"><thead><tr><th>Rank</th><th>Agency</th><th>Score</th><th class="n">Accepted in 48 h</th>
+<th class="n">Done on time</th><th class="n">Confirmed</th><th class="n">Not overdue</th><th class="n">Median hours to accept</th><th class="n">Tasks</th></tr></thead><tbody></tbody></table></div>
+<p class="small muted" id="un" style="margin-top:10px"></p></section>
+<section><h2>How the score works</h2><div class="card small" id="method"></div></section>
+<section><h2>Action log</h2><div class="row"><label class="small">Agency <select id="fa"><option value="">All</option></select></label>
+<label class="small">Status <select id="fs"><option value="">All</option><option>open</option><option>accepted</option><option>done</option><option>confirmed</option><option>disputed</option><option>rejected</option></select></label></div>
+<div id="log" style="margin-top:8px"></div></section>
+<p class="small muted" id="note"></p>
+</main>
+<script>
+const $=s=>document.querySelector(s),pct=v=>v==null?"no data yet":Math.round(v*100)+"%";
+const t=(tag,a={},...k)=>{const e=document.createElement(tag);for(const x in a)e.setAttribute(x,a[x]);k.flat().forEach(c=>e.append(c instanceof Node?c:String(c)));return e};
+const when=s=>new Date(s).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+async function load(){
+  const [lb,tr]=await Promise.all([fetch("/api/leaderboard").then(r=>r.json()),fetch("/api/transparency?limit=200").then(r=>r.json())]);
+  if(lb.demo){$("#demo").hidden=false;$("#demo").textContent=lb.demo_note}
+  const tb=$("#lb tbody");tb.textContent="";
+  lb.agencies.forEach(a=>{const c=a.components,i=a.inputs;
+    tb.append(t("tr",{},t("td",{},a.ranked?"#"+a.rank:t("span",{class:"chip"},"not ranked")),t("td",{},t("strong",{},a.agency_name)),
+      t("td",{},a.score==null?"-":t("div",{},t("strong",{},a.score.toFixed(0)),t("div",{class:"bar"},t("i",{style:`width:${a.score}%`})))),
+      t("td",{class:"n"},pct(c.response),t("div",{class:"small muted"},`${i.accepted_in_48h} of ${i.received-i.handed_back-i.still_in_window}`,i.still_in_window?` (+${i.still_in_window} still in its window)`:"")),
+      t("td",{class:"n"},pct(c.delivery),t("div",{class:"small muted"},`${i.completed_in_window} of ${i.completed+i.late_open}`)),
+      t("td",{class:"n"},pct(c.verified),t("div",{class:"small muted"},`${i.confirmed} yes, ${i.disputed} no`)),
+      t("td",{class:"n"},pct(c.timeliness),t("div",{class:"small muted"},`${i.overdue_now} overdue`)),
+      t("td",{class:"n"},a.median_hours_to_accept??"-"),t("td",{class:"n"},i.received,i.handed_back?t("div",{class:"small muted"},i.handed_back+" handed back"):"")))});
+  const u=lb.unassigned;$("#un").textContent=u.tasks?`${u.tasks} task(s) have no owner found and are not scored. The oldest has waited ${u.oldest_days} days. The ward coordinator assigns them.`:"No task is waiting without an owner.";
+  const m=lb.method;$("#method").append(t("p",{},m.score),t("ul",{},Object.values(m.measures).map(x=>t("li",{},x))),
+    t("p",{},t("strong",{},"Not scored: ")),t("ul",{},m.not_scored.map(x=>t("li",{},x))),t("p",{},m.minimum));
+  const fa=$("#fa");lb.agencies.forEach(a=>fa.append(t("option",{value:a.agency_id},a.agency_name)));fa.append(t("option",{value:"none"},"No owner found"));
+  const draw=()=>{const A=fa.value,S=$("#fs").value,log=$("#log");log.textContent="";
+    tr.actions.filter(x=>(!A||(A==="none"?!x.agency_id:x.agency_id===A))&&(!S||x.status===S)).forEach(x=>{
+      log.append(t("details",{},t("summary",{},t("strong",{},`#${x.task_id} `),x.asset_name," ",t("span",{class:"chip"},x.status)," ",
+        x.overdue?t("span",{class:"od"},"overdue "):"",t("span",{class:"muted small"},`→ ${x.agency_name}`)),
+        t("p",{class:"small muted"},`Why routed: ${x.why_routed}. Reports: ${x.reports}. Scenario fill-time gain: ${x.fill_time_gain_h} h. Due ${when(x.due_at)}.`),
+        t("ol",{class:"tl"},x.timeline.map(e=>t("li",{},t("strong",{},e.label),` · ${e.by}${e.agency_id?" · "+e.agency_id.toUpperCase():""} · ${when(e.at)}`,e.note?` · ${e.note}`:"")))))});
+    if(!log.children.length)log.append(t("p",{class:"muted"},"No tasks match."))};
+  fa.onchange=draw;$("#fs").onchange=draw;draw();$("#note").textContent=tr.gain_note+" "+lb.banner;
+}
+load().catch(e=>{$("#note").textContent="Could not load the board: "+e.message});
+</script></body></html>

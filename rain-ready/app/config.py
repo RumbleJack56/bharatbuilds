@@ -4,6 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = os.getenv("DB_PATH", str(ROOT / "var" / "rainready.db"))
+SEED_PATH = os.getenv("SEED_PATH", str(ROOT / "data" / "seed.json"))   # the placeholder set for UI work: data/seed.placeholder.json
 PHOTO_DIR = os.getenv("PHOTO_DIR", str(ROOT / "var" / "photos"))
 STORAGE = os.getenv("STORAGE", "local")                 # local | s3
 S3_BUCKET = os.getenv("S3_BUCKET", "")

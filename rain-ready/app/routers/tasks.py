@@ -1,13 +1,13 @@
 """Task lifecycle: open -> accepted -> done -> confirmed | disputed. Every step writes a task_events row."""
 import json
-from datetime import date, datetime, timezone
+from datetime import datetime
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from core import copy
 
-from .. import service, storage
+from .. import clock, service, storage
 from ..auth import current_user, need
 from ..db import get_db, now_iso
 
@@ -19,7 +19,7 @@ SQL = ("SELECT t.*, a.name AS asset_name, a.lat, a.lon, a.owner_source, a.type A
 
 
 def _overdue(t: dict) -> bool:
-    return t["status"] in ("open", "accepted") and bool(t["due_at"]) and datetime.fromisoformat(t["due_at"]) < datetime.now(timezone.utc)
+    return t["status"] in ("open", "accepted") and bool(t["due_at"]) and datetime.fromisoformat(t["due_at"]) < clock.now()
 
 
 def _out(db, r, detail=False) -> dict:
@@ -159,7 +159,7 @@ def confirm(tid: int, body: ConfirmIn, user=Depends(need("resident")), db=Depend
         raise HTTPException(403, "you reported this problem, so someone else has to check the fix")
     if body.ok:
         service.refresh_rank(db, tid)                       # gain is recorded as it stands before the reset
-        db.execute("UPDATE assets SET last_confirmed_clean=? WHERE id=?", (date.today().isoformat(), t["asset_id"]))
+        db.execute("UPDATE assets SET last_confirmed_clean=? WHERE id=?", (clock.today().isoformat(), t["asset_id"]))
         _set(db, tid, status="confirmed")
         service.log_event(db, tid, user["id"], "confirmed", body.note[:300], agency_id=t["agency_id"])
     else:

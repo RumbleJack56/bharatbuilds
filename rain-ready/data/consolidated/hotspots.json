@@ -1,0 +1,1511 @@
+{
+ "hotspots": [
+  {
+   "id": "LP-KBM",
+   "name": "Pusa Road at Karol Bagh Metro Station",
+   "kind": "other",
+   "position": {
+    "lat": 28.644004,
+    "lon": 77.188605,
+    "radius_m": 30,
+    "grade": "A",
+    "groups": 2,
+    "spread_m": 44,
+    "anchors": [
+     {
+      "ref": "node/345234441",
+      "group": "metro",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "Karol Bagh Metro Station (railway=station)",
+      "lat": 28.644012,
+      "lon": 77.188524,
+      "dist_m": 8
+     },
+     {
+      "ref": "node/6743274679",
+      "group": "metro",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "Karol Bagh Metro Station",
+      "lat": 28.644166,
+      "lon": 77.188189,
+      "dist_m": 44
+     },
+     {
+      "ref": "node/5638613674",
+      "group": "metro",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "Karol Bagh Metro Station (bus stop)",
+      "lat": 28.644199,
+      "lon": 77.188947,
+      "dist_m": 40
+     },
+     {
+      "ref": "way/1301371025",
+      "group": "locality",
+      "role": "locality",
+      "weight": 1.0,
+      "phrase": "Karol Bagh",
+      "lat": 28.643935,
+      "lon": 77.188684,
+      "dist_m": 11
+     }
+    ]
+   },
+   "waterlogging": {
+    "rows": [
+     {
+      "list": "2023",
+      "row_no": 164,
+      "pdf_page": 73,
+      "road": "PUSA Road",
+      "place": "Karol Bagh Metro Station",
+      "dates": [
+       "2023-07-09",
+       "2024-07-22"
+      ]
+     }
+    ],
+    "dates": [
+     "2023-07-09",
+     "2024-07-22"
+    ],
+    "years": [
+     "2023",
+     "2024"
+    ],
+    "n_dates": 2,
+    "on_ordinary_days": 0,
+    "busiest_day": [
+     139,
+     "2023-07-09"
+    ]
+   },
+   "documents": [
+    {
+     "id": "D76-ROUTE",
+     "hotspots": "LP-ORN;LP-KBM",
+     "kind": "drain",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The drain originates near the Shankar Road and flows through Rajinder nagar for a length of 800 metres, where it crosses the Pusa Road. Thereafter, it flows through Karol Bagh and Sarai Rohilla area for a length of 3000 metres and crosses Shankar Road. It then flows towards Shastri Nagar and Bharat Nagar areas and falls into the Najafgarh drain. The total length of a existing drain is 5700 metres and serves a catchment area of 3386 acres."
+    },
+    {
+     "id": "D76-DESIGN",
+     "hotspots": "LP-ORN;LP-KBM;LP-JHB;LP-FIL;LP-ANP",
+     "kind": "design",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The drains run through moderate to densely populated areas and a unit discharge of 0.7 cusecs per acres has been adopted for designing the drain."
+    }
+   ],
+   "exposure": {
+    "within_m": 200,
+    "by_type": {
+     "hospital": 2,
+     "clinic": 1,
+     "prep_school": 1,
+     "school": 1
+    },
+    "total": 5,
+    "nearest_facility_m": 54
+   },
+   "components": {
+    "recurrence": 0.78,
+    "persistence": 0.5,
+    "ordinary_days": 0.0,
+    "exposure": 0.83
+   },
+   "design_mm_h": 17.6,
+   "design_cusec_per_acre": 0.7,
+   "confidence": "low",
+   "coverage_gap": false,
+   "note": "Waterlogging place named in the FCO (Pusa Road, Karol Bagh Metro Station).",
+   "scenario": {
+    "catchment_ha": 1.5,
+    "runoff_c": 0.85,
+    "storage_m3": 120.0
+   },
+   "index": 60.5,
+   "rank": {
+    "rank": 4,
+    "best": 2,
+    "worst": 4,
+    "top2_share": 0.19
+   },
+   "drains": [
+    "DR-KBM-PUSA",
+    "DR-DN-PUSA"
+   ],
+   "linked_drains": [
+    "DR-KBM-PUSA"
+   ]
+  },
+  {
+   "id": "LP-JHB",
+   "name": "Bagga Link / Jhandewalan roundabout (Dayal Chowk)",
+   "kind": "other",
+   "position": {
+    "lat": 28.645171,
+    "lon": 77.197763,
+    "radius_m": 152,
+    "grade": "B",
+    "groups": 2,
+    "spread_m": 230,
+    "anchors": [
+     {
+      "ref": "way/28190395",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Roundabout Bagga and surrounding area of Baba Lal Dayal Chowk",
+      "lat": 28.645611,
+      "lon": 77.197138,
+      "dist_m": 78
+     },
+     {
+      "ref": "way/590610019",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645509,
+      "lon": 77.197749,
+      "dist_m": 38
+     },
+     {
+      "ref": "way/590610020",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645405,
+      "lon": 77.196901,
+      "dist_m": 88
+     },
+     {
+      "ref": "way/590610021",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645221,
+      "lon": 77.196869,
+      "dist_m": 87
+     },
+     {
+      "ref": "way/590610022",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645224,
+      "lon": 77.19779,
+      "dist_m": 6
+     },
+     {
+      "ref": "way/590610023",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645052,
+      "lon": 77.197015,
+      "dist_m": 74
+     },
+     {
+      "ref": "way/590610024",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.644973,
+      "lon": 77.19727,
+      "dist_m": 53
+     },
+     {
+      "ref": "way/590610025",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645025,
+      "lon": 77.197578,
+      "dist_m": 24
+     },
+     {
+      "ref": "way/610043964",
+      "group": "dayal",
+      "role": "junction",
+      "weight": 3.0,
+      "phrase": "Baba Lal Dayal Chowk",
+      "lat": 28.645645,
+      "lon": 77.197499,
+      "dist_m": 59
+     },
+     {
+      "ref": "node/345234443",
+      "group": "jhandewalan",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "Roundabout Jhandewalan / Bagga Link",
+      "lat": 28.6443,
+      "lon": 77.199905,
+      "dist_m": 230
+     },
+     {
+      "ref": "relation/8300341",
+      "group": "jhandewalan",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "Jhandewalan (Metro Station)",
+      "lat": 28.644306,
+      "lon": 77.199847,
+      "dist_m": 225
+     }
+    ]
+   },
+   "waterlogging": {
+    "rows": [
+     {
+      "list": "2022",
+      "row_no": 11,
+      "pdf_page": 58,
+      "road": "Pusa Road",
+      "place": "Bagga Link Hanuman Mandir",
+      "dates": [
+       "2022-05-23"
+      ]
+     },
+     {
+      "list": "2022",
+      "row_no": 88,
+      "pdf_page": 61,
+      "road": "Pusa Road- Vande",
+      "place": "Roundabout Bagga and",
+      "dates": [
+       "2022-06-30",
+       "2022-10-08"
+      ]
+     },
+     {
+      "list": "2023",
+      "row_no": 165,
+      "pdf_page": 73,
+      "road": "PUSA Road",
+      "place": "R/A Bagga Link",
+      "dates": [
+       "2023-07-08",
+       "2023-07-09"
+      ]
+     },
+     {
+      "list": "2023",
+      "row_no": 166,
+      "pdf_page": 73,
+      "road": "Pusta Road",
+      "place": "Roundabout Jhandewalan/",
+      "dates": [
+       "2023-03-18",
+       "2023-03-20",
+       "2023-03-30",
+       "2023-06-27"
+      ]
+     },
+     {
+      "list": "2024",
+      "row_no": 13,
+      "pdf_page": 78,
+      "road": "Dr. Bhim Rao Ambedkar Marg",
+      "place": "27.06.2024",
+      "dates": [
+       "2024-06-27"
+      ]
+     }
+    ],
+    "dates": [
+     "2022-05-23",
+     "2022-06-30",
+     "2022-10-08",
+     "2023-03-18",
+     "2023-03-20",
+     "2023-03-30",
+     "2023-06-27",
+     "2023-07-08",
+     "2023-07-09",
+     "2024-06-27"
+    ],
+    "years": [
+     "2022",
+     "2023",
+     "2024"
+    ],
+    "n_dates": 10,
+    "on_ordinary_days": 3,
+    "busiest_day": [
+     139,
+     "2023-07-09"
+    ]
+   },
+   "documents": [
+    {
+     "id": "D76-DESIGN",
+     "hotspots": "LP-ORN;LP-KBM;LP-JHB;LP-FIL;LP-ANP",
+     "kind": "design",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The drains run through moderate to densely populated areas and a unit discharge of 0.7 cusecs per acres has been adopted for designing the drain."
+    }
+   ],
+   "exposure": {
+    "within_m": 200,
+    "by_type": {
+     "school": 3,
+     "hospital": 1
+    },
+    "total": 4,
+    "nearest_facility_m": 79
+   },
+   "components": {
+    "recurrence": 0.99,
+    "persistence": 0.75,
+    "ordinary_days": 0.3,
+    "exposure": 0.67
+   },
+   "design_mm_h": 17.6,
+   "design_cusec_per_acre": 0.7,
+   "confidence": "medium",
+   "coverage_gap": false,
+   "note": "Rows merged by place name: Bagga Link, Dayal Chowk and the Jhandewalan roundabout are one place in 2022 #88 and 2023 #166. 2024 #13 is merged by the same phrase (the row's table columns are swapped in the PDF).",
+   "scenario": {
+    "catchment_ha": 1.5,
+    "runoff_c": 0.85,
+    "storage_m3": 120.0
+   },
+   "index": 74.6,
+   "rank": {
+    "rank": 1,
+    "best": 1,
+    "worst": 2,
+    "top2_share": 1.0
+   },
+   "drains": [
+    "DR-JHB-LINK",
+    "DR-OSM-A"
+   ],
+   "linked_drains": [
+    "DR-JHB-LINK"
+   ]
+  },
+  {
+   "id": "LP-FIL",
+   "name": "Rani Jhansi Road at Filmistan",
+   "kind": "other",
+   "position": {
+    "lat": 28.658833,
+    "lon": 77.203693,
+    "radius_m": 38,
+    "grade": "A",
+    "groups": 2,
+    "spread_m": 65,
+    "anchors": [
+     {
+      "ref": "way/265815212",
+      "group": "filmistan",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "Filmistan",
+      "lat": 28.658833,
+      "lon": 77.203693,
+      "dist_m": 0
+     },
+     {
+      "ref": "node/11849811732",
+      "group": "filmistan_studio",
+      "role": "locality",
+      "weight": 1.0,
+      "phrase": "Filmistan (photo studio)",
+      "lat": 28.658304,
+      "lon": 77.203409,
+      "dist_m": 65
+     }
+    ]
+   },
+   "waterlogging": {
+    "rows": [
+     {
+      "list": "2022",
+      "row_no": 12,
+      "pdf_page": 58,
+      "road": "Rani Jhansi Marg",
+      "place": "Filmistan",
+      "dates": [
+       "2022-05-23"
+      ]
+     },
+     {
+      "list": "2023",
+      "row_no": 178,
+      "pdf_page": 73,
+      "road": "Rani Jhansi Marg",
+      "place": "Filmistan",
+      "dates": [
+       "2023-05-03"
+      ]
+     }
+    ],
+    "dates": [
+     "2022-05-23",
+     "2023-05-03"
+    ],
+    "years": [
+     "2022",
+     "2023"
+    ],
+    "n_dates": 2,
+    "on_ordinary_days": 0,
+    "busiest_day": [
+     12,
+     "2023-05-03"
+    ]
+   },
+   "documents": [
+    {
+     "id": "D76-FIL",
+     "hotspots": "LP-FIL",
+     "kind": "waterlogging",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "the connecting drain from Bara Hindu Rao, Filmistan and Delhi Cloth Mill area should also be immediately improved, as these areas get water logged practically every monsoon."
+    },
+    {
+     "id": "D76-DESIGN",
+     "hotspots": "LP-ORN;LP-KBM;LP-JHB;LP-FIL;LP-ANP",
+     "kind": "design",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The drains run through moderate to densely populated areas and a unit discharge of 0.7 cusecs per acres has been adopted for designing the drain."
+    }
+   ],
+   "exposure": {
+    "within_m": 200,
+    "by_type": {
+     "clinic": 1,
+     "school": 2,
+     "college": 1
+    },
+    "total": 4,
+    "nearest_facility_m": 104
+   },
+   "components": {
+    "recurrence": 0.78,
+    "persistence": 0.75,
+    "ordinary_days": 0.0,
+    "exposure": 0.67
+   },
+   "design_mm_h": 17.6,
+   "design_cusec_per_acre": 0.7,
+   "confidence": "medium",
+   "coverage_gap": false,
+   "note": "FCO calls the road Rani Jhansi Marg.",
+   "scenario": {
+    "catchment_ha": 1.5,
+    "runoff_c": 0.85,
+    "storage_m3": 120.0
+   },
+   "index": 62.8,
+   "rank": {
+    "rank": 2,
+    "best": 2,
+    "worst": 4,
+    "top2_share": 0.31
+   },
+   "drains": [
+    "DR-FIL-RANI"
+   ],
+   "linked_drains": [
+    "DR-FIL-RANI"
+   ]
+  },
+  {
+   "id": "LP-ANP",
+   "name": "New Rohtak Road at Anand Parbat (foot of Zakhira Flyover)",
+   "kind": "other",
+   "position": {
+    "lat": 28.665488,
+    "lon": 77.173814,
+    "radius_m": 336,
+    "grade": "C",
+    "groups": 2,
+    "spread_m": 672,
+    "anchors": [
+     {
+      "ref": "way/1312789634",
+      "group": "zakhira_foot",
+      "role": "structure",
+      "weight": 3.0,
+      "phrase": "Anand Parbat at the foot of Flyover / Under Zakhira Flyover",
+      "lat": 28.665642,
+      "lon": 77.173717,
+      "dist_m": 20
+     },
+     {
+      "ref": "way/1312789635",
+      "group": "zakhira_foot",
+      "role": "structure",
+      "weight": 3.0,
+      "phrase": "Anand Parbat at the foot of Flyover / Under Zakhira Flyover",
+      "lat": 28.665488,
+      "lon": 77.173814,
+      "dist_m": 0
+     },
+     {
+      "ref": "node/10815131299",
+      "group": "anand_parbat",
+      "role": "locality",
+      "weight": 1.0,
+      "phrase": "Anand Parbat",
+      "lat": 28.660231,
+      "lon": 77.170415,
+      "dist_m": 672
+     }
+    ]
+   },
+   "waterlogging": {
+    "rows": [
+     {
+      "list": "2022",
+      "row_no": 9,
+      "pdf_page": 58,
+      "road": "New Rohtak Road",
+      "place": "Anand Parbat near Gali No.",
+      "dates": [
+       "2022-05-23",
+       "2022-06-30",
+       "2022-07-11",
+       "2022-07-16",
+       "2022-07-20",
+       "2022-08-05",
+       "2022-09-22",
+       "2022-10-08"
+      ]
+     },
+     {
+      "list": "2023",
+      "row_no": 121,
+      "pdf_page": 71,
+      "road": "New Rohtak Road",
+      "place": "Near Gali No.10, Anand Parbat",
+      "dates": [
+       "2023-03-18",
+       "2023-05-27",
+       "2023-07-08",
+       "2023-07-09",
+       "2024-07-15",
+       "2024-07-22",
+       "2024-07-24",
+       "2024-08-09",
+       "2024-08-23"
+      ]
+     },
+     {
+      "list": "2023",
+      "row_no": 122,
+      "pdf_page": 71,
+      "road": "New Rohtak Road",
+      "place": "Under Zakhira Flyover",
+      "dates": [
+       "2023-03-30",
+       "2023-05-27"
+      ]
+     }
+    ],
+    "dates": [
+     "2022-05-23",
+     "2022-06-30",
+     "2022-07-11",
+     "2022-07-16",
+     "2022-07-20",
+     "2022-08-05",
+     "2022-09-22",
+     "2022-10-08",
+     "2023-03-18",
+     "2023-03-30",
+     "2023-05-27",
+     "2023-07-08",
+     "2023-07-09",
+     "2024-07-15",
+     "2024-07-22",
+     "2024-07-24",
+     "2024-08-09",
+     "2024-08-23"
+    ],
+    "years": [
+     "2022",
+     "2023",
+     "2024"
+    ],
+    "n_dates": 18,
+    "on_ordinary_days": 3,
+    "busiest_day": [
+     139,
+     "2023-07-09"
+    ]
+   },
+   "documents": [
+    {
+     "id": "D76-ANP",
+     "hotspots": "LP-ANP",
+     "kind": "waterlogging",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "one barrel is necessary, along the road, in between Lala Desh Bandhu Gupta Road and New Rohtak Road, for carrying the flood discharges from Anand Prabat which get stagnated in a round-about in this area."
+    },
+    {
+     "id": "D76-DESIGN",
+     "hotspots": "LP-ORN;LP-KBM;LP-JHB;LP-FIL;LP-ANP",
+     "kind": "design",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The drains run through moderate to densely populated areas and a unit discharge of 0.7 cusecs per acres has been adopted for designing the drain."
+    }
+   ],
+   "exposure": {
+    "within_m": 200,
+    "by_type": {},
+    "total": 0,
+    "nearest_facility_m": 838
+   },
+   "components": {
+    "recurrence": 1.0,
+    "persistence": 1.0,
+    "ordinary_days": 0.17,
+    "exposure": 0.0
+   },
+   "design_mm_h": 17.6,
+   "design_cusec_per_acre": 0.7,
+   "confidence": "medium",
+   "coverage_gap": false,
+   "note": "2023 #122 (Under Zakhira Flyover) is included as the same structure. This place is about 400 m north of the pilot bbox.",
+   "scenario": {
+    "catchment_ha": 1.5,
+    "runoff_c": 0.85,
+    "storage_m3": 120.0
+   },
+   "index": 62.5,
+   "rank": {
+    "rank": 3,
+    "best": 1,
+    "worst": 4,
+    "top2_share": 0.5
+   },
+   "drains": [],
+   "linked_drains": []
+  },
+  {
+   "id": "LP-EPN",
+   "name": "East Patel Nagar bus stand, Dr K S Krishnan Marg",
+   "kind": "other",
+   "position": {
+    "lat": 28.641544,
+    "lon": 77.173919,
+    "radius_m": 118,
+    "grade": "C",
+    "groups": 1,
+    "spread_m": 129,
+    "anchors": [
+     {
+      "ref": "node/6225480084",
+      "group": "epn_bus",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "East Patel Nagar Bus Stand",
+      "lat": 28.642378,
+      "lon": 77.173488,
+      "dist_m": 102
+     },
+     {
+      "ref": "node/6386259488",
+      "group": "epn_bus",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "East Patel Nagar Bus Stand",
+      "lat": 28.642592,
+      "lon": 77.173671,
+      "dist_m": 119
+     },
+     {
+      "ref": "node/5634522773",
+      "group": "epn_bus",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "East Patel Nagar Bus Stand",
+      "lat": 28.640561,
+      "lon": 77.174443,
+      "dist_m": 121
+     },
+     {
+      "ref": "node/5634525358",
+      "group": "epn_bus",
+      "role": "landmark",
+      "weight": 2.0,
+      "phrase": "East Patel Nagar Bus Stand",
+      "lat": 28.640407,
+      "lon": 77.174174,
+      "dist_m": 129
+     }
+    ]
+   },
+   "waterlogging": {
+    "rows": [
+     {
+      "list": "2024",
+      "row_no": 14,
+      "pdf_page": 78,
+      "road": "Dr. K.S. Krishnan Marg",
+      "place": "the carriageway going towards",
+      "dates": [
+       "2024-08-13"
+      ]
+     }
+    ],
+    "dates": [
+     "2024-08-13"
+    ],
+    "years": [
+     "2024"
+    ],
+    "n_dates": 1,
+    "on_ordinary_days": 0,
+    "busiest_day": [
+     8,
+     "2024-08-13"
+    ]
+   },
+   "documents": [
+    {
+     "id": "D76-PATEL",
+     "hotspots": "LP-EPN",
+     "kind": "drain",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "It starts near the crossing of Pusa road and Shankar Road, runs towards North-West along the Patel Road for a length of 2000 metres before out falling into the D.T.U. Nallah. The total area covered by this drain is 850 acres. The design discharge of 0.6 cusecs per acre has therefore been assumed for design purposes. The existing section of the drain is found grossly inadequate"
+    },
+    {
+     "id": "D76-EPN",
+     "hotspots": "LP-EPN",
+     "kind": "waterlogging",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The catchment area is the portion east of Patel Road (i.e. East and West Patel nagar), upto the elevated ground of Anand Parbat. The area is densely populated. Because of the inadequacy of these barrels, a twin masonary rectangular drain is under construction."
+    }
+   ],
+   "exposure": {
+    "within_m": 200,
+    "by_type": {
+     "school": 1
+    },
+    "total": 1,
+    "nearest_facility_m": 110
+   },
+   "components": {
+    "recurrence": 0.36,
+    "persistence": 0.5,
+    "ordinary_days": 0.0,
+    "exposure": 0.17
+   },
+   "design_mm_h": 15.1,
+   "design_cusec_per_acre": 0.6,
+   "confidence": "medium",
+   "coverage_gap": false,
+   "note": "FCO gives the carriageway going towards Ratanpuri; the four OSM bus stops of that name are used.",
+   "scenario": {
+    "catchment_ha": 1.5,
+    "runoff_c": 0.85,
+    "storage_m3": 120.0
+   },
+   "index": 29.3,
+   "rank": {
+    "rank": 5,
+    "best": 5,
+    "worst": 5,
+    "top2_share": 0.0
+   },
+   "drains": [
+    "DR-PRB-EPN"
+   ],
+   "linked_drains": [
+    "DR-PRB-EPN"
+   ]
+  },
+  {
+   "id": "LP-ORN",
+   "name": "Old Rajinder Nagar low point (Bazaar Marg)",
+   "kind": "saucer",
+   "position": {
+    "lat": 28.639251,
+    "lon": 77.183859,
+    "radius_m": 178,
+    "grade": "B",
+    "groups": 2,
+    "spread_m": 178,
+    "anchors": [
+     {
+      "ref": "way/235103423",
+      "group": "bazaar",
+      "role": "locality",
+      "weight": 1.0,
+      "phrase": "Bazaar Marg (Old Rajinder Nagar)",
+      "lat": 28.640614,
+      "lon": 77.184813,
+      "dist_m": 178
+     },
+     {
+      "ref": "way/265927783",
+      "group": "bada_bazar",
+      "role": "locality",
+      "weight": 1.0,
+      "phrase": "Bada Bazar Road (name used by the Tribune for the incident road)",
+      "lat": 28.637888,
+      "lon": 77.182906,
+      "dist_m": 178
+     }
+    ]
+   },
+   "waterlogging": {
+    "rows": [],
+    "dates": [],
+    "years": [],
+    "n_dates": 0,
+    "on_ordinary_days": 0,
+    "busiest_day": null
+   },
+   "documents": [
+    {
+     "id": "D76-ROUTE",
+     "hotspots": "LP-ORN;LP-KBM",
+     "kind": "drain",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "The drain originates near the Shankar Road and flows through Rajinder nagar for a length of 800 metres, where it crosses the Pusa Road. Thereafter, it flows through Karol Bagh and Sarai Rohilla area for a length of 3000 metres and crosses Shankar Road. It then flows towards Shastri Nagar and Bharat Nagar areas and falls into the Najafgarh drain. The total length of a existing drain is 5700 metres and serves a catchment area of 3386 acres."
+    },
+    {
+     "id": "D76-BARREL",
+     "hotspots": "LP-ORN",
+     "kind": "drain",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "the existing drain is barrel type from the starting point at Shankar Road upto Rohtak Railway Bridge. The reach of the drain from railway line, as at present, is kacha open drain."
+    },
+    {
+     "id": "D76-SILT",
+     "hotspots": "LP-ORN;LP-KBM",
+     "kind": "drain",
+     "source": "I&FC Flood Control Wing, Master Plan for storm water drainage of the MCD and DDA area (1976), Karol Bagh Zone; ifc.delhi.gov.in/sites/default/files/inline-files/mcd.docx",
+     "year": "1976",
+     "origin": "master-plan-1976",
+     "quote": "In the open portion of the drain, below the railway bridge however, considerable silting has been noticed. The maintenance of the drain is very poor."
+    },
+    {
+     "id": "D24-SAUCER",
+     "hotspots": "LP-ORN",
+     "kind": "waterlogging",
+     "source": "Tribune India, 30 Jul 2024: coaching centre tragedy, ramps constructed over drains, inquiry report; tribuneindia.com/news/delhi/coaching-centre-tragedy-ramps-constructed-over-drains-blocked-water-flow-inquiry-report",
+     "year": "2024",
+     "origin": "inquiry-2024",
+     "quote": "the property owners in the area have constructed ramps over stormwater drains thereby blocking the entry of rainwater; area in the shape of a saucer with the lowest point falling right in front of Rau's coaching centre"
+    },
+    {
+     "id": "D24-BARREL",
+     "hotspots": "LP-ORN",
+     "kind": "drain",
+     "source": "Tribune India, 30 Jul 2024 (same report)",
+     "year": "2024",
+     "origin": "inquiry-2024",
+     "quote": "MCD inspected the barrel, a larger pipe carrying mixed discharge from Shankar Road and Old Rajinder Nagar, and found no silt obstruction there"
+    },
+    {
+     "id": "D24-SILT",
+     "hotspots": "LP-ORN",
+     "kind": "waterlogging",
+     "source": "The Week/PTI, 9 Aug 2024: magisterial report on the coaching centre deaths; theweek.in/wire-updates/national/2024/08/09/des4-dl-coaching-deaths-report.html",
+     "year": "2024",
+     "origin": "inquiry-2024",
+     "quote": "drains not desilted for five years, though low-lying and waterlogging-prone"
+    },
+    {
+     "id": "D24-HC",
+     "hotspots": "LP-ORN",
+     "kind": "ownership",
+     "source": "Verdictum, 2 Aug 2024: Delhi High Court transfers probe to CBI; verdictum.in/court-updates/high-courts/breaking-delhi-high-court-transfers-to-cbi-investigation-into-recent-water-flooding-tragedy-killing-3-students-at-upsc-coaching-centre-1546451",
+     "year": "2024",
+     "origin": "court-2024",
+     "quote": "MCD Commissioner told the court the stormwater drain is dysfunctional and has been encroached upon by residents"
+    },
+    {
+     "id": "D24-RESIDENTS",
+     "hotspots": "LP-ORN",
+     "kind": "waterlogging",
+     "source": "Tribune India, 28 Jul 2024: tragedy was waiting to happen, waterlogging in Old Rajinder Nagar ignored for decades; tribuneindia.com/news/delhi/tragedy-was-waiting-to-happen-waterlogging-in-old-rajinder-nagar-ignored-for-decades-644292",
+     "year": "2024",
+     "origin": "residents-2024",
+     "quote": "residents: this area is a low-lying zone, and water has always accumulated here; Shankar Nagar and New Rajinder Nagar on higher ground drain into it"
+    }
+   ],
+   "exposure": {
+    "within_m": 200,
+    "by_type": {
+     "school": 1
+    },
+    "total": 1,
+    "nearest_facility_m": 182
+   },
+   "components": {
+    "recurrence": 0.0,
+    "persistence": 0.25,
+    "ordinary_days": 0.0,
+    "exposure": 0.17
+   },
+   "design_mm_h": 17.6,
+   "design_cusec_per_acre": 0.7,
+   "confidence": "medium",
+   "coverage_gap": true,
+   "note": "From reported findings of the 2024 inquiry, not from an FCO list (no FCO row names this area). The exact low point is not published.",
+   "scenario": {
+    "catchment_ha": 6.0,
+    "runoff_c": 0.8,
+    "storage_m3": 900.0
+   },
+   "index": null,
+   "rank": null,
+   "drains": [
+    "DR-DN-BAZ"
+   ],
+   "linked_drains": [
+    "DR-DN-BAZ"
+   ]
+  }
+ ],
+ "drains": [
+  {
+   "id": "DR-PRB-EPN",
+   "name": "Patel Road barrel (1976 plan), East Patel Nagar",
+   "type": "drain_segment",
+   "method": "road_nearest",
+   "lat": 28.641875,
+   "lon": 77.1743,
+   "distance_m": 52,
+   "geometry": [
+    [
+     77.1742995,
+     28.6418753
+    ],
+    [
+     77.1742565,
+     28.6419306
+    ],
+    [
+     77.1742214,
+     28.6419661
+    ],
+    [
+     77.1741447,
+     28.6420364
+    ],
+    [
+     77.1738953,
+     28.6422182
+    ],
+    [
+     77.17351179575913,
+     28.642440760461778
+    ]
+   ],
+   "data_source": "official",
+   "confidence": "medium",
+   "citation_base": "OpenStreetMap way/28190350 (road line, ODbL, retrieved 2026-10-10)",
+   "note": "Alignment: the barrel runs along Patel Road for 2,000 m from the Pusa Road and Shankar Road crossing. Older source conflict: the 1976 plan lists it among MCD drains.",
+   "hotspot": "LP-EPN",
+   "links_pocket": true,
+   "pwd_code": "RD-00798",
+   "agency_id": "pwd",
+   "owner_source": "PWD road inventory RD-00798 'Patel Road' (West Road Division 2), Right of Way 36.57 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+  },
+  {
+   "id": "DR-KBM-PUSA",
+   "name": "Pusa Road roadside drain (assumed), Karol Bagh Metro",
+   "type": "drain_segment",
+   "method": "road_nearest",
+   "lat": 28.644073,
+   "lon": 77.188593,
+   "distance_m": 8,
+   "geometry": [
+    [
+     77.1882538,
+     28.6440243
+    ],
+    [
+     77.1891147,
+     28.6441482
+    ],
+    [
+     77.189601898976,
+     28.644228252628338
+    ]
+   ],
+   "data_source": "derived",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/718034947 (road line, ODbL, retrieved 2026-10-10)",
+   "note": "Drain ASSUMED along this road: OSM has no drain line here. Owner by the Right of Way rule; the trunk drain that crosses Pusa Road nearby is listed separately.",
+   "hotspot": "LP-KBM",
+   "links_pocket": true,
+   "pwd_code": "RD-00219",
+   "agency_id": "pwd",
+   "owner_source": "PWD road inventory RD-00219 'PUSA Road' (South West Road Division 1), Right of Way 27.44 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+  },
+  {
+   "id": "DR-DN-PUSA",
+   "name": "Daryai Nallah barrel, Pusa Road crossing (inferred)",
+   "type": "drain_segment",
+   "method": "road_end",
+   "lat": 28.643649,
+   "lon": 77.186986,
+   "distance_m": 163,
+   "geometry": [
+    [
+     77.1869856,
+     28.6436487
+    ],
+    [
+     77.18690257883546,
+     28.643535171058115
+    ]
+   ],
+   "data_source": "official",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/1378604253 (road line, ODbL, retrieved 2026-10-10)",
+   "note": "Position: north end of Bazaar Marg where it meets Pusa Road, about 800 m of route from the Shankar Road origin in the 1976 text. Context asset, not linked to the pocket: a pocket's drainage is limited by its worst linked drain, so linking two would make cleaning either one worth nothing in the simulator.",
+   "hotspot": "LP-KBM",
+   "links_pocket": false,
+   "pwd_code": "",
+   "agency_id": "mcd",
+   "owner_source": "1976 master plan lists Daryai Nallah among the MCD drains of Karol Bagh Zone. MCD Commissioner told the High Court on 2 Aug 2024 the Old Rajinder Nagar storm drain is dysfunctional. That this section is Daryai Nallah is inferred from the route (see checks)"
+  },
+  {
+   "id": "DR-DN-BAZ",
+   "name": "Daryai Nallah barrel, Bazaar Marg (inferred)",
+   "type": "drain_segment",
+   "method": "road_nearest",
+   "lat": 28.639276,
+   "lon": 77.183846,
+   "distance_m": 3,
+   "geometry": [
+    [
+     77.18438886836144,
+     28.640037551169584
+    ],
+    [
+     77.1842813,
+     28.6399017
+    ],
+    [
+     77.1841653,
+     28.6397468
+    ],
+    [
+     77.1840888,
+     28.6396313
+    ],
+    [
+     77.1840169,
+     28.6395106
+    ],
+    [
+     77.1838972,
+     28.6393401
+    ],
+    [
+     77.1837705,
+     28.6391796
+    ],
+    [
+     77.1836363,
+     28.6390026
+    ]
+   ],
+   "data_source": "official",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/235103423 (road line, ODbL, retrieved 2026-10-10)",
+   "note": "Bazaar Marg is the only road that runs from near Shankar Road to the Pusa Road crossing at about the documented length.",
+   "hotspot": "LP-ORN",
+   "links_pocket": true,
+   "pwd_code": "",
+   "agency_id": "mcd",
+   "owner_source": "1976 master plan lists Daryai Nallah among the MCD drains of Karol Bagh Zone. MCD Commissioner told the High Court on 2 Aug 2024 the Old Rajinder Nagar storm drain is dysfunctional. That this section is Daryai Nallah is inferred from the route (see checks)"
+  },
+  {
+   "id": "DR-FIL-RANI",
+   "name": "Rani Jhansi Road roadside drain (assumed), Filmistan",
+   "type": "drain_segment",
+   "method": "road_nearest",
+   "lat": 28.658837,
+   "lon": 77.203122,
+   "distance_m": 56,
+   "geometry": [
+    [
+     77.20335031230127,
+     28.65970295280748
+    ],
+    [
+     77.2032285,
+     28.659456
+    ],
+    [
+     77.203158,
+     28.6592529
+    ],
+    [
+     77.2031395,
+     28.6591471
+    ],
+    [
+     77.2031218,
+     28.6590462
+    ],
+    [
+     77.2031204,
+     28.658914
+    ],
+    [
+     77.2031236,
+     28.6587957
+    ],
+    [
+     77.2031419,
+     28.6586563
+    ],
+    [
+     77.2032061,
+     28.6584194
+    ]
+   ],
+   "data_source": "derived",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/171505923 (road line, ODbL, retrieved 2026-10-10)",
+   "note": "Drain ASSUMED along this road: OSM has no drain line here and the 1976 connecting drain is not located.",
+   "hotspot": "LP-FIL",
+   "links_pocket": true,
+   "pwd_code": "RD-00437",
+   "agency_id": "pwd",
+   "owner_source": "PWD road inventory RD-00437 'Rani Jhansi Road' (SRD Project Division 2), Right of Way 34 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+  },
+  {
+   "id": "DR-JHB-LINK",
+   "name": "Link Road roadside drain (assumed), Jhandewalan",
+   "type": "drain_segment",
+   "method": "road_nearest",
+   "lat": 28.645104,
+   "lon": 77.197746,
+   "distance_m": 8,
+   "geometry": [
+    [
+     77.19869839610104,
+     28.64477860421527
+    ],
+    [
+     77.1985638,
+     28.6448417
+    ],
+    [
+     77.1978791,
+     28.6450747
+    ],
+    [
+     77.1978027,
+     28.6450917
+    ],
+    [
+     77.1977098,
+     28.6451123
+    ]
+   ],
+   "data_source": "derived",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/77885889 (road line, ODbL, retrieved 2026-10-10)",
+   "note": "Drain ASSUMED along this road: OSM has no drain line here. PWD lists this Link Road (Rani Jhansi Road to Faiz Road Round about, via Jhandewalan).",
+   "hotspot": "LP-JHB",
+   "links_pocket": true,
+   "pwd_code": "RD-01247",
+   "agency_id": "pwd",
+   "owner_source": "PWD road inventory RD-01247 'Link Road' (SRD Project Division 2), Right of Way 44.4 m, 60 ft or more. GNCTD notification 10.01.2012 vests roads of 60 ft or more with PWD (PWD reply in NGT OA 559/2022); SDMC affidavit to the NGT, Feb 2020: drains on those roads are PWD's (South Delhi statement, applied here by inference)"
+  },
+  {
+   "id": "DR-OSM-A",
+   "name": "Culvert (OSM, unnamed), Dayal Chowk",
+   "type": "drain_segment",
+   "method": "osm_line",
+   "lat": 28.645602,
+   "lon": 77.195642,
+   "distance_m": 212,
+   "geometry": [
+    [
+     77.1965581,
+     28.645734
+    ],
+    [
+     77.1959173,
+     28.6456461
+    ],
+    [
+     77.1955352,
+     28.6455853
+    ],
+    [
+     77.1952149,
+     28.6455395
+    ],
+    [
+     77.1947256,
+     28.6454681
+    ]
+   ],
+   "data_source": "osm",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/553844981 (ODbL), waterway=drain tunnel=culvert, retrieved 2026-10-10",
+   "note": "Real line from OSM. Consistent with the Daryai Nallah route (see checks) but not confirmed to be it. Context asset, not linked to the pocket (212 m from the position).",
+   "hotspot": "LP-JHB",
+   "links_pocket": false,
+   "pwd_code": "",
+   "agency_id": "",
+   "owner_source": "none: unnamed OSM culvert, no source assigns it"
+  },
+  {
+   "id": "DR-OSM-B",
+   "name": "Culvert (OSM, unnamed), parallel to Dayal Chowk culvert",
+   "type": "drain_segment",
+   "method": "osm_line",
+   "lat": 28.645626,
+   "lon": 77.19563,
+   "distance_m": 734,
+   "geometry": [
+    [
+     77.1965401,
+     28.6457677
+    ],
+    [
+     77.1956221,
+     28.6456249
+    ],
+    [
+     77.1947183,
+     28.6454904
+    ]
+   ],
+   "data_source": "osm",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/554092519 (ODbL), waterway=drain tunnel=culvert, retrieved 2026-10-10",
+   "note": "Real line from OSM.",
+   "hotspot": "",
+   "links_pocket": false,
+   "pwd_code": "",
+   "agency_id": "",
+   "owner_source": "none: unnamed OSM culvert, no source assigns it"
+  },
+  {
+   "id": "DR-OSM-C",
+   "name": "Culvert (OSM, unnamed), Sarai Rohilla railway crossing",
+   "type": "drain_segment",
+   "method": "osm_line",
+   "lat": 28.661015,
+   "lon": 77.193786,
+   "distance_m": 1279,
+   "geometry": [
+    [
+     77.1942328,
+     28.6640903
+    ],
+    [
+     77.1943942,
+     28.6639077
+    ],
+    [
+     77.1944367,
+     28.6635349
+    ],
+    [
+     77.1942455,
+     28.6629311
+    ],
+    [
+     77.1940984,
+     28.6625309
+    ],
+    [
+     77.1941202,
+     28.662278
+    ],
+    [
+     77.1940547,
+     28.6621004
+    ],
+    [
+     77.1938429,
+     28.661183
+    ],
+    [
+     77.1936906,
+     28.6607345
+    ],
+    [
+     77.1935021,
+     28.6603927
+    ],
+    [
+     77.1936848,
+     28.6600833
+    ],
+    [
+     77.1939184,
+     28.6597367
+    ],
+    [
+     77.1939567,
+     28.6595883
+    ],
+    [
+     77.19397,
+     28.6595368
+    ],
+    [
+     77.1940926,
+     28.659062
+    ],
+    [
+     77.1942706,
+     28.6581899
+    ],
+    [
+     77.1941872,
+     28.6579995
+    ]
+   ],
+   "data_source": "osm",
+   "confidence": "low",
+   "citation_base": "OpenStreetMap way/77881906 (ODbL), waterway=drain tunnel=culvert, retrieved 2026-10-10",
+   "note": "Real line from OSM.",
+   "hotspot": "",
+   "links_pocket": false,
+   "pwd_code": "",
+   "agency_id": "",
+   "owner_source": "none: unnamed OSM culvert, no source assigns it"
+  }
+ ],
+ "meta": {
+  "generated_from": {
+   "fco_rows": 622,
+   "fco_location_dates": 1099,
+   "fco_days": 156,
+   "ordinary_day_cut": 3.0,
+   "busiest_days": [
+    [
+     139,
+     "2023-07-09"
+    ],
+    [
+     121,
+     "2023-07-08"
+    ],
+    [
+     88,
+     "2022-06-30"
+    ],
+    [
+     75,
+     "2024-06-28"
+    ],
+    [
+     28,
+     "2024-07-31"
+    ]
+   ]
+  },
+  "checks": [
+   {
+    "id": "origin-to-pusa",
+    "claim": "Daryai Nallah flows 800 m through Rajinder Nagar from near Shankar Road to the Pusa Road crossing",
+    "measured": "Bazaar Marg is 612 m; its north end is 0 m from Pusa Road and its south end 225 m from Shankar Road",
+    "documented_m": 800,
+    "measured_m": 837,
+    "difference_pct": 5,
+    "rule": "within 25%",
+    "holds": true
+   },
+   {
+    "id": "karol-bagh-run",
+    "claim": "then flows 3,000 m through Karol Bagh and Sarai Rohilla",
+    "measured": "path from the Pusa Road crossing through the three OSM culvert pieces (straight links between them)",
+    "documented_m": 3000,
+    "measured_m": 3059,
+    "difference_pct": 2,
+    "rule": "within 25%",
+    "holds": true
+   },
+   {
+    "id": "patel-barrel",
+    "claim": "Patel Road barrel runs 2,000 m along Patel Road",
+    "measured": "OSM Patel Road is 2451 m long in the extract",
+    "documented_m": 2000,
+    "measured_m": 2451,
+    "difference_pct": 23,
+    "rule": "road at least as long as the barrel",
+    "holds": true
+   }
+  ],
+  "daryai_chain": [
+   [
+    28.6390026,
+    77.1836363
+   ],
+   [
+    28.6436487,
+    77.1869856
+   ],
+   [
+    28.6454681,
+    77.1947256
+   ],
+   [
+    28.645734,
+    77.1965581
+   ],
+   [
+    28.6579995,
+    77.1941872
+   ],
+   [
+    28.6640903,
+    77.1942328
+   ]
+  ],
+  "weights": {
+   "recurrence": 0.35,
+   "persistence": 0.25,
+   "ordinary_days": 0.15,
+   "exposure": 0.25
+  },
+  "retrieved": "2026-10-10"
+ }
+}

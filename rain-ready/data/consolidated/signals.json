@@ -1,0 +1,138 @@
+{
+ "registry": [
+  {
+   "id": "S1",
+   "name": "Flood Control Order 2025, Traffic Police waterlogging lists 2022 to 2024",
+   "kind": "document",
+   "source": "ifc.delhi.gov.in, fco_2025.pdf, 146 pages",
+   "used": "recurrence, day severity, years active",
+   "limit": "Arterial roads and junctions only. No coordinates, no agency. Row numbering gaps in 2022 (#98) and 2024 (#58, #145)."
+  },
+  {
+   "id": "S2",
+   "name": "I&FC Flood Control Wing, master plan for storm water drainage of the MCD and DDA area (1976)",
+   "kind": "document",
+   "source": "ifc.delhi.gov.in, inline-files/mcd.docx",
+   "used": "named drains and their routes, design discharge, places named as waterlogged",
+   "limit": "Fifty years old. Routes are described in words. Drain names and layouts may have changed."
+  },
+  {
+   "id": "S3",
+   "name": "2024 Old Rajinder Nagar inquiry and High Court reporting",
+   "kind": "document",
+   "source": "Tribune India, The Week/PTI, Verdictum",
+   "used": "Old Rajinder Nagar low point, barrel from Shankar Road, ownership statements",
+   "limit": "Press reports of official findings. The exact low point and the drain's owner are not stated."
+  },
+  {
+   "id": "S4",
+   "name": "OpenStreetMap roads, stations, junctions, facilities",
+   "kind": "geodata",
+   "source": "Overpass API, ODbL",
+   "used": "position anchors, road geometry, exposure counts",
+   "limit": "Names vary between sources. No roadside drains are mapped."
+  },
+  {
+   "id": "S5",
+   "name": "OpenStreetMap drain lines",
+   "kind": "geodata",
+   "source": "Overpass API, ODbL",
+   "used": "three real culvert lines",
+   "limit": "Three unnamed lines in 1,100 hectares. Not a network."
+  },
+  {
+   "id": "S6",
+   "name": "PWD Delhi road inventory",
+   "kind": "register",
+   "source": "pwddelhi.gov.in road search API, 1,297 roads",
+   "used": "Right of Way per road, owner by the 60 ft rule",
+   "limit": "Names spelled differently from OSM. No geometry. Road ownership, not drain ownership."
+  },
+  {
+   "id": "S7",
+   "name": "CGWB year book 2019-20 and India-WRIS station data 2024",
+   "kind": "measurement",
+   "source": "cgwb.gov.in, indiawris.gov.in",
+   "used": "water table near the pilot (rain-capture sites)",
+   "limit": "Karol Bagh tehsil has no monitoring well. Nearest is Pusa (NRL) piezometer, 2.2 to 2.6 km away."
+  },
+  {
+   "id": "S8",
+   "name": "State Election Commission ward summary, delimitation 2022",
+   "kind": "register",
+   "source": "sec.delhi.gov.in",
+   "used": "ward context: Rajinder Nagar is ward 141, population 62,224",
+   "limit": "Ward boundaries for 2022 are published as map PDFs only."
+  },
+  {
+   "id": "N1",
+   "name": "Copernicus GLO-30 elevation",
+   "kind": "tested, not used",
+   "source": "AWS Open Data",
+   "used": "nothing",
+   "limit": "Only 2 of 6 recorded waterlogging points sit below their surroundings. The model includes buildings and flyovers."
+  },
+  {
+   "id": "N2",
+   "name": "Delhi storm drain or sewer layer on OpenCity",
+   "kind": "tested, not available",
+   "source": "data.opencity.in",
+   "used": "nothing",
+   "limit": "Drain datasets exist for Pune, Bengaluru, Chennai and Hyderabad. None for Delhi."
+  },
+  {
+   "id": "N3",
+   "name": "SoilGrids soil texture",
+   "kind": "tested, not available",
+   "source": "rest.isric.org",
+   "used": "nothing",
+   "limit": "Returns no value for built-up cells in Delhi."
+  },
+  {
+   "id": "N4",
+   "name": "Flood Control Order 2026",
+   "kind": "tested, not available",
+   "source": "ifc.delhi.gov.in",
+   "used": "nothing",
+   "limit": "The page lists no PDF in its static HTML. Needs a browser session."
+  }
+ ],
+ "checks": [
+  {
+   "id": "origin-to-pusa",
+   "claim": "Daryai Nallah flows 800 m through Rajinder Nagar from near Shankar Road to the Pusa Road crossing",
+   "measured": "Bazaar Marg is 612 m; its north end is 0 m from Pusa Road and its south end 225 m from Shankar Road",
+   "documented_m": 800,
+   "measured_m": 837,
+   "difference_pct": 5,
+   "rule": "within 25%",
+   "holds": true
+  },
+  {
+   "id": "karol-bagh-run",
+   "claim": "then flows 3,000 m through Karol Bagh and Sarai Rohilla",
+   "measured": "path from the Pusa Road crossing through the three OSM culvert pieces (straight links between them)",
+   "documented_m": 3000,
+   "measured_m": 3059,
+   "difference_pct": 2,
+   "rule": "within 25%",
+   "holds": true
+  },
+  {
+   "id": "patel-barrel",
+   "claim": "Patel Road barrel runs 2,000 m along Patel Road",
+   "measured": "OSM Patel Road is 2451 m long in the extract",
+   "documented_m": 2000,
+   "measured_m": 2451,
+   "difference_pct": 23,
+   "rule": "road at least as long as the barrel",
+   "holds": true
+  }
+ ],
+ "weights": {
+  "recurrence": 0.35,
+  "persistence": 0.25,
+  "ordinary_days": 0.15,
+  "exposure": 0.25
+ }
+}

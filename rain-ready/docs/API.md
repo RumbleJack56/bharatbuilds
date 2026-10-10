@@ -28,11 +28,18 @@ Live, always-correct reference: run the server and open `/docs`. This page is th
 | `GET /api/accountability` | public | per agency: assets owned, tasks by status, overdue, bounced away, median hours to accept and complete; includes the "No owner found" row (`agency_id: null`) |
 | `GET /api/insights` | public | rule-based facts: `[{id, text, why, evidence}]` with `banner`. Rules: reports near a drain with no owner; an agency that bounced 3 or more tasks; a silted, unassigned drain in a fast-filling pocket; a task more than 3 days overdue; a drain of the fastest pocket not confirmed clean for 60 days. Placeholder rows say "placeholder data" |
 | `GET /api/reports/ward?format=json\|md` | public | generated ward report from database facts: open and overdue tasks by agency, held report count, top 5 drains by fill time gained (with low and high), pockets by level, cleans confirmed in 7 days, insights. `md` returns Markdown with the banner. Fixed wording, no model text |
+| `GET /api/actions?top=` | public | One action per drain: `clean`, `inspect`, `clarify_owner` or `monitor`, each with its route (agency, or the ward coordinator when no owner), the reason, evidence, fill-time gain as a range, and whether a task is already dispatched |
+| `GET /api/projection?rain=20,35,50&horizon=0,30,60,90` | public | Scenario projection per pocket, rain and horizon: runoff m3/h, share of the drain used (`utilisation_pct`), silt fraction if not cleaned, fill time as a low-high range. Plus the silt curve. Scenario, not a forecast |
+| `GET /api/assets/{id}` | public | One drain: owner and its source, data source and confidence, citation, cleaning history from tasks, silt now and at 30, 60, 90 days, reports, pockets it serves |
+| `GET /api/leaderboard` | public | Agencies scored 0 to 100 from the task log (response, delivery, verified, timeliness), the inputs behind each score, unassigned tasks apart, and the printed method. `demo: true` when the database holds rehearsal history |
+| `GET /api/transparency?agency_id=&status=&limit=` | public | Every task with route, reason, evidence and timeline. Roles are shown, never names |
+| `GET /board` | public | A page that renders the two endpoints above: leaderboard, method, filterable action log |
+| `GET /api/city/summary` `GET /api/city/insights` `GET /api/city/places` `GET /api/city/roads/{code}` | public | Delhi evidence base: recorded waterlogging (1,100 location-dates), places merged across lists with the owner by the 60 ft rule, PWD road inventory, and the EDA insights with their actions |
 | `GET /api/impact` | public | headline numbers (SCOPE section 6) |
 | `GET /api/opportunities` | public | rain-capture candidates with decision, rule id, m3/year |
 | `GET /media/{key}` | public | photo (S3 pre-signed redirect when `STORAGE=s3`) |
 
-**Task lifecycle:** `open -> accepted -> done -> confirmed | disputed`; `disputed -> accepted` through `accept` (rework; `done_by` is cleared). A bounce stays `open` under the new agency. A reject with no target is `rejected`. Every step writes a `task_events` row.
+**Task lifecycle:** `open -> accepted -> done -> confirmed | disputed`; a disputed task is redone: the owning agency accepts it again (`disputed -> accepted`, `done_by` cleared) and a different resident confirms again. A bounce stays `open` under the new agency. A reject with no target is `rejected`. Every step writes a `task_events` row.
 
 **Errors:** JSON `{"detail": "..."}`. 401 no persona, 403 wrong role or agency, 409 wrong status, 422 bad input, 404 unknown id.
 

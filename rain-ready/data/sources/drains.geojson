@@ -1,0 +1,390 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.1742995,
+      28.6418753
+     ],
+     [
+      77.1742565,
+      28.6419306
+     ],
+     [
+      77.1742214,
+      28.6419661
+     ],
+     [
+      77.1741447,
+      28.6420364
+     ],
+     [
+      77.1738953,
+      28.6422182
+     ],
+     [
+      77.17351179575913,
+      28.642440760461778
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-PRB-EPN",
+    "name": "Patel Road barrel (1976 plan), East Patel Nagar",
+    "type": "drain_segment",
+    "data_source": "official",
+    "confidence": "medium",
+    "citation": "OpenStreetMap way/28190350 (road line, ODbL, retrieved 2026-10-10); PWD road inventory RD-00798 'Patel Road' (West Road Division 2), Right of Way 36.57 m, 60 ft or more; I&FC Master Plan for drainage of the MCD and DDA area (1976), Karol Bagh Zone",
+    "note": "Alignment: the barrel runs along Patel Road for 2,000 m from the Pusa Road and Shankar Road crossing. Older source conflict: the 1976 plan lists it among MCD drains."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.1882538,
+      28.6440243
+     ],
+     [
+      77.1891147,
+      28.6441482
+     ],
+     [
+      77.189601898976,
+      28.644228252628338
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-KBM-PUSA",
+    "name": "Pusa Road roadside drain (assumed), Karol Bagh Metro",
+    "type": "drain_segment",
+    "data_source": "derived",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/718034947 (road line, ODbL, retrieved 2026-10-10); PWD road inventory RD-00219 'PUSA Road' (South West Road Division 1), Right of Way 27.44 m, 60 ft or more; drain presence assumed, not observed",
+    "note": "Drain ASSUMED along this road: OSM has no drain line here. Owner by the Right of Way rule; the trunk drain that crosses Pusa Road nearby is listed separately."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.1869856,
+      28.6436487
+     ],
+     [
+      77.18690257883546,
+      28.643535171058115
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-DN-PUSA",
+    "name": "Daryai Nallah barrel, Pusa Road crossing (inferred)",
+    "type": "drain_segment",
+    "data_source": "official",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/1378604253 (road line, ODbL, retrieved 2026-10-10); 1976 master plan lists Daryai Nallah among the MCD drains of Karol Bagh Zone; I&FC Master Plan for drainage of the MCD and DDA area (1976), Karol Bagh Zone",
+    "note": "Position: north end of Bazaar Marg where it meets Pusa Road, about 800 m of route from the Shankar Road origin in the 1976 text. Context asset, not linked to the pocket: a pocket's drainage is limited by its worst linked drain, so linking two would make cleaning either one worth nothing in the simulator."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.18438886836144,
+      28.640037551169584
+     ],
+     [
+      77.1842813,
+      28.6399017
+     ],
+     [
+      77.1841653,
+      28.6397468
+     ],
+     [
+      77.1840888,
+      28.6396313
+     ],
+     [
+      77.1840169,
+      28.6395106
+     ],
+     [
+      77.1838972,
+      28.6393401
+     ],
+     [
+      77.1837705,
+      28.6391796
+     ],
+     [
+      77.1836363,
+      28.6390026
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-DN-BAZ",
+    "name": "Daryai Nallah barrel, Bazaar Marg (inferred)",
+    "type": "drain_segment",
+    "data_source": "official",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/235103423 (road line, ODbL, retrieved 2026-10-10); 1976 master plan lists Daryai Nallah among the MCD drains of Karol Bagh Zone; I&FC Master Plan for drainage of the MCD and DDA area (1976), Karol Bagh Zone",
+    "note": "Bazaar Marg is the only road that runs from near Shankar Road to the Pusa Road crossing at about the documented length."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.20335031230127,
+      28.65970295280748
+     ],
+     [
+      77.2032285,
+      28.659456
+     ],
+     [
+      77.203158,
+      28.6592529
+     ],
+     [
+      77.2031395,
+      28.6591471
+     ],
+     [
+      77.2031218,
+      28.6590462
+     ],
+     [
+      77.2031204,
+      28.658914
+     ],
+     [
+      77.2031236,
+      28.6587957
+     ],
+     [
+      77.2031419,
+      28.6586563
+     ],
+     [
+      77.2032061,
+      28.6584194
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-FIL-RANI",
+    "name": "Rani Jhansi Road roadside drain (assumed), Filmistan",
+    "type": "drain_segment",
+    "data_source": "derived",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/171505923 (road line, ODbL, retrieved 2026-10-10); PWD road inventory RD-00437 'Rani Jhansi Road' (SRD Project Division 2), Right of Way 34 m, 60 ft or more; drain presence assumed, not observed",
+    "note": "Drain ASSUMED along this road: OSM has no drain line here and the 1976 connecting drain is not located."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.19869839610104,
+      28.64477860421527
+     ],
+     [
+      77.1985638,
+      28.6448417
+     ],
+     [
+      77.1978791,
+      28.6450747
+     ],
+     [
+      77.1978027,
+      28.6450917
+     ],
+     [
+      77.1977098,
+      28.6451123
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-JHB-LINK",
+    "name": "Link Road roadside drain (assumed), Jhandewalan",
+    "type": "drain_segment",
+    "data_source": "derived",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/77885889 (road line, ODbL, retrieved 2026-10-10); PWD road inventory RD-01247 'Link Road' (SRD Project Division 2), Right of Way 44.4 m, 60 ft or more; drain presence assumed, not observed",
+    "note": "Drain ASSUMED along this road: OSM has no drain line here. PWD lists this Link Road (Rani Jhansi Road to Faiz Road Round about, via Jhandewalan)."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.1965581,
+      28.645734
+     ],
+     [
+      77.1959173,
+      28.6456461
+     ],
+     [
+      77.1955352,
+      28.6455853
+     ],
+     [
+      77.1952149,
+      28.6455395
+     ],
+     [
+      77.1947256,
+      28.6454681
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-OSM-A",
+    "name": "Culvert (OSM, unnamed), Dayal Chowk",
+    "type": "drain_segment",
+    "data_source": "osm",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/553844981 (ODbL), waterway=drain tunnel=culvert, retrieved 2026-10-10",
+    "note": "Real line from OSM. Consistent with the Daryai Nallah route (see checks) but not confirmed to be it. Context asset, not linked to the pocket (212 m from the position)."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.1965401,
+      28.6457677
+     ],
+     [
+      77.1956221,
+      28.6456249
+     ],
+     [
+      77.1947183,
+      28.6454904
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-OSM-B",
+    "name": "Culvert (OSM, unnamed), parallel to Dayal Chowk culvert",
+    "type": "drain_segment",
+    "data_source": "osm",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/554092519 (ODbL), waterway=drain tunnel=culvert, retrieved 2026-10-10",
+    "note": "Real line from OSM."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      77.1942328,
+      28.6640903
+     ],
+     [
+      77.1943942,
+      28.6639077
+     ],
+     [
+      77.1944367,
+      28.6635349
+     ],
+     [
+      77.1942455,
+      28.6629311
+     ],
+     [
+      77.1940984,
+      28.6625309
+     ],
+     [
+      77.1941202,
+      28.662278
+     ],
+     [
+      77.1940547,
+      28.6621004
+     ],
+     [
+      77.1938429,
+      28.661183
+     ],
+     [
+      77.1936906,
+      28.6607345
+     ],
+     [
+      77.1935021,
+      28.6603927
+     ],
+     [
+      77.1936848,
+      28.6600833
+     ],
+     [
+      77.1939184,
+      28.6597367
+     ],
+     [
+      77.1939567,
+      28.6595883
+     ],
+     [
+      77.19397,
+      28.6595368
+     ],
+     [
+      77.1940926,
+      28.659062
+     ],
+     [
+      77.1942706,
+      28.6581899
+     ],
+     [
+      77.1941872,
+      28.6579995
+     ]
+    ]
+   },
+   "properties": {
+    "id": "DR-OSM-C",
+    "name": "Culvert (OSM, unnamed), Sarai Rohilla railway crossing",
+    "type": "drain_segment",
+    "data_source": "osm",
+    "confidence": "low",
+    "citation": "OpenStreetMap way/77881906 (ODbL), waterway=drain tunnel=culvert, retrieved 2026-10-10",
+    "note": "Real line from OSM."
+   }
+  }
+ ]
+}

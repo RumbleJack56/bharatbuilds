@@ -4,7 +4,9 @@ from pathlib import Path
 
 from core import seedcheck
 
-REAL = json.loads((Path(__file__).resolve().parent.parent / "data" / "seed.json").read_text())
+DATA = Path(__file__).resolve().parent.parent / "data"
+REAL = json.loads((DATA / "seed.placeholder.json").read_text())      # the rules are exercised on the placeholder set
+SHIPPED = json.loads((DATA / "seed.json").read_text())
 
 
 def bad(mutate) -> list[str]:
@@ -15,6 +17,11 @@ def bad(mutate) -> list[str]:
 
 def test_real_seed_passes():
     assert seedcheck.validate(REAL) == []
+
+
+def test_shipped_seed_passes_and_has_no_placeholder_rows():
+    assert seedcheck.validate(SHIPPED) == []
+    assert not [r for t in ("assets", "pockets") for r in SHIPPED[t] if r["data_source"] == "placeholder"]
 
 
 def test_each_rule_fails_on_its_own():
