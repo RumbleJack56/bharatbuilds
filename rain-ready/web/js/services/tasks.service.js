@@ -18,7 +18,7 @@ export function createTasksService(http) {
     },
     async assign(tid, agencyId) { return fixPhotos(await http.request("POST", `/api/tasks/${id(tid)}/assign`, { json: { agency_id: agencyId } })); },
     async complete(tid, { photo, note = "" }) {
-      const fd = new FormData(); fd.append("photo", photo); fd.append("note", note);
+      const fd = new FormData(); fd.append("photo", photo, "photo.jpg"); fd.append("note", note);
       return fixPhotos(await http.request("POST", `/api/tasks/${id(tid)}/complete`, { form: fd }));
     },
     async confirm(tid, { ok, note = "" }) { return fixPhotos(await http.request("POST", `/api/tasks/${id(tid)}/confirm`, { json: { ok, note } })); },

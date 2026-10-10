@@ -62,6 +62,7 @@ test("I3: #coords shows the pin source, and keeps the GPS failure text", async (
   const root = reportRoot();
   let clicked;
   const ctx = { map: { available: () => true, create: () => ({ pin() {}, view() {}, destroy() {}, onClick: f => { clicked = f; } }) },
+    camera: { available: () => true },
     geo: { current: async () => { throw new Error("Could not get GPS. Tap the map instead."); } },
     toast: { show() {} }, services: {} };
   await report.mount(root, ctx);
@@ -73,7 +74,7 @@ test("I3: #coords shows the pin source, and keeps the GPS failure text", async (
 });
 test("I3: GPS success shows accuracy; copy has no banned words", async () => {
   const root = reportRoot();
-  const ctx = { map: { available: () => false }, toast: { show() {} }, services: {},
+  const ctx = { map: { available: () => false }, toast: { show() {} }, services: {}, camera: { available: () => true },
     geo: { current: async () => ({ lat: 28.6, lon: 77.1, accuracy_m: 12.4 }) } };
   await report.mount(root, ctx);
   await root.els["#gps"].onclick({ target: { disabled: false } });

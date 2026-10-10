@@ -40,7 +40,9 @@ export const openActions = ({ agencies, current }) =>
   `<div class="card"><button class="primary big" id="acc">Accept this task</button>${notOurs(agencies, current)}</div>`;
 export const acceptedActions = ({ agencies, current }) => `<form class="card" id="done"><h3>Mark as done</h3>
   <p class="small muted">Photograph the finished work from the footpath.</p>
-  <input type="file" id="ph" accept="image/*" capture="environment">
+  <button type="button" id="ph" class="big primary">Take after-photo</button>
+  <p class="small muted">The photo is location and time stamped.</p>
+  <p class="small" id="camnote" role="alert"></p><div id="prev" class="photos"></div>
   <label for="nt">Note</label><textarea id="nt" maxlength="300"></textarea>
   <button class="primary big" type="submit">Submit with after-photo</button></form>
   <div class="card">${notOurs(agencies, current)}</div>`;

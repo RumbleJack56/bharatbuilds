@@ -11,5 +11,7 @@ export const USE = { store_reuse: "Store and reuse", detain: "Detain only", rech
 export const PIN = {
   default: "Default pin (Old Rajinder Nagar) - tap the map or use my location",
   tapped: "Pin you tapped",
+  photo: (m) => `Pin from your photo (\u00b1 ${Math.round(m)} m)`,
   gps: (m) => `Your GPS (\u00b1 ${Math.round(m)} m)`,
 };
+export const CAMERA = { none: "Camera not available on this device. You can still send a report without a photo: pick what you see." };

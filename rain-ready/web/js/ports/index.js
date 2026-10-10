@@ -7,3 +7,4 @@ export const GeoPort = definePort("GeoPort", ["current"]);
 export const MapPort = definePort("MapPort", ["available", "create"]);
 export const MapViewPort = definePort("MapViewPort", ["circle", "badge", "pin", "onClick", "view", "fit", "destroy"]);
 export const ToastPort = definePort("ToastPort", ["show"]);
+export const CameraPort = definePort("CameraPort", ["available", "capture"]);

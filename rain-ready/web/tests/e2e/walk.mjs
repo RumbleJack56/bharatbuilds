@@ -1,7 +1,7 @@
 // web/tests/e2e/walk.mjs — end-to-end walk on a FRESH database (never the dev DB).
 // Usage: NODE_PATH=<dir with node_modules/playwright> PW_CHROME=<chromium binary> \
 //        node web/tests/e2e/walk.mjs http://localhost:8010 [screenshotDir]
-// Flow: resident reports -> official accepts -> completes with photo -> a different resident confirms -> dashboard.
+// Flow: resident reports (live camera) -> official accepts -> completes with a camera photo -> a different resident confirms -> dashboard.
 // Checks the Rajinder Nagar pocket level on the map goes High -> Elevated. Exit code 1 on any failure
 // or any unexpected console error / 4xx / 5xx. No package.json or npm dependency lives in web/.
 import { createRequire } from "node:module";
@@ -14,29 +14,21 @@ const BASE = (process.argv[2] || "http://localhost:8010").replace(/\/$/, "");
 const SHOTS = process.argv[3] || process.env.WALK_SHOTS || join(tmpdir(), "rr-walk-shots");
 mkdirSync(SHOTS, { recursive: true });
 
-// 64x64 gradient PNG with noise so the photo checks do not call it blank.
-async function png() {
-  const { deflateSync } = await import("node:zlib");
-  const w = 64, h = 64, raw = Buffer.alloc((w * 3 + 1) * h);
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    const o = y * (w * 3 + 1) + 1 + x * 3; raw[o] = (x * 4 + y * 3 + ((x * y) % 17)) & 255;
-    raw[o + 1] = (y * 4) & 255; raw[o + 2] = (x * 2 + y * 2 + ((x ^ y) % 29)) & 255;
-  }
-  const crc = (b) => { let c, t = []; for (let n = 0; n < 256; n++) { c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
-    let r = 0xffffffff; for (const x of b) r = t[(r ^ x) & 255] ^ (r >>> 8); return (r ^ 0xffffffff) >>> 0; };
-  const chunk = (type, data) => { const len = Buffer.alloc(4); len.writeUInt32BE(data.length);
-    const td = Buffer.concat([Buffer.from(type), data]); const c = Buffer.alloc(4); c.writeUInt32BE(crc(td)); return Buffer.concat([len, td, c]); };
-  const ihdr = Buffer.alloc(13); ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4); ihdr[8] = 8; ihdr[9] = 2;
-  return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk("IHDR", ihdr), chunk("IDAT", deflateSync(raw)), chunk("IEND", Buffer.alloc(0))]);
-}
-
 const results = [], problems = [], expected = [];
 const ok = (name, pass, detail = "") => { results.push({ name, pass, detail }); console.log(`${pass ? "PASS" : "FAIL"}  ${name}${detail ? "  " + detail : ""}`); };
-const browser = await chromium.launch({ executablePath: process.env.PW_CHROME });
-const photo = { name: "drain.png", mimeType: "image/png", buffer: await png() };
+// The fake camera feeds a test pattern, so the live-camera flow runs without a device.
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROME,
+  args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] });
+// Opens the camera from `openSel`, takes the shot, waits for the stamped preview.
+async function takePhoto(page, openSel) {
+  await page.click(openSel); await page.waitForSelector(".cam-overlay video");
+  await page.waitForFunction(() => !document.querySelector(".cam-overlay button.primary")?.disabled);
+  await page.click(".cam-overlay button.primary"); await page.waitForSelector("#prev img");
+}
 
 async function persona(user, expect4xx = []) {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, permissions: ["geolocation", "camera"],
+    geolocation: { latitude: 28.6433, longitude: 77.1846, accuracy: 10 } });
   const page = await ctx.newPage();
   page.on("console", m => {
     if (m.type() !== "error") return;
@@ -73,7 +65,8 @@ try {
   // 1. Resident A reports at the default pin (drain DR-RN-001, MCD).
   u = await persona("res-1");
   await u.go("#/report"); await u.shot("01-report-form");
-  await u.page.setInputFiles("#photo", photo);
+  await takePhoto(u.page, "#cam");
+  ok("report photo locks the pin", /Pin from your photo/.test(await u.page.innerText("#coords")));
   await u.page.selectOption("#kind", "blocked_drain");
   await u.page.fill("#note", "Leaves and plastic block the grate (walk)");
   await u.page.click("#send");
@@ -96,7 +89,7 @@ try {
   await u.go(taskHash); await u.shot("06-task-open");
   await u.page.click("#acc"); await u.page.waitForSelector("#done");
   await u.shot("07-task-accepted");
-  await u.page.setInputFiles("#ph", photo);
+  await takePhoto(u.page, "#ph");
   await u.page.fill("#nt", "Cleared by hand (walk)");
   await u.page.click("#done button[type=submit]");
   await u.page.waitForSelector("text=waiting", { timeout: 8000 }).catch(() => {});
