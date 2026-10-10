@@ -2,22 +2,24 @@
 
 Ujjwal and Aarush work in parallel on **main** with short-lived branches. The split below is by file, so merges rarely touch the same lines.
 
-## 0. Status on 10 Oct 2026, late morning (read first)
+## 0. Status on 10 Oct 2026, 13:00 IST (read first)
 
-**On `main` (PRs #1 to #6):** the full loop (report, task, accept, complete, confirm, dashboard); photo checks and held reports; hardening (rate limit, repeat hold, admin review, insights, ward report); the backend review fixes B13 to B26; the real Delhi seed with an evidence base, public leaderboard and transparency log, actions and projection endpoints, demo history and seeding scripts; Aarush's layered web rewrite (V1 to V5); the deploy scripts and the AWS CLI playbook. 188 backend and 115 web tests pass; CI is green.
+**On `main` (PRs #1 to #15):** the full loop; photo checks; hardening; backend fixes B13 to B26; real Delhi seed, evidence base, public leaderboard, actions, projection; reference rain 25 mm/h with a self-consistent gain range; Aarush's screens V1 to V18, the camera, polish and screenshots; the deploy scripts and AWS playbook. 191 backend and 238 web tests pass.
 
-**Live host:** https://15-207-177-122.sslip.io (Aarush's account, S3 storage, hourly backup, first AMI). It still runs the **old build**: nothing from PRs #4 to #6 is deployed, photos do not open, Bedrock is off. Auto-deploy is built but **off** until Ujjwal sets the repo variables (`docs/AWS_TODO.md` section 3.5).
+**Live (https://15-207-177-122.sslip.io and https://rainready.rumblejack56.dev):**
+- Backend is current: it already serves reference rain 25 and the corrected range (commit `5a17d71` came after PR #8).
+- Web is behind: V9 camera is live; the board, held queue, actions, insights and the polish are **not** (their view files return 404; no import map; the default report pin is the old one).
+- Live DB is the clean real seed (0 tasks). Bedrock is off (`manual`).
+
+**Why the web is behind:** the auto-deploy job fails at AWS sign-in. The role's trust policy lacks GitHub's immutable OIDC subject (confirmed from a real token; fix is in `docs/AWS_TODO.md` 3.3, PR #15). It needs one AWS command by Aarush. A **manual deploy** (`AWS_TODO.md` 3.4, same script, IAM user credentials) does not need the OIDC fix and ships the web today.
 
 **Blockers, in order:**
-1. Aarush runs `docs/AWS_TODO.md` (A1 to A8). Five open items wait on it: B3, B4, B6, the live seed and auto-deploy.
-2. Ujjwal sets the four repo variables when the role ARN arrives.
-3. Seed the live database: clean or rehearsal data (`docs/SEEDING.md` section 7). Default: clean now, `--demo` only just before recording.
-4. Pin the deadline hour (S2); the freeze is 6 hours before it.
-5. Decide D1 and B27 below.
+1. Aarush: manual deploy of current `main`, then purge the Cloudflare cache, then the trust-policy command.
+2. Aarush: phone test of the camera and photo (A4, V9); then `REQUIRE_LIVE_CAPTURE=1`.
+3. Aarush: Bedrock console form, then the converse test.
+4. Ujjwal decisions: B27, clean or demo seed for recording, squash message setting, old attribution lines on `main`, deadline hour (S2).
 
-**Left, Ujjwal:** set the repo variables, decisions D1 and B27, B6 APK after V9, S2 to S6 with Aarush. B7 is done except what needs a person (B7b).
-
-**Left, Aarush:** the seed prompt `docs/AARUSH_PROMPT.md` lists it in order: AWS A1 to A8, seed the live DB, then V9 to V17. First submission is not before 12:00 noon on the last day (11 Oct); the exact hour is unknown, so keep the freeze rule.
+**Plan for Ujjwal to the freeze:** section 9. The freeze is 6 hours before the deadline. Aarush states the deadline is 11 Oct 8:00 PM IST, so the freeze is 2:00 PM IST on 11 Oct. Confirm against the event page.
 
 ## 1. Who owns what
 
@@ -131,6 +133,12 @@ If time allows:
 - [ ] B7b Needs a person (`docs/DATA_SOURCES.md` section 8): field capture of pocket and drain coordinates in Old Rajinder Nagar; Flood Control Order 2026 PDF from a browser; ward number 141 or 149; Copernicus attribution wording
 - [x] D1 Reference rain is **25 mm/h** (was 35). Swept 15 to 35: at 35 every pocket is High even clean and cleaning gains under 1 h; at 22.5 the pilot pocket shows a knife-edge 37 h; 25 mm/h is about the design capacity cited for Delhi drains (research doc 3b, search-summary source: re-check before saying it in the video, S3), puts the pilot-ward drain `DR-DN-BAZ` first (4.8 h gained, range 0.7 to 5.2) and keeps 20, 35 and 50 as scenarios. Also fixed: the gain range now contains the point estimate at every rain
 - [ ] B27 Reads are wide: task detail needs no login, and any resident can list every resident's reports. Decide what the public dashboard may show; hide `user_id` and notes from other residents
+- [ ] B28 Scripts executable in git (`git update-index --chmod=+x rain-ready/scripts/*.sh`, then the cron line can drop `bash`) and a dated daily copy in `backup.sh` (`backup/daily/rainready-YYYYMMDD.db`; the hourly key overwrites itself). From Aarush's report items 2 and 3
+- [ ] B29 Add `held_for_review` to incident items (`GET /api/incidents?mine=true` and the report response). Report item 4; the app falls back to the flags today
+- [ ] B30 Put the latest dispute note on `GET /api/tasks` list items so the inbox stops making one detail call per disputed task. Report item 6
+- [ ] B31 After-photo stamp checks: allow officials on `GET /api/capture-token`; `POST /api/tasks/{id}/complete` accepts `lat`, `lon`, `accuracy_m`, `capture_token` and returns the same flags as a report. Report item 5. Biggest backend item; Aarush then adds the token call to the after-photo flow
+- [ ] B32 Note that `DOMAIN` may list several hosts (comma separated) in `.env.example` and `docs/DEPLOY.md`. Report item 7
+- [ ] B33 Refresh demo docs at the reference rain: run `make demo` against a local server on a scratch DB for `docs/DEMO_RUN.md`; recompute the PITCH scenario numbers; fix stale lines (`docs/DATA.md` "do not copy the candidate seed", `docs/PITCH.md` "not yet checked in a browser", `docs/DEMO_FLOW.md` narration at 35 mm/h, the TODO in `rain-ready/README.md`)
 
 Known and accepted for the demo: persona header auth (anyone with the URL can act as admin; cover is the hourly backup and a fresh AMI), one shared SQLite connection with no rollback.
 
@@ -143,31 +151,31 @@ Order: AWS A1 to A8 and the live seed, then V13, V9, V10 to V12 (demo critical),
 - [x] V3 Fix the official flow: inbox, task detail, accept, "Not ours", complete with photo
 - [x] V4 Fix the confirm screen and the "did the work" error message
 - [x] V5 Admin screen: assign and generate plan (V1 to V5 done in PR #3)
-- [ ] V5b Dashboard screens: check in a browser, fix, polish (map, accountability, impact, simulator, capture)
+- [x] V5b Dashboard screens: check in a browser, fix, polish (map, accountability, impact, simulator, capture) *Merged in PR #14.*
 - [ ] V6 Stranger test with someone outside the team; fix what confuses them
 - [ ] V7 Good-to-haves from SCOPE 4.1 to 4.4 (screens)
-- [ ] V8 Screenshots and clean empty states for the video
-- [ ] V9 Photo capture camera, stamp, token, flags display (section 4, "what the backend now needs")
-- [ ] V10 Shrink the photo on the phone before upload (longest side about 1600 px, JPEG, under 2 MB), after the stamp is drawn. Bedrock cannot read large images (B19). `PLAN.md` section 6 has the adapter slot
-- [ ] V11 Disputed tasks: when B14 lands, show a disputed task in the official inbox with its reason and the existing Accept button (the task is `disputed`; accept sends it back to `accepted`)
-- [ ] V12 Confirm screen: show the plain 403 message when the reporter tries to confirm their own report (B15), and the 422 "could not be read as an image; please take it again" message when a photo cannot be read (B16)
-- [ ] V13 **Real-seed fixes (do before the video).** The default report pin in `web/js/controllers/report.js` (`DEFAULT`, the old placeholder point) links to no drain on the real seed. Use the Daryai Nallah barrel at the Pusa Road crossing, `DR-DN-PUSA`, 28.643592, 77.186944 (MCD), with a label. Update `web/tests/e2e/walk.mjs` to the real seed ids; fixtures may stay static
-- [ ] V14 Public accountability screen in the app (replaces the `/board` stand-in): `GET /api/leaderboard` (scores, inputs, printed method, `unassigned`, `demo`) and `GET /api/transparency` (route, reason, evidence, timeline; roles, never names). Show "Rehearsal data" whenever `demo` is true
-- [ ] V15 Held queue and review buttons for admin: `GET /api/incidents?held=true`, `POST /api/incidents/{id}/review` (`release` or `reject`, note). Show the warn flags in plain words
-- [ ] V16 Actions list: `GET /api/actions?top=` one action per drain (clean, inspect, clarify owner, monitor) with route, reason, evidence and the fill-time range; link to the task when one exists
-- [ ] V17 Insights and ward report: `GET /api/insights`, `GET /api/reports/ward` (`format=md` for a download); city evidence views `GET /api/city/*` and `GET /api/projection` if time allows. Cut first if late
-- [ ] V18 Simulator default rain and any caption read `reference_rain_mm_h` from `GET /api/map` (now 25) instead of a fixed 35 (`web/js/views/sim.view.js` default). The slider stays free so a viewer can drag to 20 or 35
+- [x] V8 Screenshots and clean empty states for the video *Merged in PR #14 (15 screenshots in `docs/screenshots/`).*
+- [ ] V9 Photo capture camera, stamp, token, flags display (section 4, "what the backend now needs") *Merged in PR #9 and live. Open until the phone test (A4) passes.*
+- [x] V10 Shrink the photo on the phone before upload (longest side about 1600 px, JPEG, under 2 MB), after the stamp is drawn. Bedrock cannot read large images (B19). `PLAN.md` section 6 has the adapter slot *Merged in PR #13 (web not live until the next deploy).*
+- [x] V11 Disputed tasks: when B14 lands, show a disputed task in the official inbox with its reason and the existing Accept button (the task is `disputed`; accept sends it back to `accepted`) *Merged in PR #13 (web not live until the next deploy).*
+- [x] V12 Confirm screen: show the plain 403 message when the reporter tries to confirm their own report (B15), and the 422 "could not be read as an image; please take it again" message when a photo cannot be read (B16) *Merged in PR #13 (web not live until the next deploy).*
+- [x] V13 **Real-seed fixes (do before the video).** The default report pin in `web/js/controllers/report.js` (`DEFAULT`, the old placeholder point) links to no drain on the real seed. Use the Daryai Nallah barrel at the Pusa Road crossing, `DR-DN-PUSA`, 28.643592, 77.186944 (MCD), with a label. Update `web/tests/e2e/walk.mjs` to the real seed ids; fixtures may stay static *Merged in PR #13 (web not live until the next deploy).*
+- [x] V14 Public accountability screen in the app (replaces the `/board` stand-in): `GET /api/leaderboard` (scores, inputs, printed method, `unassigned`, `demo`) and `GET /api/transparency` (route, reason, evidence, timeline; roles, never names). Show "Rehearsal data" whenever `demo` is true *Merged in PR #13 (web not live until the next deploy).*
+- [x] V15 Held queue and review buttons for admin: `GET /api/incidents?held=true`, `POST /api/incidents/{id}/review` (`release` or `reject`, note). Show the warn flags in plain words *Merged in PR #13 (web not live until the next deploy).*
+- [x] V16 Actions list: `GET /api/actions?top=` one action per drain (clean, inspect, clarify owner, monitor) with route, reason, evidence and the fill-time range; link to the task when one exists *Merged in PR #13 (web not live until the next deploy).*
+- [x] V17 Insights and ward report: `GET /api/insights`, `GET /api/reports/ward` (`format=md` for a download); city evidence views `GET /api/city/*` and `GET /api/projection` if time allows. Cut first if late *Merged in PR #13 (web not live until the next deploy).*
+- [x] V18 Simulator default rain and any caption read `reference_rain_mm_h` from `GET /api/map` (now 25) instead of a fixed 35 (`web/js/views/sim.view.js` default). The slider stays free so a viewer can drag to 20 or 35 *Merged in PR #13 (web not live until the next deploy).*
 
 AWS work (Aarush owns the account). The full AWS CLI playbook, written so an agent can run it, is `docs/AWS_TODO.md`. Fill in its section 10 and send it to Ujjwal.
 
-- [ ] A1 Inventory check: instance, role, hop limit 2, private bucket, health (`AWS_TODO` section 2)
+- [x] A1 Inventory check: instance, role, hop limit 2, private bucket, health (`AWS_TODO` section 2) *Pass per `docs/AWS_REPORT.md`.*
 - [ ] A2 **Automatic deploy on merge to `main`**: SSM policy on the EC2 role, GitHub OIDC provider, role `rainready-github-deploy`, one deploy by hand; then Ujjwal sets four repo variables (section 3). Do this first: every later fix reaches the live site through it
 - [ ] A3 Bedrock: use-case form in the console, pick a model id from the account's list, test, switch the server to `TRIAGE_MODE=bedrock`; if it fails, stay on manual and send the error text (section 4). Wait for B18 and B19
 - [ ] A4 After B13 is deployed: report a photo from a phone and check it opens (section 5)
-- [ ] A5 Backups: cron line present, newest copy under 70 minutes old, restore test (section 6)
-- [ ] A6 Port 22 open to your IP only; check the cost so far (section 7)
+- [x] A5 Backups: cron line present, newest copy under 70 minutes old, restore test (section 6) *Pass per `docs/AWS_REPORT.md`.*
+- [x] A6 Port 22 open to your IP only; check the cost so far (section 7) *Pass per `docs/AWS_REPORT.md`.*
 - [ ] A7 Before recording, when Ujjwal says go: fresh seed data on the live DB and a new AMI (section 8)
-- [ ] A8 Set `CAPTURE_SECRET` in the server `.env` if it is empty: `openssl rand -hex 24`, then `docker compose up -d --force-recreate app`
+- [x] A8 Set `CAPTURE_SECRET` in the server `.env` if it is empty: `openssl rand -hex 24`, then `docker compose up -d --force-recreate app` *Done: live health shows no `CAPTURE_SECRET` warning.*
 
 ## 7. Shared tasks
 
@@ -191,3 +199,64 @@ AWS work (Aarush owns the account). The full AWS CLI playbook, written so an age
 | 14-16 | S4, S5, S6 | S4, S5 | Submit |
 
 Cut order if late: capture screen, simulator screen, Bedrock, APK polish, dispute flow. Never cut: the loop, the accountability chart, the AWS deploy, the video.
+
+## 9. Plan: Ujjwal, 10 Oct 13:00 IST to the freeze (11 Oct 14:00 IST)
+
+Rule for this plan: do what no one else blocks first; gate the rest on named checks.
+
+### What Aarush's merged PRs unblocked
+
+| Item | Before | Now |
+|---|---|---|
+| Backend asks (B28 to B32) | Not specified | Written in `docs/AWS_REPORT.md`; start now |
+| B31 after-photo stamps | No client call | Camera and `stamp.js` exist; the client needs only the token call |
+| B6 APK | No camera, old pin | Web on `main` has V9, V10, V13; build from `main` today. Gate for release is the phone test |
+| Phone test (A4) | Photos 403 | Photo fix and V9 camera are live; test can run now (use the tap-to-move pin until the web deploy ships V13) |
+| Video (S4) | No board, held queue, actions, insights | Screens merged; need the web deploy and cache purge |
+| B27 decision | Nothing to inform it | Screens now show what the API exposes; decide |
+| Auto-deploy | Not built | Built; red only at the OIDC step |
+
+### Order of work
+
+| # | Step | Owner | Time box | Done when | Depends on |
+|---|---|---|---|---|---|
+| 1 | Manual deploy of current `main` (`AWS_TODO.md` 3.4), then Cloudflare purge | Aarush | 15 min | `/js/views/board.view.js` returns 200 on live | none |
+| 2 | Trust-policy command (3.3), then `gh workflow run test --ref main` | Aarush, then Ujjwal | 15 min | `deploy` job green | none |
+| 3 | Backend batch B28 to B32: one branch, one PR, tests first | Ujjwal | 2 h | 191+ tests pass; PR merged | none |
+| 4 | Phone test: report with camera, open as `off-mcd`, check S3 object | Aarush | 30 min | stamp shows, photo opens | step 1 |
+| 5 | `REQUIRE_LIVE_CAPTURE=1` on the server | Aarush | 5 min | health unchanged; a report without a token is held | step 4 |
+| 6 | B6 APK: `make apk API=https://rainready.rumblejack56.dev`; install; test camera and GPS | Ujjwal | 1 h | APK reports a stamped photo from a phone | step 4 |
+| 7 | Bedrock: console form, converse test, switch to `bedrock` or stay `manual` | Aarush | 30 min plus 15 min wait | health shows `bedrock: ok`, or manual is confirmed | none |
+| 8 | B31 client call and V6 stranger test | Aarush | 1 h | after-photo flags show | step 3 |
+| 9 | B33 docs refresh; S3 fact sheet (every spoken number with its source) | Ujjwal | 1.5 h | no 35 mm/h claim without "stress scenario"; table in `docs/PITCH.md` | step 3 |
+| 10 | S5 README and credits (AI tools, OSM ODbL, Leaflet, Capacitor, PWD API, IIT Delhi plan) | Ujjwal | 45 min | TODO line removed | none |
+| 11 | Decisions batch (below) | Ujjwal | 15 min | each answered in this file | none |
+| 12 | S4 script from SCOPE section 9; rehearse on a scratch DB with `--demo`; record | both | 3 h | video uploaded and viewed signed out | steps 1, 4, 9 |
+| 13 | A7 reset: fresh seed on live (clean, or `--demo` for the recording), new AMI | Aarush, when Ujjwal says | 20 min | health ok; AMI available | final code |
+| 14 | S6: public-repo review, signed-out clone test | Ujjwal | 45 min | checklist below passes | all code merged |
+| 15 | Freeze | both | 11 Oct 14:00 IST | no merges after | |
+
+### Decisions needed from Ujjwal
+
+| ID | Question | Recommendation |
+|---|---|---|
+| B27 | What may the public dashboard show? | Keep task detail and lists public (accountability is the product). Hide `user_id` and free-text notes of other residents in `GET /api/incidents`. Roles, never names |
+| Seed | Clean or `--demo` on live for the recording? | `--demo` only for the recording, then reset clean before submission |
+| Host | Which URL for the APK and the video? | The custom domain (`rainready.rumblejack56.dev`), with the sslip host as a fallback. Both are in Caddy |
+| Squash message | Set the repo squash message to the PR body? | Yes: `gh api -X PATCH repos/RumbleJack56/bharatbuilds -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY` |
+| Old trailers | About 40 commits on `main` carry AI trailers | Leave them; credit the tools in the README (rule 8 applies from now on) |
+| S2 | Deadline hour | Confirm 11 Oct 8:00 PM IST on the event page; freeze 2:00 PM IST |
+
+### S6 checklist (before the repo goes public)
+
+- [ ] Skim `docs/research/*.md` for names of officials (news-based notes).
+- [ ] `docs/AWS_REPORT.md` and `docs/AWS_TODO.md`: account id, instance id, bucket, IAM user name. Decide to keep or redact.
+- [ ] `data/raw/` has no contact tags (stripped at fetch); `docs/screenshots/` shows only persona data.
+- [ ] No `.env`, `*.pem`, `var/`, `mobile/android`, `*.apk` in the tree (`git ls-files`).
+- [ ] `LICENSE` present; credits list complete (S5).
+- [ ] Signed-out clone: `git clone`, `make setup`, `make test`, `make run`.
+
+### Not planned (cut order if late)
+
+Capture screen polish, simulator extras, `Protocol` refactor (B5 item 7), offline queue, work-order draft, MCD ward boundary and basin research (DATA_SOURCES section 8), field capture (B7b, needs a person on site).
+
