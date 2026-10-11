@@ -8,6 +8,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import auth, checks, config, routers
@@ -64,4 +65,18 @@ def health(deep: bool = False, x_user_id: str | None = Header(default=None), x_p
 
 
 WEB = Path(__file__).resolve().parent.parent / "web"
+
+
+@app.get("/", include_in_schema=False)
+def site():
+    """Public site (EcoPower Framer layout) with live counts. Old /#/... app links are forwarded to /app by the page."""
+    return FileResponse(WEB / "landing" / "index.html")
+
+
+@app.get("/app", include_in_schema=False)
+def app_shell():
+    """The web app. Its assets are root-relative (css/, js/), so /app serves index.html without a trailing slash."""
+    return FileResponse(WEB / "index.html")
+
+
 app.mount("/", StaticFiles(directory=WEB, html=True), name="web")
