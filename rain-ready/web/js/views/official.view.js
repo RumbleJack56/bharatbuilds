@@ -47,7 +47,7 @@ export const taskCard = (t, note = "", n = 0) => `<a class="card glass rise task
   <h3>${esc(t.asset_name)}</h3>${meta(t)}
   ${t.status === "disputed" ? `<blockquote class="quote"><strong>Resident's note:</strong> ${esc(note || "(no note)")}</blockquote>` : ""}
   <p class="ibx-gain">${icon("droplets")}<span>Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</span></p>
-  <svg class="ic chev" aria-hidden="true"><use href="img/icons.svg?v=5#i-chevron-right"/></svg></a>`;
+  <svg class="ic chev" aria-hidden="true"><use href="img/icons.svg?v=6#i-chevron-right"/></svg></a>`;
 
 // The list region the controller redraws when a filter changes.
 export const inboxList = (tasks, notes = {}) => tasks.length

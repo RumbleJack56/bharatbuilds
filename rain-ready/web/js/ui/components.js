@@ -3,7 +3,7 @@ import { esc } from "./format.js";
 
 export const chip = (status) => `<span class="chip ${esc(status)}">${esc(status)}</span>`;
 // Decorative sprite icon (the one place views build a sprite reference, so a version bump touches one line).
-export const icon = (name, cls = "ic") => `<svg class="${esc(cls)}" aria-hidden="true"><use href="img/icons.svg?v=5#i-${esc(name)}"/></svg>`;
+export const icon = (name, cls = "ic") => `<svg class="${esc(cls)}" aria-hidden="true"><use href="img/icons.svg?v=6#i-${esc(name)}"/></svg>`;
 export const empty = (text) => `<div class="empty">${icon("inbox")}<p>${esc(text)}</p></div>`;
 // Nav innerHTML: [hash, label, icon] tabs, the one whose hash prefixes the current hash is marked.
 // .tab-ic holds the icon so the phone bar can draw its active pill behind it.
