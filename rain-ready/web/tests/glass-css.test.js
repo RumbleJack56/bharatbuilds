@@ -8,15 +8,15 @@ const css = (f) => readFileSync(new URL(f, dir), "utf8");
 test("every stylesheet stays within ~250 lines", () => {
   for (const f of readdirSync(dir).filter(f => f.endsWith(".css"))) assert.ok(css(f).split("\n").length <= 250, f);
 });
-test("tokens carry the Firefly values", () => {
+test("tokens carry the Framer-look values", () => {
   const t = css("tokens.css").replace(/\s+/g, "");
-  for (const s of ["--bg:#121214", "--s1:#1a1a1d", "--accent-fill:#6d5ce6", "--radius:12px", "--radius-sm:8px", "--top-h:56px",
+  for (const s of ["--bg:#f4f5f5", "--s1:#ffffff", "--accent-fill:#2f7d81", "--radius:20px", "--radius-sm:12px", "--top-h:64px",
     "--ease:cubic-bezier(.2,.8,.2,1)", "--dur-fast:120ms", "--dur:220ms"]) assert.ok(t.includes(s), s);
 });
-test("index.html has no backdrop and links Inter with display=swap", () => {
+test("index.html has no backdrop and links Satoshi with display=swap", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   assert.doesNotMatch(html, /class="backdrop"/);
-  assert.match(html, /fonts\.googleapis\.com\/css2\?family=Inter[^"]*display=swap/);
+  assert.match(html, /api\.fontshare\.com\/v2\/css\?f\[\]=satoshi[^"]*display=swap/);
 });
 test("motion.css has no drift keyframes", () => assert.doesNotMatch(css("motion.css"), /@keyframes drift/));
 test("glass has the solid fallback when backdrop-filter is unsupported", () => {

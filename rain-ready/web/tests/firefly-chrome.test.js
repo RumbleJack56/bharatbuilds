@@ -40,6 +40,6 @@ test("task rows carry the sprite chevron; the CSS chevron is gone", () => {
 test("flat chrome CSS", () => {
   const app = web("css/app.css"), ui = web("css/ui.css");
   assert.doesNotMatch(app, /border-radius:var\(--radius\) var\(--radius\) 0 0/);
-  assert.match(app + ui, /inset 0 -2px var\(--accent\)/);
+  assert.match(app, /\.tabs a\.on\{[^}]*background:var\(--s1\)/);   // active tab is a white pill (Framer look)
   assert.match(ui, /\.menu\{/); assert.match(ui, /\.avatar/); assert.match(ui, /\.ic\{width:20px;height:20px/);
 });
