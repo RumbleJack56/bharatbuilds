@@ -8,91 +8,94 @@
 <title>Rain-Ready</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <link rel="preconnect" href="https://api.fontshare.com"><link rel="preconnect" href="https://cdn.fontshare.com" crossorigin><link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap">
-<link rel="stylesheet" href="css/tokens.css?v=4">
-<link rel="stylesheet" href="css/app.css?v=4">
-<link rel="stylesheet" href="css/ui.css?v=4">
-<link rel="stylesheet" href="css/motion.css?v=4">
+<link rel="stylesheet" href="css/tokens.css?v=5">
+<link rel="stylesheet" href="css/app.css?v=5">
+<link rel="stylesheet" href="css/ui.css?v=5">
+<link rel="stylesheet" href="css/motion.css?v=5">
+<link rel="stylesheet" href="css/phone.css?v=5">
+<link rel="stylesheet" href="css/dash.css?v=5">
+<link rel="stylesheet" href="css/inbox.css?v=5">
 </head>
 <body>
-<header class="top lg"><a class="brand" href="#/">Rain-Ready</a><div class="acct" id="acct-wrap" hidden><button id="acct" class="avatar" type="button" popovertarget="acct-menu" aria-label="Account"></button><div id="acct-menu" class="menu" popover><p class="menu-name" id="acct-name"></p><p class="menu-role muted small" id="acct-role"></p><button id="logout" class="menu-item" type="button"><svg class="ic" aria-hidden="true"><use href="img/icons.svg?v=4#i-log-out"/></svg>Log out</button></div></div></header>
+<header class="top lg"><a class="brand" href="#/">Rain-Ready</a><div class="acct" id="acct-wrap" hidden><button id="acct" class="avatar" type="button" popovertarget="acct-menu" aria-label="Account"></button><div id="acct-menu" class="menu" popover><p class="menu-name" id="acct-name"></p><p class="menu-role muted small" id="acct-role"></p><button id="logout" class="menu-item" type="button"><svg class="ic" aria-hidden="true"><use href="img/icons.svg?v=5#i-log-out"/></svg>Log out</button></div></div></header>
 <nav id="tabs" class="tabs lg" aria-label="Main"></nav>
 <main id="view" tabindex="-1"></main>
 <div id="toast" class="toast glass-strong lg" data-lg-css role="status" aria-live="polite" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <!-- Cache-busting: Cloudflare caches /css and /js for 4 h. On every deploy bump ?v= here on the css link, on main.js and on EVERY
      line of the import map (a module import has no query of its own, the map adds it). web/tests/cache-bust.test.js fails if one differs.
-     Also bump the sprite refs (img/icons.svg?v=) in this file and in js/ui/components.js and js/views/official.view.js.
-     Bump command (from the repo root, N -> N+1): sed -i 's/?v=N/?v=N+1/g' rain-ready/web/index.html rain-ready/web/js/ui/components.js rain-ready/web/js/views/official.view.js -- the test guards it. -->
+     Also bump the sprite refs (img/icons.svg?v=) in this file and in js/ui/components.js, js/views/dash.view.js and js/views/official.view.js.
+     Bump command (from the repo root, N -> N+1): sed -i 's/?v=N/?v=N+1/g' rain-ready/web/index.html rain-ready/web/js/ui/components.js rain-ready/web/js/views/dash.view.js rain-ready/web/js/views/official.view.js -- the test guards it. -->
 <script type="importmap">
 {"imports": {
-  "./js/adapters/camera-media.js": "./js/adapters/camera-media.js?v=4",
-  "./js/adapters/download-dom.js": "./js/adapters/download-dom.js?v=4",
-  "./js/adapters/geo-browser.js": "./js/adapters/geo-browser.js?v=4",
-  "./js/adapters/glass-css.js": "./js/adapters/glass-css.js?v=4",
-  "./js/adapters/glass-liquidgl.js": "./js/adapters/glass-liquidgl.js?v=4",
-  "./js/adapters/http-fetch.js": "./js/adapters/http-fetch.js?v=4",
-  "./js/adapters/image-canvas.js": "./js/adapters/image-canvas.js?v=4",
-  "./js/adapters/map-leaflet.js": "./js/adapters/map-leaflet.js?v=4",
-  "./js/adapters/storage-local.js": "./js/adapters/storage-local.js?v=4",
-  "./js/adapters/toast-dom.js": "./js/adapters/toast-dom.js?v=4",
-  "./js/adapters/transition-vt.js": "./js/adapters/transition-vt.js?v=4",
-  "./js/controllers/actions.js": "./js/controllers/actions.js?v=4",
-  "./js/controllers/admin.js": "./js/controllers/admin.js?v=4",
-  "./js/controllers/board.js": "./js/controllers/board.js?v=4",
-  "./js/controllers/city.js": "./js/controllers/city.js?v=4",
-  "./js/controllers/dash.js": "./js/controllers/dash.js?v=4",
-  "./js/controllers/dashmap.js": "./js/controllers/dashmap.js?v=4",
-  "./js/controllers/drain.js": "./js/controllers/drain.js?v=4",
-  "./js/controllers/held.js": "./js/controllers/held.js?v=4",
-  "./js/controllers/home.js": "./js/controllers/home.js?v=4",
-  "./js/controllers/index.js": "./js/controllers/index.js?v=4",
-  "./js/controllers/insights.js": "./js/controllers/insights.js?v=4",
-  "./js/controllers/login.js": "./js/controllers/login.js?v=4",
-  "./js/controllers/official.js": "./js/controllers/official.js?v=4",
-  "./js/controllers/places.js": "./js/controllers/places.js?v=4",
-  "./js/controllers/projection.js": "./js/controllers/projection.js?v=4",
-  "./js/controllers/report.js": "./js/controllers/report.js?v=4",
-  "./js/controllers/resident.js": "./js/controllers/resident.js?v=4",
-  "./js/controllers/sim.js": "./js/controllers/sim.js?v=4",
-  "./js/core/errors.js": "./js/core/errors.js?v=4",
-  "./js/core/glass.js": "./js/core/glass.js?v=4",
-  "./js/core/port.js": "./js/core/port.js?v=4",
-  "./js/core/router.js": "./js/core/router.js?v=4",
-  "./js/ports/index.js": "./js/ports/index.js?v=4",
-  "./js/services/capture.service.js": "./js/services/capture.service.js?v=4",
-  "./js/services/city.service.js": "./js/services/city.service.js?v=4",
-  "./js/services/dashboard.service.js": "./js/services/dashboard.service.js?v=4",
-  "./js/services/drains.service.js": "./js/services/drains.service.js?v=4",
-  "./js/services/incidents.service.js": "./js/services/incidents.service.js?v=4",
-  "./js/services/places.service.js": "./js/services/places.service.js?v=4",
-  "./js/services/projection.service.js": "./js/services/projection.service.js?v=4",
-  "./js/services/session.service.js": "./js/services/session.service.js?v=4",
-  "./js/services/tasks.service.js": "./js/services/tasks.service.js?v=4",
-  "./js/ui/components.js": "./js/ui/components.js?v=4",
-  "./js/ui/copy.js": "./js/ui/copy.js?v=4",
-  "./js/ui/format.js": "./js/ui/format.js?v=4",
-  "./js/ui/geo.js": "./js/ui/geo.js?v=4",
-  "./js/ui/stamp.js": "./js/ui/stamp.js?v=4",
-  "./js/views/actions.view.js": "./js/views/actions.view.js?v=4",
-  "./js/views/admin.view.js": "./js/views/admin.view.js?v=4",
-  "./js/views/board.view.js": "./js/views/board.view.js?v=4",
-  "./js/views/city.view.js": "./js/views/city.view.js?v=4",
-  "./js/views/dash.view.js": "./js/views/dash.view.js?v=4",
-  "./js/views/drain.view.js": "./js/views/drain.view.js?v=4",
-  "./js/views/held.view.js": "./js/views/held.view.js?v=4",
-  "./js/views/home.view.js": "./js/views/home.view.js?v=4",
-  "./js/views/insights.view.js": "./js/views/insights.view.js?v=4",
-  "./js/views/login.view.js": "./js/views/login.view.js?v=4",
-  "./js/views/official.view.js": "./js/views/official.view.js?v=4",
-  "./js/views/places.view.js": "./js/views/places.view.js?v=4",
-  "./js/views/projection.view.js": "./js/views/projection.view.js?v=4",
-  "./js/views/report.view.js": "./js/views/report.view.js?v=4",
-  "./js/views/resident.view.js": "./js/views/resident.view.js?v=4",
-  "./js/views/sim.view.js": "./js/views/sim.view.js?v=4"
+  "./js/adapters/camera-media.js": "./js/adapters/camera-media.js?v=5",
+  "./js/adapters/download-dom.js": "./js/adapters/download-dom.js?v=5",
+  "./js/adapters/geo-browser.js": "./js/adapters/geo-browser.js?v=5",
+  "./js/adapters/glass-css.js": "./js/adapters/glass-css.js?v=5",
+  "./js/adapters/glass-liquidgl.js": "./js/adapters/glass-liquidgl.js?v=5",
+  "./js/adapters/http-fetch.js": "./js/adapters/http-fetch.js?v=5",
+  "./js/adapters/image-canvas.js": "./js/adapters/image-canvas.js?v=5",
+  "./js/adapters/map-leaflet.js": "./js/adapters/map-leaflet.js?v=5",
+  "./js/adapters/storage-local.js": "./js/adapters/storage-local.js?v=5",
+  "./js/adapters/toast-dom.js": "./js/adapters/toast-dom.js?v=5",
+  "./js/adapters/transition-vt.js": "./js/adapters/transition-vt.js?v=5",
+  "./js/controllers/actions.js": "./js/controllers/actions.js?v=5",
+  "./js/controllers/admin.js": "./js/controllers/admin.js?v=5",
+  "./js/controllers/board.js": "./js/controllers/board.js?v=5",
+  "./js/controllers/city.js": "./js/controllers/city.js?v=5",
+  "./js/controllers/dash.js": "./js/controllers/dash.js?v=5",
+  "./js/controllers/dashmap.js": "./js/controllers/dashmap.js?v=5",
+  "./js/controllers/drain.js": "./js/controllers/drain.js?v=5",
+  "./js/controllers/held.js": "./js/controllers/held.js?v=5",
+  "./js/controllers/home.js": "./js/controllers/home.js?v=5",
+  "./js/controllers/index.js": "./js/controllers/index.js?v=5",
+  "./js/controllers/insights.js": "./js/controllers/insights.js?v=5",
+  "./js/controllers/login.js": "./js/controllers/login.js?v=5",
+  "./js/controllers/official.js": "./js/controllers/official.js?v=5",
+  "./js/controllers/places.js": "./js/controllers/places.js?v=5",
+  "./js/controllers/projection.js": "./js/controllers/projection.js?v=5",
+  "./js/controllers/report.js": "./js/controllers/report.js?v=5",
+  "./js/controllers/resident.js": "./js/controllers/resident.js?v=5",
+  "./js/controllers/sim.js": "./js/controllers/sim.js?v=5",
+  "./js/core/errors.js": "./js/core/errors.js?v=5",
+  "./js/core/glass.js": "./js/core/glass.js?v=5",
+  "./js/core/port.js": "./js/core/port.js?v=5",
+  "./js/core/router.js": "./js/core/router.js?v=5",
+  "./js/ports/index.js": "./js/ports/index.js?v=5",
+  "./js/services/capture.service.js": "./js/services/capture.service.js?v=5",
+  "./js/services/city.service.js": "./js/services/city.service.js?v=5",
+  "./js/services/dashboard.service.js": "./js/services/dashboard.service.js?v=5",
+  "./js/services/drains.service.js": "./js/services/drains.service.js?v=5",
+  "./js/services/incidents.service.js": "./js/services/incidents.service.js?v=5",
+  "./js/services/places.service.js": "./js/services/places.service.js?v=5",
+  "./js/services/projection.service.js": "./js/services/projection.service.js?v=5",
+  "./js/services/session.service.js": "./js/services/session.service.js?v=5",
+  "./js/services/tasks.service.js": "./js/services/tasks.service.js?v=5",
+  "./js/ui/components.js": "./js/ui/components.js?v=5",
+  "./js/ui/copy.js": "./js/ui/copy.js?v=5",
+  "./js/ui/format.js": "./js/ui/format.js?v=5",
+  "./js/ui/geo.js": "./js/ui/geo.js?v=5",
+  "./js/ui/stamp.js": "./js/ui/stamp.js?v=5",
+  "./js/views/actions.view.js": "./js/views/actions.view.js?v=5",
+  "./js/views/admin.view.js": "./js/views/admin.view.js?v=5",
+  "./js/views/board.view.js": "./js/views/board.view.js?v=5",
+  "./js/views/city.view.js": "./js/views/city.view.js?v=5",
+  "./js/views/dash.view.js": "./js/views/dash.view.js?v=5",
+  "./js/views/drain.view.js": "./js/views/drain.view.js?v=5",
+  "./js/views/held.view.js": "./js/views/held.view.js?v=5",
+  "./js/views/home.view.js": "./js/views/home.view.js?v=5",
+  "./js/views/insights.view.js": "./js/views/insights.view.js?v=5",
+  "./js/views/login.view.js": "./js/views/login.view.js?v=5",
+  "./js/views/official.view.js": "./js/views/official.view.js?v=5",
+  "./js/views/places.view.js": "./js/views/places.view.js?v=5",
+  "./js/views/projection.view.js": "./js/views/projection.view.js?v=5",
+  "./js/views/report.view.js": "./js/views/report.view.js?v=5",
+  "./js/views/resident.view.js": "./js/views/resident.view.js?v=5",
+  "./js/views/sim.view.js": "./js/views/sim.view.js?v=5"
 }}
 </script>
 <script async type="module" src="https://cdn.jsdelivr.net/npm/liquid-gl@2.2.4/liquidGL.min.js"></script>
 <script src="config.js"></script>
-<script type="module" src="js/main.js?v=4"></script>
+<script type="module" src="js/main.js?v=5"></script>
 </body>
 </html>
