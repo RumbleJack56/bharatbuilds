@@ -1,5 +1,6 @@
 // web/js/controllers/index.js — route table. every entry is a Controller (PLAN.md 2.2).
 import { login } from "./login.js";
+import { welcome } from "./welcome.js";
 import { report } from "./report.js";
 import { mine, confirm } from "./resident.js";
 import { inbox, task } from "./official.js";
@@ -14,6 +15,7 @@ import { drain } from "./drain.js";
 
 export const CONTROLLERS = [
   login,
+  welcome,
   dash,
   report,
   mine,

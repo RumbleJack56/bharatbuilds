@@ -86,3 +86,33 @@ fieldset.plain{border:0;padding:0;margin:8px 0}
   .fab{bottom:16px}
   .toast{left:50%;right:auto;width:min(480px,calc(100% - 24px));transform:translateX(-50%);bottom:24px}
 }
+/* welcome (#/welcome): the website's landing page inside the app and the APK */
+.welcome{display:flex;flex-direction:column;gap:28px}
+.w-hero{display:flex;flex-direction:column;justify-content:flex-end;gap:10px;min-height:min(78vh,620px);margin:-8px 0 0;padding:24px 20px 22px;border-radius:28px;color:#fff;
+  background:linear-gradient(180deg,rgba(8,30,32,.1) 25%,rgba(8,30,32,.72)),url(../img/hero.jpg) center/cover}
+.w-word{margin:0 0 auto;text-align:center;font-weight:700;font-size:clamp(46px,15vw,120px);line-height:1;letter-spacing:-.05em;
+  background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.15));-webkit-background-clip:text;background-clip:text;color:transparent}
+.w-hero h1{margin:0;color:#fff;font-size:clamp(32px,8vw,48px)}.w-hero p{margin:0;color:#fff;max-width:30em}
+.w-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.w-acts .btn:not(.go){background:rgba(255,255,255,.88);color:var(--fg)}
+.w-sec h2{margin:.2em 0 .5em}.w-sec .eyebrow{margin:0}
+.w-logos{list-style:none;margin:12px 0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px 12px}
+.w-logos li{display:flex;align-items:center;gap:10px}
+.w-logos img,.w-mono{flex:none;width:52px;height:52px;object-fit:contain}
+.w-mono{display:grid;place-items:center;border-radius:50%;background:var(--accent-fill);color:#fff;font-size:13px;letter-spacing:-.02em}
+.w-logos span{display:flex;flex-direction:column;font-size:12px;line-height:1.3;color:var(--fg-muted)}.w-logos strong{font-size:16px;color:var(--fg)}
+.w-about{display:grid;gap:16px}.w-about img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;object-position:50% 75%;border-radius:var(--radius)}
+.w-about h2{font-size:22px;line-height:1.3}
+.w-stats{display:grid;gap:10px}
+.w-stat{position:relative;display:flex;align-items:flex-end;min-height:180px;margin:0;border-radius:var(--radius);overflow:hidden;color:#fff}
+.w-stat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.w-stat figcaption{position:relative;width:100%;padding:40px 18px 16px;background:linear-gradient(180deg,rgba(8,30,32,0),rgba(8,30,32,.8))}
+.w-stat strong{display:block;font-size:44px;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.w-steps,.w-who{display:grid;gap:10px}.w-steps .card,.w-who .card{margin:0}
+.w-ic{display:grid;place-items:center;width:40px;height:40px;margin-bottom:10px;border-radius:50%;background:color-mix(in srgb, var(--accent-fill) 14%, var(--s1));color:var(--accent)}
+.w-who img{display:block;width:100%;height:auto;aspect-ratio:13/10;object-fit:cover;border-radius:14px;margin-bottom:10px}
+.w-cta{display:flex;flex-direction:column;align-items:center;gap:18px;padding:48px 20px;border-radius:28px;text-align:center;color:#fff;
+  background:linear-gradient(rgba(8,30,32,.4),rgba(8,30,32,.55)),url(../landing/img/cta.jpg) center/cover}
+.w-cta h2{margin:0;color:#fff;font-size:28px;font-weight:600}
+.w-credits{margin:0}
+@media (min-width:641px){.w-logos{grid-template-columns:repeat(4,1fr)}.w-about{grid-template-columns:5fr 7fr;align-items:center}
+  .w-stats,.w-who{grid-template-columns:repeat(3,1fr)}.w-steps{grid-template-columns:repeat(2,1fr)}}

@@ -9,7 +9,7 @@ export const TAB_ICONS = { map: "map", accountability: "building-2", actions: "l
 // Pages outside the dashboard route that the strip and the home tiles also open.
 export const MORE_VIEWS = [["#/projection", "Projection", "trending-up"], ["#/city", "Delhi evidence", "landmark"], ["#/places", "Waterlogging places", "map-pin"]];
 const STATUS = ["open", "accepted", "done", "confirmed", "disputed", "rejected"];
-export const SPRITE = "img/icons.svg?v=5";
+export const SPRITE = "img/icons.svg?v=6";
 export const icon = (name, cls = "ic") => `<svg class="${cls}" aria-hidden="true"><use href="${SPRITE}#i-${esc(name)}"/></svg>`;
 
 // One row of chips: Overview, the seven tabs, then the three pages outside the dashboard (marked with an arrow).
