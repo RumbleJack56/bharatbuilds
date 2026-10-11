@@ -24,7 +24,7 @@ test("the import map holds no entry for a missing module", () => {
 });
 test("every stylesheet link carries the same version", () => {
   const links = [...html.matchAll(/<link rel="stylesheet" href="(css\/[\w-]+\.css)\?v=([\w.-]+)"/g)];
-  assert.deepEqual(links.map(l => l[1]), ["css/tokens.css", "css/app.css", "css/ui.css", "css/motion.css"]);
+  assert.deepEqual(links.map(l => l[1]), ["css/tokens.css", "css/app.css", "css/ui.css", "css/motion.css", "css/phone.css", "css/dash.css", "css/inbox.css"]);
   for (const [, href, v] of links) assert.equal(v, V, href);
 });
 test("every icons.svg reference carries the same version", () => {

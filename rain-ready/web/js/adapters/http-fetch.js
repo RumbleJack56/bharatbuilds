@@ -8,7 +8,7 @@ function detailText(d) {
   return JSON.stringify(d);
 }
 
-export function createFetchHttp({ base = "", getUserId = () => "", fetchImpl = (...a) => globalThis.fetch(...a) } = {}) {
+export function createFetchHttp({ base = "", getUserId = () => "", fetchImpl = (...a) => globalThis.fetch(...a), retryMs = 150 } = {}) {
   const root = base.replace(/\/$/, "");
   return {
     async request(method, path, { json, form, text } = {}) {
@@ -19,7 +19,11 @@ export function createFetchHttp({ base = "", getUserId = () => "", fetchImpl = (
       if (json !== undefined) { headers["Content-Type"] = "application/json"; body = JSON.stringify(json); }
       else if (form) body = form;
       let res;
-      try { res = await fetchImpl(root + path, { method, headers, body }); }
+      try {
+        res = await fetchImpl(root + path, { method, headers, body });
+        // A GET is read-only, so one retry after a 5xx is harmless; it rides out the server's intermittent 500 under parallel reads.
+        if (method === "GET" && res.status >= 500) { await new Promise(r => setTimeout(r, retryMs)); res = await fetchImpl(root + path, { method, headers, body }); }
+      }
       catch { throw new ApiError("Cannot reach the server. Check your connection.", 0); }
       if (text && res.ok) return res.text();
       let data = null;

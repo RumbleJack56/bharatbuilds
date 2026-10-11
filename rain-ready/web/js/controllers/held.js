@@ -11,6 +11,7 @@ export const held = {
     const places = await dashboard.map().then(m => Object.fromEntries(m.assets.map(a => [a.id, a.name])), () => ({}));
     const draw = async (result = null) => {
       root.innerHTML = heldView({ items: await incidents.held(), places, canReview, result });
+      if (result) root.querySelector(".hld-result")?.focus();                // the tapped card is gone: keep keyboard focus on the outcome
       root.querySelectorAll("[data-inc]").forEach(c => ["release", "reject"].forEach(decision => {
         const btn = c.querySelector(`[data-act="${decision}"]`);
         if (!btn) return;

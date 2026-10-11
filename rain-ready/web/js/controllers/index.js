@@ -7,6 +7,10 @@ import { admin } from "./admin.js";
 import { dash } from "./dash.js";
 import { held } from "./held.js";
 import { board } from "./board.js";
+import { city } from "./city.js";
+import { places, road } from "./places.js";
+import { projection } from "./projection.js";
+import { drain } from "./drain.js";
 
 export const CONTROLLERS = [
   login,
@@ -19,6 +23,11 @@ export const CONTROLLERS = [
   admin,
   held,
   board,
+  city,
+  places,
+  road,
+  projection,
+  drain,
 ];
 export const TABS = {
   resident: [["#/report", "Report", "camera"], ["#/mine", "My reports", "list"], ["#/confirm", "Confirm", "circle-check"], ["#/dash", "Dashboard", "layout-dashboard"], ["#/board", "Board", "trophy"]],

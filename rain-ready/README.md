@@ -12,7 +12,7 @@ Docs: [`SCOPE.md`](SCOPE.md) (what we build), [`docs/API.md`](docs/API.md) (endp
 
 ## Run
 ```
-make setup && make run      # http://localhost:8010   API docs at /docs
+make setup && make run      # site http://localhost:8010   app /app   API docs /docs
 make test
 ```
 
@@ -21,5 +21,7 @@ EC2 (host), S3 (photos), Bedrock (photo to report category).
 
 ## Credits and AI tools
 - FastAPI, Uvicorn, Pydantic, boto3 (open source). Leaflet 1.9.4 and OpenStreetMap tiles. Capacitor (MIT).
+- Public site and app look: layout after the EcoPower template for Framer. Font: Satoshi (Fontshare). Icons: Lucide (ISC).
+- Photos on the site: Unsplash (Unsplash License), listed with links in the site footer. They are illustrative, not of the pilot ward.
 - Built with Claude Code (Claude Sonnet 5.5) as a coding assistant.
 - TODO before submission: LICENSE and the final credits list.

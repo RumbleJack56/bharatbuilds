@@ -38,3 +38,11 @@ test("geo rejects with a readable message when denied or missing", async () => {
   await assert.rejects(createBrowserGeo({ getCurrentPosition: (_, fail) => fail({ code: 1 }) }).current(), /Could not get GPS/);
   await assert.rejects(createBrowserGeo(null).current(), /No GPS/);
 });
+test("a GET that gets a 5xx is retried once; a POST is not", async () => {
+  let n = 0;
+  const flaky = createFetchHttp({ retryMs: 0, fetchImpl: async () => (++n === 1 ? res(500, { detail: "boom" }) : res(200, { ok: 1 })) });
+  assert.deepEqual(await flaky.request("GET", "/api/x"), { ok: 1 }); assert.equal(n, 2);
+  let p = 0;
+  const post = createFetchHttp({ retryMs: 0, fetchImpl: async () => { p++; return res(500, { detail: "boom" }); } });
+  await assert.rejects(post.request("POST", "/api/x", { json: {} }), e => e.status === 500); assert.equal(p, 1);
+});
