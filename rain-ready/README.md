@@ -369,7 +369,7 @@ make apk API=https://<your-host>        # writes mobile/rain-ready.apk
 adb install -r mobile/rain-ready.apk
 ```
 
-The API must be HTTPS, because camera and GPS need a secure origin.. See [`mobile/README.md`](mobile/README.md).
+The API must be HTTPS, because camera and GPS need a secure origin. See [`mobile/README.md`](mobile/README.md).
 
 ## API overview
 
