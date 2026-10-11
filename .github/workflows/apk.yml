@@ -1,0 +1,29 @@
+name: apk
+# Builds the debug APK (rain-ready/mobile/build.sh) on GitHub's runner, which has the Android SDK
+# preinstalled, and uploads it as the "rain-ready-apk" artifact. Runs on pushes to taher/apk-build
+# or by hand from the Actions tab. API base: repo variable APK_API_BASE, else the live host.
+on:
+  push:
+    branches: [taher/apk-build]
+  workflow_dispatch:
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rain-ready/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: bash build.sh "${{ vars.APK_API_BASE || 'https://rainready.rumblejack56.dev' }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rain-ready-apk
+          path: rain-ready/mobile/rain-ready.apk
+          if-no-files-found: error
