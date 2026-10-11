@@ -26,7 +26,7 @@ test("V11: after Accept, the task page shows the to-be-redone note", () => {
 test("V11: inbox controller loads detail only for disputed tasks to get the note", async () => {
   const http = createFakeHttp({ "GET /api/tasks/7": T });
   const tasks = { list: async () => ({ tasks: [T, { ...T, id: 8, status: "open" }], banner: "" }), get: async (id) => http.request("GET", `/api/tasks/${id}`) };
-  const root = { innerHTML: "" };
+  const root = { innerHTML: "", querySelector: () => null };   // no filter bar to wire in a fake root
   await inbox.mount(root, { services: { session: { me: async () => ({ agency_id: "mcd" }) }, tasks } });
   assert.match(root.innerHTML, /Still full of plastic/);
   assert.deepEqual(http.calls.map(c => c.path), ["/api/tasks/7"]);

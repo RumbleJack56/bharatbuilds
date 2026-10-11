@@ -1,20 +1,35 @@
 // web/js/controllers/official.js — inbox and the task page with role-aware actions.
-import { inboxView, taskDetail, disputeNote, openActions, disputedActions, acceptedActions, assignActions, waitingActions } from "../views/official.view.js";
+import { inboxView, inboxList, filterTasks, showing, taskDetail, disputeNote, openActions, disputedActions, acceptedActions, assignActions, waitingActions } from "../views/official.view.js";
 import { guard } from "../ui/components.js";
 import { esc } from "../ui/format.js";
 import { CAMERA } from "../ui/copy.js";
 
 const BACK = { official: "#/inbox", admin: "#/admin", resident: "#/mine" };
+let filter = "all";                 // the last inbox filter, kept for the session so Back returns to the same view
 
 export const inbox = {
   path: "inbox", roles: ["official"],
   async mount(root, ctx) {
     const me = await ctx.services.session.me();
     const data = await ctx.services.tasks.list({ agencyId: me.agency_id });
-    // The list has no events; a disputed task's note comes from its detail.
+    // The list carries each disputed task's note (dispute_note); without it the note comes from the detail.
     const notes = {};
-    await Promise.all(data.tasks.filter(t => t.status === "disputed").map(async t => { notes[t.id] = await ctx.services.tasks.get(t.id).then(disputeNote, () => ""); }));   // one failure leaves that note empty
-    root.innerHTML = inboxView(data, notes);
+    await Promise.all(data.tasks.filter(t => t.status === "disputed").map(async t => {
+      notes[t.id] = typeof t.dispute_note === "string" ? t.dispute_note : await ctx.services.tasks.get(t.id).then(disputeNote, () => "");   // one failure leaves that note empty
+    }));
+    root.innerHTML = inboxView(data, notes, filter);
+    // Filters run on the loaded list: only the list redraws, so focus stays on the pressed chip.
+    const box = root.querySelector(".ibx"), list = root.querySelector("#ibx-list");
+    if (!box || !list) return;                                             // an empty inbox has no filters
+    box.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-filter]");
+      if (!btn) return;
+      filter = btn.dataset.filter;
+      box.querySelectorAll(".ibx-filter").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.filter === filter)));
+      box.querySelector(".ibx-showing").textContent = showing(data.tasks, filter);
+      list.innerHTML = inboxList(filterTasks(data.tasks, filter), notes);
+      if (!btn.classList.contains("ibx-filter")) box.querySelector(".ibx-filter[aria-pressed=true]").focus();   // "Show all" was redrawn away
+    });
   },
 };
 
