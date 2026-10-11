@@ -63,6 +63,28 @@ fieldset.plain{border:0;padding:0;margin:8px 0}
 .hero p{margin:0 0 18px;max-width:28em}
 .personas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 20px}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 0}
+/* dashboard home (phone app): photo hero with glass count cards, progress stepper, owners, action feed, tiles */
+.home-hero{margin:-4px 0 8px;padding:20px 16px 16px;border-radius:28px;color:#fff;
+  background:linear-gradient(180deg,rgba(8,30,32,.2),rgba(8,30,32,.66)),url(../img/hero.jpg) center/cover}
+.home-hero .eyebrow{margin:0;color:#dff1f1}.home-hero h1{color:#fff;font-size:28px;margin:.15em 0 .7em}.home-hero p{color:#fff}
+.area-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.area-stats .card{margin:0;padding:12px;border-radius:18px;color:var(--fg)}
+.area-stats strong{display:block;font-size:30px;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.area-stats span{font-size:13px;color:var(--body)}
+.home-cta{width:100%;min-height:56px;font-size:17px}
+.complaint{margin:0}.complaint p{margin:6px 0 0}
+.stepper{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:12px 0 0;padding:0}
+.stepper li{padding-top:8px;border-top:4px solid var(--s2);font-size:12px;line-height:1.3;color:var(--fg-muted)}
+.stepper li.on{border-top-color:var(--accent-fill);color:var(--fg)}.stepper li.now{font-weight:700}
+.owners{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.owners .card{margin:0;padding:14px}.owners strong{font-size:26px;line-height:1.1;color:var(--accent)}.owners p{margin:4px 0 0}
+.owners .owner-name{margin:0;font-weight:700;color:var(--fg)}
+.feed{list-style:none;margin:0 0 8px;padding:0}
+.feed li{display:grid;grid-template-columns:12px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.feed li::before{content:"";width:10px;height:10px;margin-top:7px;border-radius:50%;background:var(--accent-fill)}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
+.tiles a{display:flex;align-items:center;min-height:52px;padding:0 16px;border:1px solid var(--line);border-radius:16px;background:var(--s1);color:var(--fg);font-weight:600;text-decoration:none}
+.tiles a:hover{border-color:var(--accent-fill)}
 @media (max-width:640px){
   body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
   .tabs{position:fixed;bottom:0;left:0;right:0;margin:0 10px calc(10px + env(safe-area-inset-bottom));padding:4px;border-radius:28px;box-shadow:var(--shadow-menu)}

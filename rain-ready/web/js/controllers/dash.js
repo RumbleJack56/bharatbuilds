@@ -5,6 +5,8 @@ import { mapPane } from "./dashmap.js";
 import { simPane } from "./sim.js";
 import { actionsPane } from "./actions.js";
 import { insightsPane } from "./insights.js";
+import { homePane } from "./home.js";
+import { homeShell } from "../views/home.view.js";
 
 const PANES = {
   map: mapPane,
@@ -19,6 +21,11 @@ const PANES = {
 export const dash = {
   path: "dash", roles: null,
   async mount(root, ctx, [tab]) {
+    if (!tab) {                                                  // #/dash alone: the phone-app home; every tab keeps its own URL
+      root.innerHTML = homeShell();
+      const pane = root.querySelector("#pane");
+      try { return (await homePane(pane, ctx)) || undefined; } catch (e) { pane.innerHTML = errBox(e); return; }
+    }
     const t = TAB_TITLES[tab] ? tab : "map";
     root.innerHTML = dashShell(t);
     const pane = root.querySelector("#pane");
