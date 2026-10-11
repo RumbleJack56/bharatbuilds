@@ -206,7 +206,7 @@ sleep 10; curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 
 Do this after Ujjwal's fix for pre-signed URLs is on `main` and deployed.
 
-1. On a phone, open `https://<ip-with-dashes>.sslip.io`, log in as a resident and send a report with a photo.
+1. On a phone, open `https://15-207-177-122.sslip.io`, log in as a resident and send a report with a photo.
 2. Log in as `off-mcd`, open the task and tap the photo.
 
 ```bash

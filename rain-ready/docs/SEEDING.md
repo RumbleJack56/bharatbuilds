@@ -95,7 +95,7 @@ docker compose build app
 docker compose run --rm app python -m scripts.seed_db --force --db /app/var/rainready.db     # add --demo for rehearsal history
 docker compose run --rm app python -m scripts.verify_db --db /app/var/rainready.db
 docker compose up -d app
-curl -s https://<ip-with-dashes>.sslip.io/api/health && curl -s https://<ip-with-dashes>.sslip.io/api/city/summary | head -c 300
+curl -s https://15-207-177-122.sslip.io/api/health && curl -s https://15-207-177-122.sslip.io/api/city/summary | head -c 300
 ```
 Step 2 replaces every report, task and photo reference on the server. With `STORAGE=s3` the photos stay in the bucket but the rows that point to them go.
 The database already holds one test report outside the ward (`PLAN.md`); a rebuild clears it.

@@ -11,7 +11,7 @@ This is the report-back for `docs/AARUSH_PROMPT.md` Parts A to C. The AWS steps 
 | 3.2 to 3.3 OIDC provider and deploy role | done | GitHub OIDC provider created. Role ARN: `arn:aws:iam::<account-id>:role/rainready-github-deploy` |
 | 3.4 manual deploy | Success | `scripts/deploy-ssm.sh` status Success; commit `5a17d71` is live |
 | 3.7 capture secret | set | It was empty. It was set on the server and never printed |
-| New build live | pass | `/api/health` gives ok with 11 routers and no `router_errors`. `/api/leaderboard` gives 200. Both checked on https://<ip-with-dashes>.sslip.io and https://rainready.rumblejack56.dev |
+| New build live | pass | `/api/health` gives ok with 11 routers and no `router_errors`. `/api/leaderboard` gives 200. Both checked on https://15-207-177-122.sslip.io and https://rainready.rumblejack56.dev |
 | Part B live seed | pass | Clean seed, no `--demo`. Backup first: `var/backup-20261010-0626.db` on the server. `scripts.verify_db`: **26 of 26 checks passed**. `/api/city/summary` gives 1100 location-dates and 616 places. `/board` gives 200 |
 | Section 4 Bedrock | manual (pending) | Inference profiles listed. Active Haiku options include `global.anthropic.claude-haiku-4-5-20251001-v1:0` and `in.anthropic.claude-haiku-4-5-20251001-v1:0`. Converse test not run. `TRIAGE_MODE=manual` |
 | Section 5 phone photo | pending | A person's step (see below) |
