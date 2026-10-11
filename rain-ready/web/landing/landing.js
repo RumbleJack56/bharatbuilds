@@ -1,5 +1,5 @@
 // web/landing/landing.js — fills the public site from the API: counts and agencies. HTTP goes through the shared adapter; no number is hard-coded.
-import { get, esc, hrs, agencyParts } from "/landing/site.js?v=3";
+import { get, esc, agencyParts } from "/landing/site.js?v=3";
 
 const set = (key, text) => document.querySelectorAll(`[data-stat="${key}"]`).forEach(el => { el.textContent = text; });
 
@@ -9,20 +9,18 @@ async function counts() {
   set("pockets", String(map.pockets.length));
   set("drains", String(map.assets.length));
   set("unowned", String(noOwner ? noOwner.assets_owned : 0));
-  set("rain", `${map.reference_rain_mm_h} mm/h`);
-  const fills = map.pockets.filter(p => p.time_to_fill_h != null).sort((a, b) => a.time_to_fill_h - b.time_to_fill_h);
-  if (fills.length) {
-    set("fastest", hrs(fills[0].time_to_fill_h));
-    set("fastest-name", `Fastest pocket to fill: ${fills[0].name}`);
-  }
-  if (map.banner) document.getElementById("banner").textContent = map.banner;
 }
+
+// Each agency's own logo where it has one. PWD and I&FC only use the State Emblem of India, which may not be reused here,
+// so they get a plain initials badge instead.
+const LOGOS = { mcd: "/landing/img/logos/mcd.png", djb: "/landing/img/logos/djb.png" };
 
 async function agencies() {
   const { agencies: list } = await get("/api/agencies");
   document.getElementById("agencies").innerHTML = list.map(a => {
     const [short, full] = agencyParts(a.name);
-    return `<li><strong>${esc(short)}</strong><span>${esc(full)}</span></li>`;
+    const mark = LOGOS[a.id] ? `<img src="${LOGOS[a.id]}" width="120" height="120" alt="${esc(full)} logo">` : `<b class="mono" aria-hidden="true">${esc(short)}</b>`;
+    return `<li>${mark}<span><strong>${esc(short)}</strong>${esc(full)}</span></li>`;
   }).join("");
 }
 

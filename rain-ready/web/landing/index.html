@@ -9,7 +9,7 @@
 <title>Rain-Ready</title>
 <link rel="preconnect" href="https://api.fontshare.com"><link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap">
-<link rel="stylesheet" href="/landing/landing.css?v=7">
+<link rel="stylesheet" href="/landing/landing.css?v=9">
 </head>
 <body>
 <!-- Public site served at / (layout after the EcoPower Framer template). Static copy plus live data from the API (landing.js). SCOPE.md section 7: no invented numbers. -->
@@ -21,10 +21,10 @@
 
 <header class="nav">
   <a class="logo" href="#top"><svg aria-hidden="true"><use href="#drop"/></svg>Rain-Ready</a>
-  <nav class="menu" aria-label="Site"><a href="#about">About</a><a href="/landing/pockets.html">Pockets</a><a href="/landing/agencies.html">Agencies</a><a href="#steps">What it does</a><a href="#screens">Screens</a></nav>
+  <nav class="menu" aria-label="Site"><a href="#about">About</a><a href="/landing/pockets.html">Pockets</a><a href="/landing/agencies.html">Agencies</a><a href="#steps">What it does</a></nav>
   <div class="nav-r">
     <details class="mnav"><summary aria-label="Menu"><svg aria-hidden="true"><use href="#menu"/></svg></summary>
-      <nav aria-label="Site menu"><a href="/" aria-current="page">Home</a><a href="#about">About</a><a href="#insight">Insight</a><a href="/landing/pockets.html">Pockets</a><a href="/landing/agencies.html">Agencies</a><a href="#steps">What it does</a><a href="#screens">Screens</a><a href="/board">Public board</a></nav></details>
+      <nav aria-label="Site menu"><a href="/" aria-current="page">Home</a><a href="#about">About</a><a href="/landing/pockets.html">Pockets</a><a href="/landing/agencies.html">Agencies</a><a href="#steps">What it does</a><a href="/board">Public board</a></nav></details>
     <a class="btn" href="/app#/login"><span class="t">Open the app</span><span class="i" aria-hidden="true"><svg><use href="#up"/></svg></span></a>
   </div>
 </header>
@@ -44,6 +44,7 @@
 <section class="logos" aria-labelledby="logos-h">
   <p class="tag" id="logos-h">Agencies in the pilot ward</p>
   <ul id="agencies"></ul>
+  <p class="note">Logos belong to their agencies and only identify them. Rain-Ready is an independent project, not affiliated with any agency.</p>
 </section>
 
 <section class="sec" id="about">
@@ -63,32 +64,6 @@
   <p class="note" id="stats-note">Live counts from this server. Photos are illustrative, not of the pilot ward. Pilot ward: Old Rajinder Nagar and Karol Bagh, Delhi. Placeholder values are labelled in the app.</p>
 </section>
 
-<section class="sec grey" id="insight">
-  <p class="banner" id="banner">Scenario, not a forecast.</p>
-  <div class="bento">
-    <div class="bento-l">
-      <article class="card photo" style="--img:url(/landing/img/loop.jpg)">
-        <h3>The loop</h3>
-        <ul class="pills"><li>Report</li><li>Assign</li><li>Fix</li><li>Confirm</li><li>Measure</li></ul>
-      </article>
-      <article class="card">
-        <h3>Silt estimate</h3>
-        <div class="gauge"><svg viewBox="0 0 200 108" aria-hidden="true"><path class="g0" d="M14 100a86 86 0 0 1 172 0"/><path class="g1" d="M14 100a86 86 0 0 1 86-86"/></svg><p><strong>about 50%</strong>never cleaned</p></div>
-        <p class="small">Model value, illustrative. A drain with no confirmed clean counts as about half silted. A confirmed job resets the estimate.</p>
-      </article>
-      <article class="card wide">
-        <h3>Task states</h3>
-        <ol class="bars"><li style="--i:0">Open</li><li style="--i:1">Accepted</li><li style="--i:2">Done</li><li style="--i:3">Confirmed</li></ol>
-        <p class="small">A different resident confirms or disputes. Every step is kept in the task history.</p>
-      </article>
-    </div>
-    <article class="card photo tall" style="--img:url(/landing/img/ripples.jpg)">
-      <div><p class="k">Reference rain</p><p class="v" data-stat="rain">–</p></div>
-      <div><p class="big" data-stat="fastest">–</p><p class="k" data-stat="fastest-name">Fastest pocket to fill</p></div>
-    </article>
-  </div>
-</section>
-
 <section class="sec" id="steps">
   <p class="tag">What it does</p>
   <div class="head">
@@ -101,34 +76,6 @@
     <article class="feat"><span class="ico"><svg aria-hidden="true"><use href="/img/icons.svg#i-list"/></svg></span><h3>Rank</h3><p>Tasks are ordered by the hours of fill time that cleaning would buy at the reference rain.</p></article>
     <article class="feat"><span class="ico"><svg aria-hidden="true"><use href="#eye"/></svg></span><h3>Confirm</h3><p>A different resident confirms or disputes the work. Whoever did the job cannot confirm it.</p></article>
   </div>
-</section>
-
-<section class="sec" id="screens">
-  <p class="tag">Screens</p>
-  <div class="head">
-    <h2>What runs today</h2>
-    <p>Four screens from the app on the clean seed. Pick a demo persona on the first screen to open the dashboard.</p>
-  </div>
-  <article class="row">
-    <div><h3>Dashboard map</h3><p>Low-point pockets, drains and open tasks on one map, with the scenario notice.</p>
-      <a class="btn" href="/app#/dash/map"><span class="t">Open the map</span><span class="i" aria-hidden="true"><svg><use href="#up"/></svg></span></a><p class="where">Dashboard, Map tab</p></div>
-    <img src="/landing/img/screen-map.jpg" width="780" height="480" loading="lazy" alt="Dashboard map with low-point pockets around Karol Bagh">
-  </article>
-  <article class="row">
-    <div><h3>Who is responsible</h3><p>Drains owned per agency and task counts. “No owner found” is its own row and is a finding, not an error.</p>
-      <a class="btn" href="/app#/dash/accountability"><span class="t">Open the chart</span><span class="i" aria-hidden="true"><svg><use href="#up"/></svg></span></a><p class="where">Dashboard, Who is responsible tab</p></div>
-    <img src="/landing/img/screen-owners.jpg" width="780" height="480" loading="lazy" alt="Responsibility chart with drains owned and task counts for one agency">
-  </article>
-  <article class="row">
-    <div><h3>Rain simulator</h3><p>Pocket fill times at the reference rain, with the drain choices: all cleaned, all silted, or as they are now.</p>
-      <a class="btn" href="/app#/dash/simulator"><span class="t">Open the simulator</span><span class="i" aria-hidden="true"><svg><use href="#up"/></svg></span></a><p class="where">Dashboard, Simulator tab</p></div>
-    <img src="/landing/img/screen-simulator.jpg" width="780" height="480" loading="lazy" alt="Rain simulator slider at the reference rain with drain choices">
-  </article>
-  <article class="row">
-    <div><h3>Public board</h3><p>Agency scores with their raw inputs, how the score works, and the action log. No person is named.</p>
-      <a class="btn" href="/board"><span class="t">Open the board</span><span class="i" aria-hidden="true"><svg><use href="#up"/></svg></span></a><p class="where">Public, no login</p></div>
-    <img src="/landing/img/screen-board.jpg" width="780" height="480" loading="lazy" alt="Public board heading with the scenario notice">
-  </article>
 </section>
 
 <section class="sec grey center" id="who">
@@ -144,7 +91,6 @@
   </div>
 </section>
 
-
 <section class="cta">
   <h2>See who acts, how fast, and did it hold</h2>
   <a class="btn" href="/board"><span class="t">Open the public board</span><span class="i" aria-hidden="true"><svg><use href="#up"/></svg></span></a>
@@ -155,18 +101,19 @@
   <div class="cols">
     <div><h4>Pilot ward</h4><p>Old Rajinder Nagar and Karol Bagh, Delhi</p><p class="small">Scenario numbers are illustrative, not forecasts. Unofficial. Official warnings: IMD / NDMA Sachet.</p><p class="status" id="status" role="status">Server status: checking</p></div>
     <div><h4>Pages</h4><a href="/">Home</a><a href="/landing/pockets.html">Pockets</a><a href="/landing/agencies.html">Agencies</a><a href="/board">Public board</a></div>
-    <div><h4>On the home page</h4><a href="/#about">About</a><a href="/#insight">Insight</a><a href="/#steps">What it does</a><a href="/#screens">Screens</a><a href="/#who">Who uses it</a></div>
+    <div><h4>On the home page</h4><a href="/#about">About</a><a href="/#steps">What it does</a><a href="/#who">Who uses it</a></div>
     <div><h4>Live app</h4><a href="/app#/login">Open the app</a><a href="/app#/dash/map">Dashboard map</a><a href="/docs">API docs</a></div>
     <div><h4>Credits</h4><p class="small">Layout after the EcoPower template for Framer. Font: Satoshi (Fontshare). Icons: Lucide. Photos from Unsplash (illustrative):
-      <a class="in" href="https://unsplash.com/photos/HTFzvWmbpq8">road</a>, <a class="in" href="https://unsplash.com/photos/jCfVxDgdS30">glass</a>, <a class="in" href="https://unsplash.com/photos/FobwhDUgdrk">ripples</a>, <a class="in" href="https://unsplash.com/photos/qkAyHawDr6Y">water</a>,
+      <a class="in" href="https://unsplash.com/photos/HTFzvWmbpq8">road</a>, <a class="in" href="https://unsplash.com/photos/jCfVxDgdS30">glass</a>, <a class="in" href="https://unsplash.com/photos/qkAyHawDr6Y">water</a>,
       <a class="in" href="https://unsplash.com/photos/8Go9YAiVy84">rooftops</a>, <a class="in" href="https://unsplash.com/photos/P7Z3HwNWPeQ">flooded street</a>, <a class="in" href="https://unsplash.com/photos/tzMQplqL-pI">storm drain</a>, <a class="in" href="https://unsplash.com/photos/JovAFznXsSM">street waste</a>,
       <a class="in" href="https://unsplash.com/photos/-g08-J22mNo">umbrella</a>, <a class="in" href="https://unsplash.com/photos/DhrhdQLWK3Q">street crew</a>, <a class="in" href="https://unsplash.com/photos/MU9CFBQKrOc">map</a>, <a class="in" href="https://unsplash.com/photos/EUYlDT8FpUo">red umbrella</a>, <a class="in" href="https://unsplash.com/photos/4qIRBzVL9u8">rainy street</a>, <a class="in" href="https://unsplash.com/photos/n1WAn_oftE4">rooftop tanks</a>.</p>
+      <p class="small">Logos: Municipal Corporation of Delhi seal (<a class="in" href="https://commons.wikimedia.org/wiki/File:Seal_of_the_Municipal_Corporation_Of_Delhi.svg">Wikimedia Commons</a>, public domain); Delhi Jal Board logo (<a class="in" href="https://commons.wikimedia.org/wiki/File:Delhi_Jal_Board.png">Wikimedia Commons</a>, GODL-India). They belong to their agencies.</p>
       <p class="small">© 2026 HopelessGuys (Rain-Ready team). MIT License.</p></div>
   </div>
   <p class="foot-word" aria-hidden="true">Rain-Ready</p>
 </footer>
 
 <script src="/config.js"></script>
-<script type="module" src="/landing/landing.js?v=4"></script>
+<script type="module" src="/landing/landing.js?v=6"></script>
 </body>
 </html>
