@@ -11,8 +11,9 @@ Built for the WeMakeDevs x AWS **Environmental Hacks** (October 2026), track Hea
 | Public board (agency scores and action log) | https://rainready.rumblejack56.dev/board |
 | API reference (generated) | https://rainready.rumblejack56.dev/docs |
 | Health | https://rainready.rumblejack56.dev/api/health |
+| Android app (APK) | [Download rain-ready.apk](https://github.com/RumbleJack56/bharatbuilds/releases/latest/download/rain-ready.apk) |
 
-The same web code also runs as an Android app (APK); see [Android app](#android-app).
+The same web code also runs as an Android app: [download the APK](https://github.com/RumbleJack56/bharatbuilds/releases/latest/download/rain-ready.apk), or see [Android app](#android-app).
 
 ---
 
@@ -21,22 +22,21 @@ The same web code also runs as an Android app (APK); see [Android app](#android-
 1. [The problem](#the-problem)
 2. [What Rain-Ready does](#what-rain-ready-does)
 3. [Features](#features)
-4. [Honesty rules](#honesty-rules)
-5. [Architecture](#architecture)
-6. [How ranking and the simulator work](#how-ranking-and-the-simulator-work)
-7. [Data](#data)
-8. [Where AWS fits](#where-aws-fits)
-9. [Repository layout](#repository-layout)
-10. [Setup and running locally](#setup-and-running-locally)
-11. [Testing](#testing)
-12. [Deploying to AWS](#deploying-to-aws)
-13. [Android app](#android-app)
-14. [API overview](#api-overview)
-15. [Further docs](#further-docs)
-16. [Limits](#limits)
-17. [Team](#team)
-18. [Credits and AI tools](#credits-and-ai-tools)
-19. [License](#license)
+4. [Architecture](#architecture)
+5. [How ranking and the simulator work](#how-ranking-and-the-simulator-work)
+6. [Data](#data)
+7. [Where AWS fits](#where-aws-fits)
+8. [Repository layout](#repository-layout)
+9. [Setup and running locally](#setup-and-running-locally)
+10. [Testing](#testing)
+11. [Deploying to AWS](#deploying-to-aws)
+12. [Android app](#android-app)
+13. [API overview](#api-overview)
+14. [Further docs](#further-docs)
+15. [Limits](#limits)
+16. [Team](#team)
+17. [Credits](#credits)
+18. [License](#license)
 
 ---
 
@@ -115,21 +115,6 @@ Login is a **demo persona picker**, labelled as such on screen: `res-1` and `res
 - Repeat reports by the same person at the same spot within 24 h are held, and there is a daily report cap per person.
 - Checks are soft: a flagged report is **held for review**, never deleted, and does not create or bump a task until released.
 
-## Honesty rules
-
-These are enforced in code and tests (full list: [`SCOPE.md`](SCOPE.md) section 7):
-
-1. Safety text is pre-written in `core/copy.py`. No model writes it.
-2. Banned UI words are checked by tests: the bare word "safe", "guarantee", "desilted", "removed", "cm deep". The UI uses no green ticks, ratings or depths.
-3. A scenario banner appears wherever simulator or rank numbers appear. Times are "about X to Y h", never a single forecast.
-4. Ownership is shown at agency level with its source. No officer or contractor is named. "No owner found" is a valid answer.
-5. AI only pre-fills a report category and fails soft. It never changes rank, owner or status.
-6. Every placeholder row is labelled (`data_source`, `confidence`). Real rows carry a citation.
-7. Nothing in the product asks anyone to open a manhole or enter a drain.
-8. Photo checks never claim proof. A rooted phone with a fake-GPS app can still stamp a false place, so the UI says "location and time stamped, checked against the report".
-
-**Not claimed:** floods prevented, lives saved, water-table rise, damage avoided.
-
 ## Architecture
 
 ### System
@@ -149,14 +134,12 @@ flowchart TB
             RT["Routers<br/>app/routers/*.py"]
             SV["Service layer<br/>app/service.py, checks, capture"]
             CO["Pure logic<br/>core/: ranking, simulator, photo checks,<br/>insights, leaderboard, EDA"]
-            AI["ai/: Bedrock client<br/>(triage, stamp reading)"]
             ST["app/storage.py<br/>local disk or S3"]
         end
         DB[("SQLite<br/>var/rainready.db")]
     end
 
     S3[("Amazon S3<br/>photos, hourly DB backups")]
-    BR["Amazon Bedrock<br/>Claude model"]
     GH["GitHub Actions<br/>tests, then deploy via SSM"]
 
     B --> CF --> CA
@@ -164,7 +147,6 @@ flowchart TB
     CA --> RT --> SV --> CO
     SV --> DB
     SV --> ST --> S3
-    SV --> AI --> BR
     GH -. "on merge to main" .-> EC2
 ```
 
@@ -172,7 +154,7 @@ flowchart TB
 - **Pure logic:** everything that decides something (ranking, fill simulation, photo checks, the rain-capture rules, insights, leaderboard, EDA) lives in `core/` with no I/O and is unit-tested.
 - **Frontend:** plain HTML, CSS and JavaScript modules in `web/`. No build step and no npm dependencies. Leaflet comes from a CDN.
 - **Mobile:** Capacitor wraps the same `web/` folder into an APK. Only `web/config.js` (the API base URL) differs.
-- **One composition root per side** picks implementations: `web/js/main.js` and `app/config.py`. Swapping storage, AI or a map library is a new adapter and one line there.
+- **One composition root per side** picks implementations: `web/js/main.js` and `app/config.py`. Swapping storage or a map library is a new adapter and one line there.
 
 ### Web app layers
 
@@ -235,11 +217,10 @@ Details: [`docs/DATA.md`](docs/DATA.md), [`docs/DATA_SOURCES.md`](docs/DATA_SOUR
 |---|---|
 | **EC2** (t3.small, ap-south-1) | Hosts the app and Caddy in Docker Compose, with an Elastic IP |
 | **S3** (private bucket) | Report and after-photos, served through pre-signed redirects; hourly SQLite backups with daily copies |
-| **Bedrock** (Claude) | Photo and note to a report category, and reading the on-photo stamp text. Built and tested with a fake client. The live server runs `TRIAGE_MODE=manual` (the resident picks the category); the app falls back to this whenever Bedrock is off or fails |
-| **IAM** | Instance role with only S3 put/get on the bucket and Bedrock invoke; a GitHub OIDC role for deploys |
+| **IAM** | Instance role with only S3 put/get on the bucket; a GitHub OIDC role for deploys |
 | **Systems Manager (SSM)** | The deploy job ships code to S3 and runs `scripts/server-deploy.sh` on the instance, with no SSH key in CI |
 
-`GET /api/health?deep=1` (admin persona) probes S3 and Bedrock and names any missing role, bucket or model access.
+`GET /api/health?deep=1` (admin persona) probes S3 and names any missing role or bucket.
 
 ## Repository layout
 
@@ -258,7 +239,6 @@ bharatbuilds/
     │   └── db.py                SQLite access, schema and seed bootstrap
     ├── core/                    pure logic, no I/O: planning, lowpoints, projection, photocheck, stamp,
     │                            cluster, m4_rules, insights, leaderboard, report, eda, seedcheck, copy
-    ├── ai/                      Bedrock client, triage and stamp reading (fail soft)
     ├── web/                     the whole frontend, no build step
     │   ├── index.html           web app shell with the import map
     │   ├── config.js            API base URL (empty = same origin; the APK sets it)
@@ -287,7 +267,7 @@ bharatbuilds/
 - Optional: **Docker** with the Compose plugin, to run it the way the server does.
 - Optional, for the APK: Node, **JDK 17** and the **Android SDK**.
 
-No AWS account is needed to run locally: photos go to `var/photos/` and AI triage stays manual.
+No AWS account is needed to run locally: photos go to `var/photos/`.
 
 ### Run
 
@@ -346,8 +326,6 @@ Copy `.env.example` to `.env` (never commit `.env`). Every value has a safe loca
 | `DOMAIN` | `localhost` | Host names Caddy gets certificates for (comma separated) |
 | `STORAGE` | `local` | `local` (disk) or `s3` |
 | `S3_BUCKET`, `AWS_REGION` | empty, `ap-south-1` | Photo bucket and region when `STORAGE=s3` |
-| `TRIAGE_MODE` | `manual` | `manual` or `bedrock` |
-| `BEDROCK_MODEL_ID` | empty | From your account (`aws bedrock list-inference-profiles`) |
 | `CAPTURE_SECRET` | empty | Signs capture tokens; set a long random value on a server |
 | `REQUIRE_LIVE_CAPTURE` | `0` | `1`: hold report photos without a fresh in-app capture token |
 | `REPORTS_PER_DAY` | `20` | Report cap per person per 24 h |
@@ -371,24 +349,27 @@ make test-web       # web: node --test, no install needed
 
 The full runbook is [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
 
-1. Create a private S3 bucket and an EC2 instance role with S3 and Bedrock access: `scripts/aws-setup.sh <bucket>`.
+1. Create a private S3 bucket and an EC2 instance role with S3 access: `scripts/aws-setup.sh <bucket>`.
 2. Start an EC2 instance (Amazon Linux 2023, t3.small) with an Elastic IP and the role. Set the metadata hop limit to 2, so the container can read the role.
 3. On the instance, run `scripts/bootstrap-ec2.sh`, clone the repo, `cp .env.example .env`, and set `DOMAIN=<ip-with-dashes>.sslip.io`, `STORAGE=s3` and `S3_BUCKET`.
 4. Run `docker compose up -d --build`. Caddy fetches a certificate automatically.
 5. Check `https://<DOMAIN>/api/health?deep=1` as `admin-1`: `config_warnings` must be empty and S3 must report ok.
-6. Optional: enable a Bedrock Claude model, set `BEDROCK_MODEL_ID` and `TRIAGE_MODE=bedrock`.
-7. Backups: an hourly cron runs `scripts/backup.sh` (SQLite snapshot to S3).
+6. Backups: an hourly cron runs `scripts/backup.sh` (SQLite snapshot to S3).
 
 After a one-time OIDC and SSM setup ([`docs/AWS_TODO.md`](docs/AWS_TODO.md) section 3), every merge to `main` that passes the tests is deployed automatically.
 
 ## Android app
+
+**Download:** [rain-ready.apk](https://github.com/RumbleJack56/bharatbuilds/releases/latest/download/rain-ready.apk) (from the repo's [Releases](https://github.com/RumbleJack56/bharatbuilds/releases)). It talks to the live server at https://rainready.rumblejack56.dev. On the phone, allow "install unknown apps" for your browser or file manager, then open the file.
+
+To build it yourself:
 
 ```bash
 make apk API=https://<your-host>        # writes mobile/rain-ready.apk
 adb install -r mobile/rain-ready.apk
 ```
 
-The API must be HTTPS, because camera and GPS need a secure origin. The build is an unsigned debug APK; allow "install unknown apps" on the phone. See [`mobile/README.md`](mobile/README.md).
+The API must be HTTPS, because camera and GPS need a secure origin.. See [`mobile/README.md`](mobile/README.md).
 
 ## API overview
 
@@ -410,7 +391,7 @@ Errors are JSON `{"detail": "..."}`: 401 no persona, 403 wrong role or agency, 4
 
 | Document | What |
 |---|---|
-| [`SCOPE.md`](SCOPE.md) | What we build, MVP vs good-to-haves, honesty rules, demo script |
+| [`SCOPE.md`](SCOPE.md) | What we build, MVP vs good-to-haves, demo script |
 | [`PLAN.md`](PLAN.md) | Web module plan and layer table |
 | [`TASKS.md`](TASKS.md) | Who owns which files, branching rules |
 | [`docs/API.md`](docs/API.md) | Endpoint map |
@@ -438,14 +419,14 @@ HopelessGuys:
 - **Ujjwal Kakar**: backend, data and EDA, AWS, APK.
 - **Aarush Rajoura**: web app, AWS deployment.
 - **Taher Merchant**: public site and phone layout of the web app.
+- **Sarthak**: ideation, hackathon organisation, and the logic of the anti-fake-report system (photo checks, capture tokens and held reports).
 
-## Credits and AI tools
+## Credits
 
 - Open source: FastAPI, Uvicorn, Pydantic, python-multipart, boto3, Pillow, pytest, httpx; Leaflet 1.9.4 with OpenStreetMap tiles (© OpenStreetMap contributors, ODbL); Capacitor (MIT).
 - Public site and app look: layout after the EcoPower template for Framer. Font: Satoshi (Fontshare). Icons: Lucide (ISC).
 - Photos on the public site: Unsplash (Unsplash License), each linked in the site footer. They are illustrative, not of the pilot ward.
 - Data: Delhi Traffic Police waterlogging lists (Flood Control Order 2025), the PWD road inventory, and OpenStreetMap. Each seed row cites its source.
-- AI tools: built with Claude Code (Anthropic Claude Sonnet 5.5 and Claude Opus 5.5) as a coding assistant. In the product, Amazon Bedrock (Claude) is used only to pre-fill a report category and read photo stamps.
 
 ## License
 
