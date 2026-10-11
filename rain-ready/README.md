@@ -134,12 +134,14 @@ flowchart TB
             RT["Routers<br/>app/routers/*.py"]
             SV["Service layer<br/>app/service.py, checks, capture"]
             CO["Pure logic<br/>core/: ranking, simulator, photo checks,<br/>insights, leaderboard, EDA"]
+            AI["ai/: Bedrock client<br/>(report category, stamp reading)"]
             ST["app/storage.py<br/>local disk or S3"]
         end
         DB[("SQLite<br/>var/rainready.db")]
     end
 
     S3[("Amazon S3<br/>photos, hourly DB backups")]
+    BR["Amazon Bedrock<br/>Claude model"]
     GH["GitHub Actions<br/>tests, then deploy via SSM"]
 
     B --> CF --> CA
@@ -147,6 +149,7 @@ flowchart TB
     CA --> RT --> SV --> CO
     SV --> DB
     SV --> ST --> S3
+    SV --> AI --> BR
     GH -. "on merge to main" .-> EC2
 ```
 
@@ -154,7 +157,7 @@ flowchart TB
 - **Pure logic:** everything that decides something (ranking, fill simulation, photo checks, the rain-capture rules, insights, leaderboard, EDA) lives in `core/` with no I/O and is unit-tested.
 - **Frontend:** plain HTML, CSS and JavaScript modules in `web/`. No build step and no npm dependencies. Leaflet comes from a CDN.
 - **Mobile:** Capacitor wraps the same `web/` folder into an APK. Only `web/config.js` (the API base URL) differs.
-- **One composition root per side** picks implementations: `web/js/main.js` and `app/config.py`. Swapping storage or a map library is a new adapter and one line there.
+- **One composition root per side** picks implementations: `web/js/main.js` and `app/config.py`. Swapping storage, AI or a map library is a new adapter and one line there.
 
 ### Web app layers
 
@@ -217,10 +220,11 @@ Details: [`docs/DATA.md`](docs/DATA.md), [`docs/DATA_SOURCES.md`](docs/DATA_SOUR
 |---|---|
 | **EC2** (t3.small, ap-south-1) | Hosts the app and Caddy in Docker Compose, with an Elastic IP |
 | **S3** (private bucket) | Report and after-photos, served through pre-signed redirects; hourly SQLite backups with daily copies |
-| **IAM** | Instance role with only S3 put/get on the bucket; a GitHub OIDC role for deploys |
+| **Bedrock** (Claude) | Reads the report photo and note to suggest the report category, and reads the text stamped on the photo so it can be checked against the report |
+| **IAM** | Instance role with only S3 put/get on the bucket and Bedrock invoke; a GitHub OIDC role for deploys |
 | **Systems Manager (SSM)** | The deploy job ships code to S3 and runs `scripts/server-deploy.sh` on the instance, with no SSH key in CI |
 
-`GET /api/health?deep=1` (admin persona) probes S3 and names any missing role or bucket.
+`GET /api/health?deep=1` (admin persona) probes S3 and Bedrock and names any missing role, bucket or model access.
 
 ## Repository layout
 
@@ -239,6 +243,7 @@ bharatbuilds/
     │   └── db.py                SQLite access, schema and seed bootstrap
     ├── core/                    pure logic, no I/O: planning, lowpoints, projection, photocheck, stamp,
     │                            cluster, m4_rules, insights, leaderboard, report, eda, seedcheck, copy
+    ├── ai/                      Bedrock client: report category and stamp reading
     ├── web/                     the whole frontend, no build step
     │   ├── index.html           web app shell with the import map
     │   ├── config.js            API base URL (empty = same origin; the APK sets it)
@@ -326,6 +331,8 @@ Copy `.env.example` to `.env` (never commit `.env`). Every value has a safe loca
 | `DOMAIN` | `localhost` | Host names Caddy gets certificates for (comma separated) |
 | `STORAGE` | `local` | `local` (disk) or `s3` |
 | `S3_BUCKET`, `AWS_REGION` | empty, `ap-south-1` | Photo bucket and region when `STORAGE=s3` |
+| `TRIAGE_MODE` | `manual` | `bedrock` to have Bedrock suggest the report category |
+| `BEDROCK_MODEL_ID` | empty | From your account (`aws bedrock list-inference-profiles`) |
 | `CAPTURE_SECRET` | empty | Signs capture tokens; set a long random value on a server |
 | `REQUIRE_LIVE_CAPTURE` | `0` | `1`: hold report photos without a fresh in-app capture token |
 | `REPORTS_PER_DAY` | `20` | Report cap per person per 24 h |
@@ -349,12 +356,13 @@ make test-web       # web: node --test, no install needed
 
 The full runbook is [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
 
-1. Create a private S3 bucket and an EC2 instance role with S3 access: `scripts/aws-setup.sh <bucket>`.
+1. Create a private S3 bucket and an EC2 instance role with S3 and Bedrock access: `scripts/aws-setup.sh <bucket>`.
 2. Start an EC2 instance (Amazon Linux 2023, t3.small) with an Elastic IP and the role. Set the metadata hop limit to 2, so the container can read the role.
 3. On the instance, run `scripts/bootstrap-ec2.sh`, clone the repo, `cp .env.example .env`, and set `DOMAIN=<ip-with-dashes>.sslip.io`, `STORAGE=s3` and `S3_BUCKET`.
 4. Run `docker compose up -d --build`. Caddy fetches a certificate automatically.
 5. Check `https://<DOMAIN>/api/health?deep=1` as `admin-1`: `config_warnings` must be empty and S3 must report ok.
-6. Backups: an hourly cron runs `scripts/backup.sh` (SQLite snapshot to S3).
+6. Enable a Bedrock Claude model, set `BEDROCK_MODEL_ID` and `TRIAGE_MODE=bedrock`, restart, and check that the deep health check shows Bedrock ok.
+7. Backups: an hourly cron runs `scripts/backup.sh` (SQLite snapshot to S3).
 
 After a one-time OIDC and SSM setup ([`docs/AWS_TODO.md`](docs/AWS_TODO.md) section 3), every merge to `main` that passes the tests is deployed automatically.
 
