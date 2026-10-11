@@ -39,16 +39,16 @@ export const report = {
       photo = p; url = URL.createObjectURL(p.blob);
       $("#prev").innerHTML = `<img alt="Your photo, location and time stamped" src="${esc(url)}">`;
       setPos(p.lat, p.lon, PIN.photo(p.accuracy_m), true, p.accuracy_m);
-      $("#cam").textContent = "Retake photo"; $("#rm").hidden = false; $("#gps").disabled = true; $("#camnote").textContent = "";
+      $("#camlbl").textContent = "Retake photo"; $("#rm").hidden = false; $("#gps").disabled = true; $("#camnote").textContent = "";
     };
     const clearPhoto = () => {
       if (url) URL.revokeObjectURL(url);
       photo = null; url = "";
-      $("#prev").innerHTML = ""; $("#cam").textContent = "Take photo"; $("#rm").hidden = true; $("#gps").disabled = false;
+      $("#prev").innerHTML = ""; $("#camlbl").textContent = "Take photo"; $("#rm").hidden = true; $("#gps").disabled = false;
       if (before) setPos(before.pos[0], before.pos[1], before.text, false, before.accuracy);
     };
     if (!ctx.camera.available()) { $("#cam").disabled = true; $("#camnote").textContent = CAMERA.none; }
-    $("#cam").onclick = (ev) => guard(ev.target, async () => {
+    $("#cam").onclick = () => guard($("#cam"), async () => {          // the button itself: a tap may land on its icon
       $("#camnote").textContent = "";                 // a refusal stays on screen until the next attempt
       try { showPhoto(await ctx.services.capture.takePhoto({ withToken: true })); }
       catch (e) { if (e.cancelled) return; $("#camnote").textContent = e.message; ctx.toast.show(e.message); }   // photo state unchanged
@@ -73,6 +73,7 @@ export const report = {
           $("#out").innerHTML = reportResult(r, { nearest: r.linked_asset ? null : nearestDrain(pos, drains), ownerless: !!own && !own.agency_id });
           $("#f").reset(); clearPhoto();
           $("#out").scrollIntoView();
+          $("#out .result")?.focus?.({ preventScroll: true });          // screen readers land on the result card
         } catch (e) {
           $("#out").innerHTML = errBox(photoError(e, kind));
         }

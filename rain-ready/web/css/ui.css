@@ -63,7 +63,7 @@ input::placeholder,textarea::placeholder{color:var(--fg-muted)}
 table{border-collapse:separate;border-spacing:0;font-size:14px}
 th{position:sticky;top:var(--top-h);background:var(--s2);z-index:1}
 td,th{border-bottom:1px solid var(--line)}
-/* Framer pieces: arrow pill (.go), persona cards, tonal initials */
+/* Framer pieces: arrow pill (.go). Login rows and initials live in phone.css. */
 button.primary,.btn.primary,button.big{border-radius:999px}
 .btn.go{gap:2px;padding:0;border:0;background:none;color:#fff;min-height:44px}
 .btn.go:hover{background:none}
@@ -71,7 +71,3 @@ button.primary,.btn.primary,button.big{border-radius:999px}
 .btn.go>span{padding:0 22px}
 .btn.go>i{width:44px;justify-content:center;background-image:var(--arrow);background-repeat:no-repeat;background-position:center;background-size:18px}
 .btn.go:hover>span,.btn.go:hover>i{background-color:var(--accent-fill-hover)}
-.persona{display:flex;align-items:center;gap:14px;width:100%;min-height:84px;margin:0;padding:18px;text-align:left;border-radius:var(--radius);font-weight:500}
-.persona:hover:not(:disabled){background:var(--s1);border-color:var(--accent-fill)}
-.persona strong{display:block;color:var(--fg)}
-.initials{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb, var(--accent-fill) 14%, var(--s1));color:var(--accent);font-weight:700;font-size:14px}
