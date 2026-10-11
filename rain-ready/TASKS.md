@@ -6,7 +6,7 @@ Ujjwal and Aarush work in parallel on **main** with short-lived branches. The sp
 
 **On `main` (PRs #1 to #15):** the full loop; photo checks; hardening; backend fixes B13 to B26; real Delhi seed, evidence base, public leaderboard, actions, projection; reference rain 25 mm/h with a self-consistent gain range; Aarush's screens V1 to V18, the camera, polish and screenshots; the deploy scripts and AWS playbook. 191 backend and 238 web tests pass.
 
-**Live (https://15-207-177-122.sslip.io and https://rainready.rumblejack56.dev):**
+**Live (https://<ip-with-dashes>.sslip.io and https://rainready.rumblejack56.dev):**
 - Backend is current: it already serves reference rain 25 and the corrected range (commit `5a17d71` came after PR #8).
 - Web is behind: V9 camera is live; the board, held queue, actions, insights and the polish are **not** (their view files return 404; no import map; the default report pin is the old one).
 - Live DB is the clean real seed (0 tasks). Bedrock is off (`manual`).
@@ -94,7 +94,7 @@ Everything below is the full backlog after these.
 ## 5. Full backlog: Ujjwal
 
 - [x] B1 LICENSE (MIT) done; reset is in PR #1, merge to `main` and confirm both can push
-- [x] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**. Live: https://15-207-177-122.sslip.io (details in `PLAN.md` section 7)
+- [x] B2 AWS: account, ap-south-1, private S3 bucket, EC2 role, EC2 t3.small, Elastic IP, Caddy HTTPS (`docs/DEPLOY.md`). Scripts in `scripts/` are ready. Aarush's account has the credits. **Public URL by hour 3**. Live: https://<ip-with-dashes>.sslip.io (details in `PLAN.md` section 7)
 - [ ] B3 Server is on `STORAGE=s3` (done by Aarush). The presign fix (B13) is on `main` but **not deployed**, so photos still return 403 on the live site. Done when a phone photo opens (A4)
 - [ ] B4 Bedrock test with one photo; else `TRIAGE_MODE=manual`. Aarush runs it (A3: console use-case form, then a model id from his account). The code side (timeouts, image prep) is done
 - [x] B5 Backend gaps found by Aarush (`PLAN.md` section 7): all done except item 4 (now decision D1) and item 7 (Protocol refactor, not before the freeze)

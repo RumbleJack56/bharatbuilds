@@ -1,17 +1,17 @@
 # AWS and screens report (Aarush, 10 Oct 2026)
 
-This is the report-back for `docs/AARUSH_PROMPT.md` Parts A to C. The AWS steps followed `docs/AWS_TODO.md` on `main`. Region `ap-south-1`, account `896128818776`.
+This is the report-back for `docs/AARUSH_PROMPT.md` Parts A to C. The AWS steps followed `docs/AWS_TODO.md` on `main`. Region `ap-south-1`, account `<account-id>`.
 
 ## Report-back table
 
 | Item | Result | Evidence |
 |---|---|---|
-| A1 inventory (section 2) | pass | Account, instance `i-02d1bc6b65cbad783`, Elastic IP 15.207.177.122, instance profile `rainready-ec2`, hop limit 2, private bucket with public access blocked, S3 health: all match |
+| A1 inventory (section 2) | pass | Account, instance `<instance-id>`, Elastic IP <elastic-ip>, instance profile `rainready-ec2`, hop limit 2, private bucket with public access blocked, S3 health: all match |
 | 3.1 SSM | pass | `AmazonSSMManagedInstanceCore` attached to `rainready-ec2`. The agent was denied for about 15 minutes while IAM applied the change. After an agent restart, PingStatus is `Online` |
-| 3.2 to 3.3 OIDC provider and deploy role | done | GitHub OIDC provider created. Role ARN: `arn:aws:iam::896128818776:role/rainready-github-deploy` |
+| 3.2 to 3.3 OIDC provider and deploy role | done | GitHub OIDC provider created. Role ARN: `arn:aws:iam::<account-id>:role/rainready-github-deploy` |
 | 3.4 manual deploy | Success | `scripts/deploy-ssm.sh` status Success; commit `5a17d71` is live |
 | 3.7 capture secret | set | It was empty. It was set on the server and never printed |
-| New build live | pass | `/api/health` gives ok with 11 routers and no `router_errors`. `/api/leaderboard` gives 200. Both checked on https://15-207-177-122.sslip.io and https://rainready.rumblejack56.dev |
+| New build live | pass | `/api/health` gives ok with 11 routers and no `router_errors`. `/api/leaderboard` gives 200. Both checked on https://<ip-with-dashes>.sslip.io and https://rainready.rumblejack56.dev |
 | Part B live seed | pass | Clean seed, no `--demo`. Backup first: `var/backup-20261010-0626.db` on the server. `scripts.verify_db`: **26 of 26 checks passed**. `/api/city/summary` gives 1100 location-dates and 616 places. `/board` gives 200 |
 | Section 4 Bedrock | manual (pending) | Inference profiles listed. Active Haiku options include `global.anthropic.claude-haiku-4-5-20251001-v1:0` and `in.anthropic.claude-haiku-4-5-20251001-v1:0`. Converse test not run. `TRIAGE_MODE=manual` |
 | Section 5 phone photo | pending | A person's step (see below) |
@@ -21,7 +21,7 @@ This is the report-back for `docs/AARUSH_PROMPT.md` Parts A to C. The AWS steps 
 
 ## Other server changes
 
-- **Custom domain.** The server `.env` has `DOMAIN=15-207-177-122.sslip.io, rainready.rumblejack56.dev`. This fixed Cloudflare error 525 (Caddy had no certificate for the custom host). Caddy now holds a Let's Encrypt certificate for both hosts.
+- **Custom domain.** The server `.env` has `DOMAIN=<ip-with-dashes>.sslip.io, rainready.rumblejack56.dev`. This fixed Cloudflare error 525 (Caddy had no certificate for the custom host). Caddy now holds a Let's Encrypt certificate for both hosts.
 - **Deploys delete untracked files.** The deploy removed `.env.bak-525`. A copy is kept in the server's `var/`.
 
 ## Backend asks (Ujjwal)

@@ -84,10 +84,10 @@ Not run from the author's machine. Only committed files ship, so commit first.
 
 ```
 # 1. from the repo root: upload the committed tree (the server .env and var/ are kept)
-git archive --format=tar HEAD:rain-ready | ssh -i rain-ready/rainready.pem ec2-user@15.207.177.122 'tar -x -C bharatbuilds/rain-ready'
+git archive --format=tar HEAD:rain-ready | ssh -i rain-ready/rainready.pem ec2-user@<elastic-ip> 'tar -x -C bharatbuilds/rain-ready'
 
 # 2. on the server
-ssh -i rain-ready/rainready.pem ec2-user@15.207.177.122
+ssh -i rain-ready/rainready.pem ec2-user@<elastic-ip>
 cd bharatbuilds/rain-ready
 cp var/rainready.db var/backup-$(date +%Y%m%d-%H%M).db        # or take the hourly copy in s3://<bucket>/backup/
 docker compose stop app
@@ -95,7 +95,7 @@ docker compose build app
 docker compose run --rm app python -m scripts.seed_db --force --db /app/var/rainready.db     # add --demo for rehearsal history
 docker compose run --rm app python -m scripts.verify_db --db /app/var/rainready.db
 docker compose up -d app
-curl -s https://15-207-177-122.sslip.io/api/health && curl -s https://15-207-177-122.sslip.io/api/city/summary | head -c 300
+curl -s https://<ip-with-dashes>.sslip.io/api/health && curl -s https://<ip-with-dashes>.sslip.io/api/city/summary | head -c 300
 ```
 Step 2 replaces every report, task and photo reference on the server. With `STORAGE=s3` the photos stay in the bucket but the rows that point to them go.
 The database already holds one test report outside the ward (`PLAN.md`); a rebuild clears it.

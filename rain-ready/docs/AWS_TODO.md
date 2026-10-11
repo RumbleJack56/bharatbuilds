@@ -17,11 +17,11 @@ Needs: AWS CLI v2 logged in as an admin of the account, `python3`, the SSH key `
 
 ```bash
 export AWS_REGION=ap-south-1 AWS_PAGER=""
-export ACCOUNT=896128818776
-export INSTANCE=i-02d1bc6b65cbad783
-export IP=15.207.177.122
-export HOST=15-207-177-122.sslip.io
-export BUCKET=rainready-photos-896128818776
+export ACCOUNT=<account-id>
+export INSTANCE=<instance-id>
+export IP=<elastic-ip>
+export HOST=<ip-with-dashes>.sslip.io
+export BUCKET=rainready-photos-<account-id>
 export EC2_ROLE=rainready-ec2
 export GH_REPO=RumbleJack56/bharatbuilds
 export GH_ROLE=rainready-github-deploy
@@ -42,7 +42,7 @@ aws s3api get-public-access-block --bucket $BUCKET
 curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 ```
 
-**Check:** the account is `896128818776`; the instance is `running` with IP `15.207.177.122`, profile `rainready-ec2` and hop limit `2`; all four public-access flags are `true`; health shows `"ok":true` and `"s3":"ok"`.
+**Check:** the account is `<account-id>`; the instance is `running` with IP `<elastic-ip>`, profile `rainready-ec2` and hop limit `2`; all four public-access flags are `true`; health shows `"ok":true` and `"s3":"ok"`.
 
 If the hop limit is 1: `aws ec2 modify-instance-metadata-options --instance-id $INSTANCE --http-put-response-hop-limit 2`.
 
@@ -103,7 +103,7 @@ aws iam put-role-policy --role-name $GH_ROLE --policy-name deploy --policy-docum
 aws iam get-role --role-name $GH_ROLE --query Role.Arn --output text
 ```
 
-**Check:** the last command prints `arn:aws:iam::896128818776:role/rainready-github-deploy`, and
+**Check:** the last command prints `arn:aws:iam::<account-id>:role/rainready-github-deploy`, and
 `aws iam get-role --role-name $GH_ROLE --query "Role.AssumeRolePolicyDocument.Statement[0].Condition.StringEquals"` lists two `sub` values.
 
 If the GitHub `deploy` job already failed with `Not authorized to perform sts:AssumeRoleWithWebIdentity`, re-running the block above repairs it (`update-assume-role-policy` replaces the trust policy). Then run `gh workflow run test --repo $GH_REPO --ref main` and check the `deploy` job.
@@ -136,10 +136,10 @@ $SSH 'crontab -l'
 Send Ujjwal the role ARN. He runs:
 
 ```bash
-gh variable set AWS_DEPLOY_ROLE_ARN --repo RumbleJack56/bharatbuilds --body arn:aws:iam::896128818776:role/rainready-github-deploy
+gh variable set AWS_DEPLOY_ROLE_ARN --repo RumbleJack56/bharatbuilds --body arn:aws:iam::<account-id>:role/rainready-github-deploy
 gh variable set AWS_REGION          --repo RumbleJack56/bharatbuilds --body ap-south-1
-gh variable set DEPLOY_BUCKET       --repo RumbleJack56/bharatbuilds --body rainready-photos-896128818776
-gh variable set DEPLOY_INSTANCE_ID  --repo RumbleJack56/bharatbuilds --body i-02d1bc6b65cbad783
+gh variable set DEPLOY_BUCKET       --repo RumbleJack56/bharatbuilds --body rainready-photos-<account-id>
+gh variable set DEPLOY_INSTANCE_ID  --repo RumbleJack56/bharatbuilds --body <instance-id>
 gh workflow run test --repo RumbleJack56/bharatbuilds --ref main
 ```
 
@@ -206,7 +206,7 @@ sleep 10; curl -fsS -H "X-User-Id: admin-1" "https://$HOST/api/health?deep=1"
 
 Do this after Ujjwal's fix for pre-signed URLs is on `main` and deployed.
 
-1. On a phone, open `https://15-207-177-122.sslip.io`, log in as a resident and send a report with a photo.
+1. On a phone, open `https://<ip-with-dashes>.sslip.io`, log in as a resident and send a report with a photo.
 2. Log in as `off-mcd`, open the task and tap the photo.
 
 ```bash

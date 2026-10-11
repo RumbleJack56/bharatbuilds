@@ -1710,7 +1710,7 @@ Each is one new adapter or service function plus a view, so none touches existin
 10. Deploy playbook step B8: `git archive --format=tar HEAD:rain-ready` must run from the repo root. Run from `rain-ready/` it sends an empty archive without an error.
 
 ### Live deployment (9 Oct 2026, Aarush's AWS account, ap-south-1)
-- URL: https://15-207-177-122.sslip.io (Caddy HTTPS). `/api/health?deep=1` returns `ok: true`, `storage: s3`, `aws: {s3: ok}`, `triage: manual`.
-- EC2 `i-02d1bc6b65cbad783` (t3.small, AL2023), Elastic IP 15.207.177.122, bucket `rainready-photos-896128818776`, role and instance profile `rainready-ec2`, first AMI `ami-0a18e29223db65238`, hourly DB backup to `s3://<bucket>/backup/` by cron.
-- Redeploy: from the repo root, `git archive --format=tar HEAD:rain-ready | ssh -i rain-ready/rainready.pem ec2-user@15.207.177.122 'tar -x -C bharatbuilds/rain-ready'`, then `ssh ... 'cd bharatbuilds/rain-ready && docker compose up -d --build'`. The server `.env` and `var/` are kept. Aarush shares the SSH key privately.
+- URL: https://<ip-with-dashes>.sslip.io (Caddy HTTPS). `/api/health?deep=1` returns `ok: true`, `storage: s3`, `aws: {s3: ok}`, `triage: manual`.
+- EC2 `<instance-id>` (t3.small, AL2023), Elastic IP <elastic-ip>, bucket `rainready-photos-<account-id>`, role and instance profile `rainready-ec2`, first AMI `<ami-id>`, hourly DB backup to `s3://<bucket>/backup/` by cron.
+- Redeploy: from the repo root, `git archive --format=tar HEAD:rain-ready | ssh -i rain-ready/rainready.pem ec2-user@<elastic-ip> 'tar -x -C bharatbuilds/rain-ready'`, then `ssh ... 'cd bharatbuilds/rain-ready && docker compose up -d --build'`. The server `.env` and `var/` are kept. Aarush shares the SSH key privately.
 - Bedrock is not on yet (model access pending). One test report (id 1, outside the ward) is in the DB; clear it before recording.

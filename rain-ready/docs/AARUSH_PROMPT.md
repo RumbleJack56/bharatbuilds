@@ -4,7 +4,7 @@ Paste everything below the line into a fresh Claude Code session started in a cl
 
 ---
 
-You are working for **Aarush** on Rain-Ready (`RumbleJack56/bharatbuilds`, folder `rain-ready/`): a shared action list for monsoon waterlogging in Delhi. Ujjwal owns the backend and the data; Aarush owns the AWS account and every screen in `web/`. The live host is `https://15-207-177-122.sslip.io` and it still runs an **old build**. Your job is to finish the AWS work, seed the live database, and build the screens listed in Part C.
+You are working for **Aarush** on Rain-Ready (`RumbleJack56/bharatbuilds`, folder `rain-ready/`): a shared action list for monsoon waterlogging in Delhi. Ujjwal owns the backend and the data; Aarush owns the AWS account and every screen in `web/`. The live host is `https://<ip-with-dashes>.sslip.io` and it still runs an **old build**. Your job is to finish the AWS work, seed the live database, and build the screens listed in Part C.
 
 ## 0. Before you do anything
 
@@ -25,7 +25,7 @@ Order:
 1. `git pull` the latest `main` (the playbook changed after it was first shared). Section 2: inventory check.
 2. Section 3.1 to 3.4: SSM, GitHub OIDC provider, deploy role, one manual deploy with `scripts/deploy-ssm.sh`. This is the first real run of that script, so read its whole output. **Report to Ujjwal now:** the role ARN from 3.3 and the output of 3.4. He then sets the repo variables (3.5), which turns on deploy-on-merge.
 3. Section 3.7: set `CAPTURE_SECRET` if it is empty.
-4. Confirm the new build is live: `curl -fsS https://15-207-177-122.sslip.io/api/health` shows `ok: true`, 11 routers and no `router_errors`; `/api/leaderboard` returns 200. If not, stop and report.
+4. Confirm the new build is live: `curl -fsS https://<ip-with-dashes>.sslip.io/api/health` shows `ok: true`, 11 routers and no `router_errors`; `/api/leaderboard` returns 200. If not, stop and report.
 5. Do Part B (seed the live database) now.
 6. Section 5: report a photo from a phone as a resident, open it as `off-mcd`. It must show in the task timeline, and a new object must appear in the bucket.
 7. Section 4: Bedrock. The console form is a person's step (Aarush does it); then list the profiles, test the model, switch `TRIAGE_MODE`. If the test fails, stay on `manual` and report the error text. Do not guess a model id.
@@ -38,7 +38,7 @@ Follow `docs/SEEDING.md` section 7 exactly, with these choices:
 - If the manual deploy in A3 already shipped the committed tree, skip its step 1 (the `git archive` upload) and start at step 2.
 - Back up first (`var/backup-<time>.db`). The rebuild removes the test report and every task row; photos stay in the bucket.
 - `scripts.verify_db` must end with **every check passed** (`N of N`; 26 of 26 on a clean seed when this was written). If any check fails, do not start the app on it: stop and report the failing lines.
-- Then check `https://15-207-177-122.sslip.io/api/health`, `/api/city/summary` and `/board`.
+- Then check `https://<ip-with-dashes>.sslip.io/api/health`, `/api/city/summary` and `/board`.
 
 ## Part C. Screens (`web/`)
 
