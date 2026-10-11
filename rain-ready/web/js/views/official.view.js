@@ -2,6 +2,7 @@
 import { esc, hrs, when, gainPhrase, rankPhrase } from "../ui/format.js";
 import { chip, banner, photos, flagList, stagger, empty } from "../ui/components.js";
 import { KINDS, FIELD_RULE, EVENT, EMPTY, NO_OWNER } from "../ui/copy.js";
+import { drainLink } from "./drain.view.js";
 
 const overdue = (t) => t.overdue ? '<span class="chip overdue">overdue</span>' : "";
 
@@ -15,7 +16,7 @@ export const taskCard = (t, note = "", n = 0) => `<a class="card glass rise task
   <p class="small muted">${[t.agency_name || "No owner found", t.pocket_name || "no pocket", `${t.report_count} report(s)`].map(esc).join(" - ")}</p>
   ${t.status === "disputed" ? `<p class="small"><strong>Resident's note:</strong> ${esc(note || "(no note)")}</p>` : ""}
   <p class="small">Cleaning this ${esc(gainPhrase(t.gain_h))} (scenario).</p>
-  <svg class="ic chev" aria-hidden="true"><use href="img/icons.svg?v=3#i-chevron-right"/></svg></a>`;
+  <svg class="ic chev" aria-hidden="true"><use href="img/icons.svg?v=4#i-chevron-right"/></svg></a>`;
 
 export const inboxView = ({ tasks, banner: b }, notes = {}) => `<h1>Inbox</h1>${banner(b)}` +
   (tasks.length ? `<div class="list">${tasks.map((t, n) => taskCard(t, notes[t.id], n)).join("")}</div>` : empty(EMPTY.inbox));
@@ -32,7 +33,7 @@ function redoBanner(t) {
 }
 
 export const taskDetail = (t, { banner: b, back }) => `<p><a class="back" href="${esc(back)}">Back</a></p>
-  <h1>${esc(t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
+  <h1>${drainLink(t.asset_id, t.asset_name)}</h1><div>${chip(t.status)} ${overdue(t)}</div>
   <p>Owner: <strong>${esc(t.agency_name || "No owner found")}</strong>${t.owner_source ? `<br><span class="small muted">Source: ${esc(t.owner_source)}</span>` : ""}</p>
   ${t.agency_id ? "" : `<p>${esc(NO_OWNER)}</p>`}${banner(b)}${redoBanner(t)}<p>${t.pocket_name ? esc(t.pocket_name) + " - cleaning" : "Cleaning"} this ${esc(gainPhrase(t.gain_h))}.</p>
   ${t.due_at ? `<p class="small muted">Due ${esc(when(t.due_at))}</p>` : ""}

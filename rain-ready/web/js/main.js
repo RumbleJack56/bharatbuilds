@@ -19,6 +19,10 @@ import { createIncidentsService } from "./services/incidents.service.js";
 import { createTasksService } from "./services/tasks.service.js";
 import { createCaptureService } from "./services/capture.service.js";
 import { createDashboardService } from "./services/dashboard.service.js";
+import { createCityService } from "./services/city.service.js";
+import { createPlacesService } from "./services/places.service.js";
+import { createProjectionService } from "./services/projection.service.js";
+import { createDrainsService } from "./services/drains.service.js";
 import { CONTROLLERS, TABS, HOME } from "./controllers/index.js";
 import { stampLines, drawStamp } from "./ui/stamp.js";
 import { initials } from "./ui/format.js";
@@ -44,6 +48,7 @@ const image = implement(ImagePort, createCanvasImage(document));
 const nav = { go: (hash) => { location.hash = hash; }, refresh: () => router.refresh() };
 const ctx = Object.freeze({
   services: { session, incidents: createIncidentsService(http), tasks: createTasksService(http), dashboard: createDashboardService(http),
+    city: createCityService(http), places: createPlacesService(http), projection: createProjectionService(http), drains: createDrainsService(http),
     capture: createCaptureService({ http, camera, geo, image, stamp: { lines: stampLines, draw: drawStamp } }) },
   map: implement(MapPort, createLeafletMap()),
   geo,

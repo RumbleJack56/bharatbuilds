@@ -2,12 +2,14 @@
 import { esc, hrs } from "../ui/format.js";
 import { banner, empty } from "../ui/components.js";
 import { LEVEL, USE, EMPTY } from "../ui/copy.js";
+import { drainHref } from "./drain.view.js";
 
 export const TAB_TITLES = { map: "Map", accountability: "Who is responsible", impact: "Impact", simulator: "Simulator", capture: "Rain capture", actions: "Actions", insights: "Insights" };
 const STATUS = ["open", "accepted", "done", "confirmed", "disputed", "rejected"];
 
 export const dashShell = (tab) => `<h1>Dashboard</h1><nav class="sub" aria-label="Dashboard sections">${Object.entries(TAB_TITLES)
   .map(([k, t]) => `<a href="#/dash/${k}" class="${k === tab ? "on" : ""}">${esc(t)}</a>`).join("")}</nav>
+  <nav class="sub" aria-label="More views"><a href="#/projection">Projection</a><a href="#/city">Delhi evidence</a><a href="#/places">Waterlogging places</a></nav>
   <div id="pane">Loading...</div><p class="small muted"><a class="back" href="#/login">Switch persona</a></p>`;
 
 export const mapLegend = (d) => `${banner(d.banner)}<div id="m" class="map tall" data-liquid-ignore></div>
@@ -21,7 +23,8 @@ export const pocketPopup = (p) => `<strong>${esc(p.name)}</strong><br>Level: <st
 export const taskPopup = (t, rank) => `<strong>Task ${esc(t.id)}</strong> (${esc(t.status)})<br>Rank ${esc(rank)}
   <br><a href="#/task/${esc(t.id)}">Open task</a>`;
 export const assetPopup = (a) => `<strong>${esc(a.name)}</strong><br>Owner: ${esc(a.agency_name)}
-  <br><span class="small">Source: ${esc(a.owner_source || "none")}</span><br>Last cleaning confirmed: ${esc(a.last_confirmed_clean || "never recorded")}`;
+  <br><span class="small">Source: ${esc(a.owner_source || "none")}</span><br>Last cleaning confirmed: ${esc(a.last_confirmed_clean || "never recorded")}${a.id ? `
+  <br><a href="${esc(drainHref(a.id))}">Drain details</a>` : ""}`;
 
 export const accountabilityView = (d) => `<p class="muted small">${esc(d.note)}</p>` + (d.agencies.length ? `<div class="list">` + d.agencies.map(a => {
   const max = Math.max(1, ...d.agencies.map(x => x.assets_owned));
