@@ -3,3 +3,5 @@
 /Rain_Ready_*.pdf
 /implementation-rough-idea.md
 /evidence/
+# office lock files (an open deck or sheet)
+.~lock.*#
