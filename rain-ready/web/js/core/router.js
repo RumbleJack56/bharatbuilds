@@ -11,7 +11,7 @@ export function resolve(controllers, name, role) {
   return { controller: c };
 }
 
-export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml, transition = { run: (fn) => fn() } }) {
+export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml, transition = { run: (fn) => fn() }, guest = "#/login" }) {
   let cleanup = null, seq = 0, shown = false;
   async function render() {
     const my = ++seq, stale = () => my !== seq;
@@ -19,7 +19,7 @@ export function createRouter({ controllers, root, ctx, home, onChrome, errorHtml
     const me = await ctx.services.session.me().catch(() => null);
     if (stale()) return;
     const hit = resolve(controllers, name, me ? me.role : null);
-    const target = me ? home[me.role] : "#/login";
+    const target = me ? home[me.role] : name === "" ? guest : "#/login";   // a visitor opening the app lands on the guest screen
     if (hit.redirect && location.hash !== target) { location.hash = target; return; }
     const controller = hit.controller || controllers.find(c => c.path === "login");
     onChrome(me, location.hash);

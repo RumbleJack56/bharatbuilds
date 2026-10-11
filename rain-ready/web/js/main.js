@@ -75,7 +75,7 @@ if (!("popover" in HTMLElement.prototype)) {
 }
 
 const transition = implement(TransitionPort, createViewTransition(document, window));
-const router = createRouter({ controllers: CONTROLLERS, root: $("#view"), ctx, home: HOME, onChrome: drawChrome, errorHtml: errBox, transition });
+const router = createRouter({ controllers: CONTROLLERS, root: $("#view"), ctx, home: HOME, onChrome: drawChrome, errorHtml: errBox, transition, guest: "#/welcome" });
 $("#logout").addEventListener("click", () => { session.logout(); nav.go("#/login"); });
 glass.mount(".lg:not([data-lg-css])");
 router.start();
